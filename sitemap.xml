@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+         <loc>https://aliahmadaziz.github.io/openclaw-guide/</loc>
+         <lastmod>2026-02-22</lastmod>
+    </url>
+    <url>
+         <loc>https://aliahmadaziz.github.io/openclaw-guide/part1-base-install/</loc>
+         <lastmod>2026-02-22</lastmod>
+    </url>
+    <url>
+         <loc>https://aliahmadaziz.github.io/openclaw-guide/part2-ai-assistant/</loc>
+         <lastmod>2026-02-22</lastmod>
+    </url>
+    <url>
+         <loc>https://aliahmadaziz.github.io/openclaw-guide/part3-infrastructure/</loc>
+         <lastmod>2026-02-22</lastmod>
+    </url>
+    <url>
+         <loc>https://aliahmadaziz.github.io/openclaw-guide/part4-automation/</loc>
+         <lastmod>2026-02-22</lastmod>
+    </url>
+    <url>
+         <loc>https://aliahmadaziz.github.io/openclaw-guide/part5-hardening/</loc>
+         <lastmod>2026-02-22</lastmod>
+    </url>
+    <url>
+         <loc>https://aliahmadaziz.github.io/openclaw-guide/part6-verification/</loc>
+         <lastmod>2026-02-22</lastmod>
+    </url>
+</urlset>

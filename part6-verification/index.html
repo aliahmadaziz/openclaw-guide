@@ -1,0 +1,2457 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Complete guide to installing and configuring OpenClaw AI assistant">
+      
+      
+        <meta name="author" content="Ali Ahmad Aziz">
+      
+      
+        <link rel="canonical" href="https://aliahmadaziz.github.io/openclaw-guide/part6-verification/">
+      
+      
+        <link rel="prev" href="../part5-hardening/">
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.2">
+    
+    
+      
+        <title>Part 6 - Verification - OpenClaw Installation Guide</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="deep-purple">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#openclaw-installation-guide-part-6-verification-15-min" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="OpenClaw Installation Guide" class="md-header__button md-logo" aria-label="OpenClaw Installation Guide" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            OpenClaw Installation Guide
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Part 6 - Verification
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="deep-purple"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="deep-purple"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/aliahmadaziz/openclaw-guide" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../part1-base-install/" class="md-tabs__link">
+          
+  
+  
+  Installation Guide
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="OpenClaw Installation Guide" class="md-nav__button md-logo" aria-label="OpenClaw Installation Guide" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    OpenClaw Installation Guide
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/aliahmadaziz/openclaw-guide" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Installation Guide
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Installation Guide
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../part1-base-install/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 1 - Base Install
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../part2-ai-assistant/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 2 - AI Assistant
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../part3-infrastructure/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 3 - Infrastructure
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../part4-automation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 4 - Automation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../part5-hardening/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 5 - Hardening
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 6 - Verification
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Part 6 - Verification
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-automated-verification-script" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Automated Verification Script
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Automated Verification Script">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-run-the-verification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 Run the Verification
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-expected-output" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 Expected Output
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-manual-end-to-end-test" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Manual End-to-End Test
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Manual End-to-End Test">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-send-a-test-message" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 Send a Test Message
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-test-a-command" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 Test a Command
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-test-file-access" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 Test File Access
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-troubleshooting-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Troubleshooting Reference
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Troubleshooting Reference">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-quick-reference-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 Quick Reference Table
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-top-10-common-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 Top 10 Common Issues
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.2 Top 10 Common Issues">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-whatsapp-keeps-disconnecting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. WhatsApp Keeps Disconnecting
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-gateway-fails-to-start" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Gateway Fails to Start
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-model-not-found-or-api-errors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. "Model not found" or API Errors
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-webhook-returns-404-or-502" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Webhook Returns 404 or 502
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-backups-not-running" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Backups Not Running
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-google-oauth-token-expired" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Google OAuth Token Expired
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7-firewall-blocking-legitimate-traffic" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Firewall Blocking Legitimate Traffic
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#8-out-of-disk-space" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Out of Disk Space
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#9-nodejs-version-mismatch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Node.js Version Mismatch
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10-crowdsec-blocking-legitimate-ips" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. CrowdSec Blocking Legitimate IPs
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-full-config-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Full Config Reference
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Full Config Reference">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-complete-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 Complete Structure
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-key-field-explanations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 Key Field Explanations
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-model-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 Model Configuration
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-whats-next" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. What's Next?
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. What&#39;s Next?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-customize-your-persona" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 Customize Your Persona
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-build-daily-rhythms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 Build Daily Rhythms
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-email-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 Email Integration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#54-create-custom-skills" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.4 Create Custom Skills
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#55-join-the-community" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.5 Join the Community
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-setup-complete" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. 🎉 Setup Complete!
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. 🎉 Setup Complete!">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-youve-accomplished" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What You've Accomplished
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#your-bot-can-now" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Your Bot Can Now
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-real-work-starts-now" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Real Work Starts Now
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#final-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Final Checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#support-resources" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Support &amp; Resources
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-automated-verification-script" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Automated Verification Script
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Automated Verification Script">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-run-the-verification" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 Run the Verification
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-expected-output" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 Expected Output
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-manual-end-to-end-test" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Manual End-to-End Test
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Manual End-to-End Test">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-send-a-test-message" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 Send a Test Message
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-test-a-command" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 Test a Command
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-test-file-access" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 Test File Access
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-troubleshooting-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Troubleshooting Reference
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Troubleshooting Reference">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#31-quick-reference-table" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.1 Quick Reference Table
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#32-top-10-common-issues" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3.2 Top 10 Common Issues
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3.2 Top 10 Common Issues">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-whatsapp-keeps-disconnecting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. WhatsApp Keeps Disconnecting
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-gateway-fails-to-start" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Gateway Fails to Start
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-model-not-found-or-api-errors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. "Model not found" or API Errors
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-webhook-returns-404-or-502" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Webhook Returns 404 or 502
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-backups-not-running" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Backups Not Running
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-google-oauth-token-expired" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Google OAuth Token Expired
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#7-firewall-blocking-legitimate-traffic" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Firewall Blocking Legitimate Traffic
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#8-out-of-disk-space" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Out of Disk Space
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#9-nodejs-version-mismatch" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Node.js Version Mismatch
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#10-crowdsec-blocking-legitimate-ips" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. CrowdSec Blocking Legitimate IPs
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-full-config-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Full Config Reference
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Full Config Reference">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-complete-structure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 Complete Structure
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-key-field-explanations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 Key Field Explanations
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#43-model-configuration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.3 Model Configuration
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-whats-next" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. What's Next?
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. What&#39;s Next?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#51-customize-your-persona" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.1 Customize Your Persona
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#52-build-daily-rhythms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.2 Build Daily Rhythms
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#53-email-integration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.3 Email Integration
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#54-create-custom-skills" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.4 Create Custom Skills
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#55-join-the-community" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5.5 Join the Community
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-setup-complete" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. 🎉 Setup Complete!
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="6. 🎉 Setup Complete!">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-youve-accomplished" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What You've Accomplished
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#your-bot-can-now" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Your Bot Can Now
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-real-work-starts-now" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Real Work Starts Now
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#final-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Final Checklist
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#support-resources" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Support &amp; Resources
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="openclaw-installation-guide-part-6-verification-15-min">OpenClaw Installation Guide - Part 6: Verification (15 min)<a class="headerlink" href="#openclaw-installation-guide-part-6-verification-15-min" title="Permanent link">&para;</a></h1>
+<p><strong>Goal:</strong> Validate your entire OpenClaw setup end-to-end. This is the final checkpoint.</p>
+<p><strong>Prerequisites:</strong> 
+- Parts 1-5 completed
+- Server is running
+- WhatsApp is paired</p>
+<hr />
+<h2 id="1-automated-verification-script">1. Automated Verification Script<a class="headerlink" href="#1-automated-verification-script" title="Permanent link">&para;</a></h2>
+<p>We've built a comprehensive verification script that checks all 20 critical points from Parts 1-5.</p>
+<h3 id="11-run-the-verification">1.1 Run the Verification<a class="headerlink" href="#11-run-the-verification" title="Permanent link">&para;</a></h3>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nb">cd</span><span class="w"> </span>/root/clawd
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>python3<span class="w"> </span>scripts/verify-setup.py
+</span></code></pre></div>
+<p><strong>What it checks:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Check</th>
+<th>Component</th>
+<th>What's Validated</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Part 1: Base Install</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>1</td>
+<td>SSH</td>
+<td>Password auth disabled</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Firewall</td>
+<td>UFW active, only SSH allowed</td>
+</tr>
+<tr>
+<td>3</td>
+<td>CrowdSec</td>
+<td>Service + bouncer running</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Swap</td>
+<td>2GB active</td>
+</tr>
+<tr>
+<td><strong>Part 2: AI Assistant</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>5</td>
+<td>Node.js</td>
+<td>v22.x installed</td>
+</tr>
+<tr>
+<td>6</td>
+<td>OpenClaw</td>
+<td>Binary installed</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Gateway</td>
+<td>Service running</td>
+</tr>
+<tr>
+<td>8</td>
+<td>WhatsApp</td>
+<td>Channel configured</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Device scope</td>
+<td>operator.read + operator.write</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Workspace</td>
+<td>Core .md files exist</td>
+</tr>
+<tr>
+<td>11</td>
+<td>Models</td>
+<td>Primary + fallback configured</td>
+</tr>
+<tr>
+<td><strong>Part 3: Infrastructure</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>12</td>
+<td>Google OAuth</td>
+<td>token.json exists</td>
+</tr>
+<tr>
+<td>13</td>
+<td>Cloudflare</td>
+<td>Tunnel service running</td>
+</tr>
+<tr>
+<td>14</td>
+<td>Webhook server</td>
+<td>Service running, health OK</td>
+</tr>
+<tr>
+<td>15</td>
+<td>Public webhook</td>
+<td>HTTPS accessible</td>
+</tr>
+<tr>
+<td><strong>Part 4: Automation</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>16</td>
+<td>Backup crons</td>
+<td>Hourly + nightly scheduled</td>
+</tr>
+<tr>
+<td>17</td>
+<td>Rclone</td>
+<td>Google Drive remote configured</td>
+</tr>
+<tr>
+<td>18</td>
+<td>OC Crons</td>
+<td>At least 1 cron job</td>
+</tr>
+<tr>
+<td>19</td>
+<td>Event queue</td>
+<td>SQLite DB exists</td>
+</tr>
+<tr>
+<td>20</td>
+<td>Heartbeat</td>
+<td>HEARTBEAT.md exists</td>
+</tr>
+<tr>
+<td><strong>Part 5: Hardening</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>21</td>
+<td>Snapshots</td>
+<td>At least 1 config snapshot</td>
+</tr>
+</tbody>
+</table>
+<h3 id="12-expected-output">1.2 Expected Output<a class="headerlink" href="#12-expected-output" title="Permanent link">&para;</a></h3>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>============================================================
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>           OpenClaw Setup Verification
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>============================================================
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>Timestamp: 2026-02-22 16:30:00 UTC
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>Part 1: Base Install
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>✅ SSH: Password auth disabled
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>✅ Firewall: UFW active, SSH only
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>✅ CrowdSec: Running + bouncer active
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>✅ Swap: 2GB active
+</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>
+</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>Part 2: AI Assistant
+</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>✅ Node.js: v22.x installed
+</span><span id="__span-1-15"><a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>✅ OpenClaw: Installed
+</span><span id="__span-1-16"><a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>✅ OpenClaw: Gateway running
+</span><span id="__span-1-17"><a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a>✅ WhatsApp: Connected
+</span><span id="__span-1-18"><a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>✅ Device scope: operator.read + operator.write
+</span><span id="__span-1-19"><a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>✅ Workspace: Core .md files exist
+</span><span id="__span-1-20"><a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>✅ Models: Primary + fallback configured
+</span><span id="__span-1-21"><a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>
+</span><span id="__span-1-22"><a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a>Part 3: Infrastructure
+</span><span id="__span-1-23"><a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a>✅ Google OAuth: token.json exists
+</span><span id="__span-1-24"><a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a>✅ Cloudflare tunnel: Running
+</span><span id="__span-1-25"><a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a>✅ Webhook server: Running
+</span><span id="__span-1-26"><a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a>✅ Public webhook: Accessible
+</span><span id="__span-1-27"><a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a>
+</span><span id="__span-1-28"><a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a>Part 4: Automation
+</span><span id="__span-1-29"><a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a>✅ Hourly + nightly crons
+</span><span id="__span-1-30"><a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a>✅ Rclone: Google Drive configured
+</span><span id="__span-1-31"><a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a>✅ OC Crons: At least 1 configured
+</span><span id="__span-1-32"><a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a>✅ Event queue: SQLite DB exists
+</span><span id="__span-1-33"><a id="__codelineno-1-33" name="__codelineno-1-33" href="#__codelineno-1-33"></a>✅ Heartbeat: HEARTBEAT.md exists
+</span><span id="__span-1-34"><a id="__codelineno-1-34" name="__codelineno-1-34" href="#__codelineno-1-34"></a>
+</span><span id="__span-1-35"><a id="__codelineno-1-35" name="__codelineno-1-35" href="#__codelineno-1-35"></a>Part 5: Hardening
+</span><span id="__span-1-36"><a id="__codelineno-1-36" name="__codelineno-1-36" href="#__codelineno-1-36"></a>✅ Config snapshot: At least 1 saved
+</span><span id="__span-1-37"><a id="__codelineno-1-37" name="__codelineno-1-37" href="#__codelineno-1-37"></a>
+</span><span id="__span-1-38"><a id="__codelineno-1-38" name="__codelineno-1-38" href="#__codelineno-1-38"></a>============================================================
+</span><span id="__span-1-39"><a id="__codelineno-1-39" name="__codelineno-1-39" href="#__codelineno-1-39"></a>                      Summary
+</span><span id="__span-1-40"><a id="__codelineno-1-40" name="__codelineno-1-40" href="#__codelineno-1-40"></a>============================================================
+</span><span id="__span-1-41"><a id="__codelineno-1-41" name="__codelineno-1-41" href="#__codelineno-1-41"></a>
+</span><span id="__span-1-42"><a id="__codelineno-1-42" name="__codelineno-1-42" href="#__codelineno-1-42"></a>Passed: 21/21 (100.0%)
+</span><span id="__span-1-43"><a id="__codelineno-1-43" name="__codelineno-1-43" href="#__codelineno-1-43"></a>
+</span><span id="__span-1-44"><a id="__codelineno-1-44" name="__codelineno-1-44" href="#__codelineno-1-44"></a>🎉 ALL CHECKS PASSED! Your OpenClaw setup is complete.
+</span></code></pre></div>
+<p>✅ <strong>Verify:</strong> All checks show ✅ green checkmarks</p>
+<hr />
+<h2 id="2-manual-end-to-end-test">2. Manual End-to-End Test<a class="headerlink" href="#2-manual-end-to-end-test" title="Permanent link">&para;</a></h2>
+<p>The automated script validates the infrastructure. Now let's validate the <strong>bot responds</strong>.</p>
+<h3 id="21-send-a-test-message">2.1 Send a Test Message<a class="headerlink" href="#21-send-a-test-message" title="Permanent link">&para;</a></h3>
+<p>From your phone (the one paired with WhatsApp):</p>
+<ol>
+<li>Open WhatsApp</li>
+<li>
+<p>Send a message to your bot number:
+   <div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>Hey, are you alive?
+</span></code></pre></div></p>
+</li>
+<li>
+<p>Wait 5-10 seconds</p>
+</li>
+</ol>
+<p>✅ <strong>Verify:</strong> Bot responds with a natural reply</p>
+<h3 id="22-test-a-command">2.2 Test a Command<a class="headerlink" href="#22-test-a-command" title="Permanent link">&para;</a></h3>
+<p>Send:
+<div class="language-text highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>What&#39;s the current UTC time?
+</span></code></pre></div></p>
+<p>✅ <strong>Verify:</strong> Bot responds with the correct time</p>
+<h3 id="23-test-file-access">2.3 Test File Access<a class="headerlink" href="#23-test-file-access" title="Permanent link">&para;</a></h3>
+<p>Send:
+<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>Read SOUL.md and tell me what your primary directive is
+</span></code></pre></div></p>
+<p>✅ <strong>Verify:</strong> Bot reads the file and summarizes</p>
+<p><strong>If any test fails</strong>, proceed to the Troubleshooting section below.</p>
+<hr />
+<h2 id="3-troubleshooting-reference">3. Troubleshooting Reference<a class="headerlink" href="#3-troubleshooting-reference" title="Permanent link">&para;</a></h2>
+<p>Quick lookup for common issues across all parts.</p>
+<h3 id="31-quick-reference-table">3.1 Quick Reference Table<a class="headerlink" href="#31-quick-reference-table" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Symptom</th>
+<th>Likely Cause</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Can't SSH to server</strong></td>
+<td>SSH service not running</td>
+<td><code>systemctl restart sshd</code></td>
+</tr>
+<tr>
+<td><strong>"Permission denied (publickey)"</strong></td>
+<td>SSH key not added to server</td>
+<td>Re-add key: <code>ssh-copy-id root@SERVER_IP</code></td>
+</tr>
+<tr>
+<td><strong>Gateway won't start</strong></td>
+<td>Port conflict or bad config</td>
+<td>Check logs: <code>journalctl -u openclaw-gateway -n 50</code></td>
+</tr>
+<tr>
+<td><strong>WhatsApp disconnected</strong></td>
+<td>QR code expired or phone offline</td>
+<td>Re-pair: <code>openclaw gateway restart</code>, scan QR</td>
+</tr>
+<tr>
+<td><strong>Bot doesn't respond</strong></td>
+<td>Gateway stopped or model API issue</td>
+<td>Check status: <code>systemctl status openclaw-gateway</code></td>
+</tr>
+<tr>
+<td><strong>"Model rate limit"</strong></td>
+<td>Too many requests</td>
+<td>Wait 60s, or switch to fallback model</td>
+</tr>
+<tr>
+<td><strong>Webhook not receiving</strong></td>
+<td>Tunnel down or server crashed</td>
+<td>Restart: <code>systemctl restart cloudflared moltbot-webhook</code></td>
+</tr>
+<tr>
+<td><strong>Backup not running</strong></td>
+<td>Cron misconfigured</td>
+<td>Check: <code>crontab -l</code>, verify paths</td>
+</tr>
+<tr>
+<td><strong>Token expired</strong></td>
+<td>Google OAuth needs refresh</td>
+<td>Re-auth: <code>scripts/google-reauth.py</code></td>
+</tr>
+<tr>
+<td><strong>"Permission denied" errors</strong></td>
+<td>Wrong file ownership</td>
+<td>Fix: <code>chown -R root:root /root/clawd</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="32-top-10-common-issues">3.2 Top 10 Common Issues<a class="headerlink" href="#32-top-10-common-issues" title="Permanent link">&para;</a></h3>
+<h4 id="1-whatsapp-keeps-disconnecting">1. WhatsApp Keeps Disconnecting<a class="headerlink" href="#1-whatsapp-keeps-disconnecting" title="Permanent link">&para;</a></h4>
+<p><strong>Symptom:</strong> Bot works for a few hours, then stops responding.</p>
+<p><strong>Cause:</strong> Phone went offline, or WhatsApp logged out.</p>
+<p><strong>Fix:</strong>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># Check gateway logs</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>journalctl<span class="w"> </span>-u<span class="w"> </span>openclaw-gateway<span class="w"> </span>-n<span class="w"> </span><span class="m">100</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span>whatsapp
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="c1"># If disconnected, restart and re-pair</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>openclaw<span class="w"> </span>gateway<span class="w"> </span>restart
+</span></code></pre></div>
+<em>Keep your phone online and WhatsApp open during initial setup.</em></p>
+<hr />
+<h4 id="2-gateway-fails-to-start">2. Gateway Fails to Start<a class="headerlink" href="#2-gateway-fails-to-start" title="Permanent link">&para;</a></h4>
+<p><strong>Symptom:</strong> <code>systemctl status openclaw-gateway</code> shows "failed" or "inactive (dead)"</p>
+<p><strong>Cause:</strong> Usually bad <code>openclaw.json</code> syntax or missing API key.</p>
+<p><strong>Fix:</strong>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="c1"># Check the exact error</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>journalctl<span class="w"> </span>-u<span class="w"> </span>openclaw-gateway<span class="w"> </span>-n<span class="w"> </span><span class="m">50</span>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="c1"># Validate JSON syntax</span>
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>cat<span class="w"> </span>~/.clawdbot/openclaw.json<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span>.
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>
+</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="c1"># If syntax error, edit and fix</span>
+</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>nano<span class="w"> </span>~/.clawdbot/openclaw.json
+</span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>
+</span><span id="__span-6-10"><a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="c1"># Restart</span>
+</span><span id="__span-6-11"><a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a>systemctl<span class="w"> </span>restart<span class="w"> </span>openclaw-gateway
+</span></code></pre></div></p>
+<hr />
+<h4 id="3-model-not-found-or-api-errors">3. "Model not found" or API Errors<a class="headerlink" href="#3-model-not-found-or-api-errors" title="Permanent link">&para;</a></h4>
+<p><strong>Symptom:</strong> Bot responds with "Model error" or doesn't respond at all.</p>
+<p><strong>Cause:</strong> Invalid API key, wrong model name, or API service down.</p>
+<p><strong>Fix:</strong>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># Check logs for specific error</span>
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>journalctl<span class="w"> </span>-u<span class="w"> </span>openclaw-gateway<span class="w"> </span>-n<span class="w"> </span><span class="m">50</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span>error
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>
+</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="c1"># Verify API key is set correctly in openclaw.json</span>
+</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>cat<span class="w"> </span>~/.clawdbot/openclaw.json<span class="w"> </span><span class="p">|</span><span class="w"> </span>jq<span class="w"> </span><span class="s1">&#39;.model, .fallbackModel&#39;</span>
+</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>
+</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="c1"># Test API key manually (for Anthropic)</span>
+</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>curl<span class="w"> </span>https://api.anthropic.com/v1/messages<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;x-api-key: YOUR_KEY&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-7-10"><a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;anthropic-version: 2023-06-01&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-7-11"><a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;content-type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-7-12"><a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;model&quot;:&quot;claude-sonnet-4-5&quot;,&quot;max_tokens&quot;:10,&quot;messages&quot;:[{&quot;role&quot;:&quot;user&quot;,&quot;content&quot;:&quot;hi&quot;}]}&#39;</span>
+</span></code></pre></div></p>
+<hr />
+<h4 id="4-webhook-returns-404-or-502">4. Webhook Returns 404 or 502<a class="headerlink" href="#4-webhook-returns-404-or-502" title="Permanent link">&para;</a></h4>
+<p><strong>Symptom:</strong> Webhook URL returns error when visited.</p>
+<p><strong>Cause:</strong> Cloudflare tunnel not running, or webhook server crashed.</p>
+<p><strong>Fix:</strong>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="c1"># Check both services</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>systemctl<span class="w"> </span>status<span class="w"> </span>cloudflared
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>systemctl<span class="w"> </span>status<span class="w"> </span>moltbot-webhook
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="c1"># Check tunnel config</span>
+</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>cat<span class="w"> </span>~/.cloudflared/config.yml
+</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a>
+</span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="c1"># Restart both</span>
+</span><span id="__span-8-9"><a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a>systemctl<span class="w"> </span>restart<span class="w"> </span>cloudflared
+</span><span id="__span-8-10"><a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a>systemctl<span class="w"> </span>restart<span class="w"> </span>moltbot-webhook
+</span><span id="__span-8-11"><a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a>
+</span><span id="__span-8-12"><a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a><span class="c1"># Test local webhook</span>
+</span><span id="__span-8-13"><a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a>curl<span class="w"> </span>http://127.0.0.1:8088/health
+</span><span id="__span-8-14"><a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a><span class="c1"># Should return: {&quot;status&quot;:&quot;ok&quot;}</span>
+</span></code></pre></div></p>
+<hr />
+<h4 id="5-backups-not-running">5. Backups Not Running<a class="headerlink" href="#5-backups-not-running" title="Permanent link">&para;</a></h4>
+<p><strong>Symptom:</strong> No recent backups in Google Drive, or cron emails about failures.</p>
+<p><strong>Cause:</strong> Cron not scheduled, rclone not configured, or script permissions wrong.</p>
+<p><strong>Fix:</strong>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1"># Check cron is scheduled</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>crontab<span class="w"> </span>-l<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>backup
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="c1"># Test hourly backup manually</span>
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>/root/clawd/backup.sh
+</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>
+</span><span id="__span-9-7"><a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="c1"># Test nightly backup manually</span>
+</span><span id="__span-9-8"><a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>/root/clawd/scripts/nightly-backup.sh
+</span><span id="__span-9-9"><a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a>
+</span><span id="__span-9-10"><a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a><span class="c1"># Check rclone config</span>
+</span><span id="__span-9-11"><a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a>rclone<span class="w"> </span>listremotes
+</span><span id="__span-9-12"><a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a><span class="c1"># Should show: gdrive:</span>
+</span><span id="__span-9-13"><a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a>
+</span><span id="__span-9-14"><a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a><span class="c1"># Check recent backup files</span>
+</span><span id="__span-9-15"><a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a>ls<span class="w"> </span>-lh<span class="w"> </span>/root/openclaw-backups/
+</span></code></pre></div></p>
+<hr />
+<h4 id="6-google-oauth-token-expired">6. Google OAuth Token Expired<a class="headerlink" href="#6-google-oauth-token-expired" title="Permanent link">&para;</a></h4>
+<p><strong>Symptom:</strong> Calendar sync fails, or "invalid_grant" errors.</p>
+<p><strong>Cause:</strong> Token expired or revoked.</p>
+<p><strong>Fix:</strong>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c1"># Re-authenticate</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="nb">cd</span><span class="w"> </span>/root/clawd
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>python3<span class="w"> </span>scripts/google-reauth.py
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a>
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="c1"># Follow the OAuth flow in browser</span>
+</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="c1"># New token will be saved to ~/.clawdbot/google/token.json</span>
+</span></code></pre></div></p>
+<hr />
+<h4 id="7-firewall-blocking-legitimate-traffic">7. Firewall Blocking Legitimate Traffic<a class="headerlink" href="#7-firewall-blocking-legitimate-traffic" title="Permanent link">&para;</a></h4>
+<p><strong>Symptom:</strong> Can't access webhook, or bot can't reach external APIs.</p>
+<p><strong>Cause:</strong> UFW rule too restrictive.</p>
+<p><strong>Fix:</strong>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="c1"># Check current rules</span>
+</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a>ufw<span class="w"> </span>status<span class="w"> </span>numbered
+</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a>
+</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="c1"># Allow outbound traffic (should be default, but verify)</span>
+</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a>ufw<span class="w"> </span>default<span class="w"> </span>allow<span class="w"> </span>outgoing
+</span><span id="__span-11-6"><a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a>
+</span><span id="__span-11-7"><a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="c1"># If you need to allow a specific inbound port:</span>
+</span><span id="__span-11-8"><a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a>ufw<span class="w"> </span>allow<span class="w"> </span>PORT_NUMBER/tcp
+</span><span id="__span-11-9"><a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a>
+</span><span id="__span-11-10"><a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a><span class="c1"># Reload</span>
+</span><span id="__span-11-11"><a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a>ufw<span class="w"> </span>reload
+</span></code></pre></div>
+<em>Never open unnecessary inbound ports. Only SSH should be allowed.</em></p>
+<hr />
+<h4 id="8-out-of-disk-space">8. Out of Disk Space<a class="headerlink" href="#8-out-of-disk-space" title="Permanent link">&para;</a></h4>
+<p><strong>Symptom:</strong> Logs say "no space left on device", services fail.</p>
+<p><strong>Cause:</strong> Logs filling disk, or too many backups.</p>
+<p><strong>Fix:</strong>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a><span class="c1"># Check disk usage</span>
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>df<span class="w"> </span>-h
+</span><span id="__span-12-3"><a id="__codelineno-12-3" name="__codelineno-12-3" href="#__codelineno-12-3"></a>
+</span><span id="__span-12-4"><a id="__codelineno-12-4" name="__codelineno-12-4" href="#__codelineno-12-4"></a><span class="c1"># Find large directories</span>
+</span><span id="__span-12-5"><a id="__codelineno-12-5" name="__codelineno-12-5" href="#__codelineno-12-5"></a>du<span class="w"> </span>-sh<span class="w"> </span>/var/log/*<span class="w"> </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span>-h
+</span><span id="__span-12-6"><a id="__codelineno-12-6" name="__codelineno-12-6" href="#__codelineno-12-6"></a>du<span class="w"> </span>-sh<span class="w"> </span>/root/*<span class="w"> </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span>-h
+</span><span id="__span-12-7"><a id="__codelineno-12-7" name="__codelineno-12-7" href="#__codelineno-12-7"></a>
+</span><span id="__span-12-8"><a id="__codelineno-12-8" name="__codelineno-12-8" href="#__codelineno-12-8"></a><span class="c1"># Clear old logs</span>
+</span><span id="__span-12-9"><a id="__codelineno-12-9" name="__codelineno-12-9" href="#__codelineno-12-9"></a>journalctl<span class="w"> </span>--vacuum-time<span class="o">=</span>7d
+</span><span id="__span-12-10"><a id="__codelineno-12-10" name="__codelineno-12-10" href="#__codelineno-12-10"></a>
+</span><span id="__span-12-11"><a id="__codelineno-12-11" name="__codelineno-12-11" href="#__codelineno-12-11"></a><span class="c1"># Delete old backups (keep last 7 days)</span>
+</span><span id="__span-12-12"><a id="__codelineno-12-12" name="__codelineno-12-12" href="#__codelineno-12-12"></a>find<span class="w"> </span>/root/openclaw-backups/<span class="w"> </span>-type<span class="w"> </span>f<span class="w"> </span>-mtime<span class="w"> </span>+7<span class="w"> </span>-delete
+</span></code></pre></div></p>
+<hr />
+<h4 id="9-nodejs-version-mismatch">9. Node.js Version Mismatch<a class="headerlink" href="#9-nodejs-version-mismatch" title="Permanent link">&para;</a></h4>
+<p><strong>Symptom:</strong> OpenClaw install fails, or runtime errors.</p>
+<p><strong>Cause:</strong> Wrong Node.js version installed.</p>
+<p><strong>Fix:</strong>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="c1"># Check current version</span>
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>node<span class="w"> </span>--version
+</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>
+</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="c1"># If not v22.x, reinstall</span>
+</span><span id="__span-13-5"><a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a>curl<span class="w"> </span>-fsSL<span class="w"> </span>https://deb.nodesource.com/setup_22.x<span class="w"> </span><span class="p">|</span><span class="w"> </span>bash<span class="w"> </span>-
+</span><span id="__span-13-6"><a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>apt-get<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>nodejs
+</span><span id="__span-13-7"><a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a>
+</span><span id="__span-13-8"><a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a><span class="c1"># Verify</span>
+</span><span id="__span-13-9"><a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a>node<span class="w"> </span>--version
+</span><span id="__span-13-10"><a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a><span class="c1"># Should show: v22.x.x</span>
+</span></code></pre></div></p>
+<hr />
+<h4 id="10-crowdsec-blocking-legitimate-ips">10. CrowdSec Blocking Legitimate IPs<a class="headerlink" href="#10-crowdsec-blocking-legitimate-ips" title="Permanent link">&para;</a></h4>
+<p><strong>Symptom:</strong> Can't SSH from your IP, or bot's outbound requests blocked.</p>
+<p><strong>Cause:</strong> CrowdSec false positive.</p>
+<p><strong>Fix:</strong>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a><span class="c1"># Check decisions (active bans)</span>
+</span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>cscli<span class="w"> </span>decisions<span class="w"> </span>list
+</span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a>
+</span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="c1"># If your IP is banned, unban it</span>
+</span><span id="__span-14-5"><a id="__codelineno-14-5" name="__codelineno-14-5" href="#__codelineno-14-5"></a>cscli<span class="w"> </span>decisions<span class="w"> </span>delete<span class="w"> </span>--ip<span class="w"> </span>YOUR_IP
+</span><span id="__span-14-6"><a id="__codelineno-14-6" name="__codelineno-14-6" href="#__codelineno-14-6"></a>
+</span><span id="__span-14-7"><a id="__codelineno-14-7" name="__codelineno-14-7" href="#__codelineno-14-7"></a><span class="c1"># Whitelist your IP permanently</span>
+</span><span id="__span-14-8"><a id="__codelineno-14-8" name="__codelineno-14-8" href="#__codelineno-14-8"></a>cscli<span class="w"> </span>decisions<span class="w"> </span>add<span class="w"> </span>--ip<span class="w"> </span>YOUR_IP<span class="w"> </span>--duration<span class="w"> </span>999999h<span class="w"> </span>--type<span class="w"> </span>captcha
+</span><span id="__span-14-9"><a id="__codelineno-14-9" name="__codelineno-14-9" href="#__codelineno-14-9"></a>
+</span><span id="__span-14-10"><a id="__codelineno-14-10" name="__codelineno-14-10" href="#__codelineno-14-10"></a><span class="c1"># Or disable bouncer temporarily</span>
+</span><span id="__span-14-11"><a id="__codelineno-14-11" name="__codelineno-14-11" href="#__codelineno-14-11"></a>systemctl<span class="w"> </span>stop<span class="w"> </span>crowdsec-firewall-bouncer
+</span></code></pre></div></p>
+<hr />
+<h2 id="4-full-config-reference">4. Full Config Reference<a class="headerlink" href="#4-full-config-reference" title="Permanent link">&para;</a></h2>
+<p>Here's an annotated <code>openclaw.json</code> showing all key fields. <strong>Do not copy values verbatim</strong> — this is a structure reference.</p>
+<h3 id="41-complete-structure">4.1 Complete Structure<a class="headerlink" href="#41-complete-structure" title="Permanent link">&para;</a></h3>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a><span class="p">{</span>
+</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a><span class="w">  </span><span class="nt">&quot;model&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;anthropic/claude-opus-4-6&quot;</span><span class="p">,</span>
+</span><span id="__span-15-3"><a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a><span class="w">  </span><span class="nt">&quot;fallbackModel&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;google/gemini-2.5-pro&quot;</span><span class="p">,</span>
+</span><span id="__span-15-4"><a id="__codelineno-15-4" name="__codelineno-15-4" href="#__codelineno-15-4"></a><span class="w">  </span><span class="nt">&quot;contextTokens&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">200000</span><span class="p">,</span>
+</span><span id="__span-15-5"><a id="__codelineno-15-5" name="__codelineno-15-5" href="#__codelineno-15-5"></a>
+</span><span id="__span-15-6"><a id="__codelineno-15-6" name="__codelineno-15-6" href="#__codelineno-15-6"></a><span class="w">  </span><span class="nt">&quot;deviceScope&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-15-7"><a id="__codelineno-15-7" name="__codelineno-15-7" href="#__codelineno-15-7"></a><span class="w">    </span><span class="s2">&quot;operator.read&quot;</span><span class="p">,</span>
+</span><span id="__span-15-8"><a id="__codelineno-15-8" name="__codelineno-15-8" href="#__codelineno-15-8"></a><span class="w">    </span><span class="s2">&quot;operator.write&quot;</span>
+</span><span id="__span-15-9"><a id="__codelineno-15-9" name="__codelineno-15-9" href="#__codelineno-15-9"></a><span class="w">  </span><span class="p">],</span>
+</span><span id="__span-15-10"><a id="__codelineno-15-10" name="__codelineno-15-10" href="#__codelineno-15-10"></a>
+</span><span id="__span-15-11"><a id="__codelineno-15-11" name="__codelineno-15-11" href="#__codelineno-15-11"></a><span class="w">  </span><span class="nt">&quot;workspaceRoot&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/root/clawd&quot;</span><span class="p">,</span>
+</span><span id="__span-15-12"><a id="__codelineno-15-12" name="__codelineno-15-12" href="#__codelineno-15-12"></a>
+</span><span id="__span-15-13"><a id="__codelineno-15-13" name="__codelineno-15-13" href="#__codelineno-15-13"></a><span class="w">  </span><span class="nt">&quot;channels&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-15-14"><a id="__codelineno-15-14" name="__codelineno-15-14" href="#__codelineno-15-14"></a><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-15-15"><a id="__codelineno-15-15" name="__codelineno-15-15" href="#__codelineno-15-15"></a><span class="w">      </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;whatsapp&quot;</span><span class="p">,</span>
+</span><span id="__span-15-16"><a id="__codelineno-15-16" name="__codelineno-15-16" href="#__codelineno-15-16"></a><span class="w">      </span><span class="nt">&quot;sessionName&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;default&quot;</span><span class="p">,</span>
+</span><span id="__span-15-17"><a id="__codelineno-15-17" name="__codelineno-15-17" href="#__codelineno-15-17"></a><span class="w">      </span><span class="nt">&quot;autoReconnect&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span>
+</span><span id="__span-15-18"><a id="__codelineno-15-18" name="__codelineno-15-18" href="#__codelineno-15-18"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-15-19"><a id="__codelineno-15-19" name="__codelineno-15-19" href="#__codelineno-15-19"></a><span class="w">  </span><span class="p">],</span>
+</span><span id="__span-15-20"><a id="__codelineno-15-20" name="__codelineno-15-20" href="#__codelineno-15-20"></a>
+</span><span id="__span-15-21"><a id="__codelineno-15-21" name="__codelineno-15-21" href="#__codelineno-15-21"></a><span class="w">  </span><span class="nt">&quot;heartbeat&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-15-22"><a id="__codelineno-15-22" name="__codelineno-15-22" href="#__codelineno-15-22"></a><span class="w">    </span><span class="nt">&quot;enabled&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+</span><span id="__span-15-23"><a id="__codelineno-15-23" name="__codelineno-15-23" href="#__codelineno-15-23"></a><span class="w">    </span><span class="nt">&quot;intervalMs&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3600000</span><span class="p">,</span>
+</span><span id="__span-15-24"><a id="__codelineno-15-24" name="__codelineno-15-24" href="#__codelineno-15-24"></a><span class="w">    </span><span class="nt">&quot;checkPath&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/root/clawd/HEARTBEAT.md&quot;</span>
+</span><span id="__span-15-25"><a id="__codelineno-15-25" name="__codelineno-15-25" href="#__codelineno-15-25"></a><span class="w">  </span><span class="p">},</span>
+</span><span id="__span-15-26"><a id="__codelineno-15-26" name="__codelineno-15-26" href="#__codelineno-15-26"></a>
+</span><span id="__span-15-27"><a id="__codelineno-15-27" name="__codelineno-15-27" href="#__codelineno-15-27"></a><span class="w">  </span><span class="nt">&quot;crons&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-15-28"><a id="__codelineno-15-28" name="__codelineno-15-28" href="#__codelineno-15-28"></a><span class="w">    </span><span class="p">{</span>
+</span><span id="__span-15-29"><a id="__codelineno-15-29" name="__codelineno-15-29" href="#__codelineno-15-29"></a><span class="w">      </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;morning-brief&quot;</span><span class="p">,</span>
+</span><span id="__span-15-30"><a id="__codelineno-15-30" name="__codelineno-15-30" href="#__codelineno-15-30"></a><span class="w">      </span><span class="nt">&quot;schedule&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;0 9 * * *&quot;</span><span class="p">,</span>
+</span><span id="__span-15-31"><a id="__codelineno-15-31" name="__codelineno-15-31" href="#__codelineno-15-31"></a><span class="w">      </span><span class="nt">&quot;command&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;python3 /root/clawd/scripts/morning-brief.py&quot;</span><span class="p">,</span>
+</span><span id="__span-15-32"><a id="__codelineno-15-32" name="__codelineno-15-32" href="#__codelineno-15-32"></a><span class="w">      </span><span class="nt">&quot;deliverTo&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;whatsapp&quot;</span><span class="p">,</span>
+</span><span id="__span-15-33"><a id="__codelineno-15-33" name="__codelineno-15-33" href="#__codelineno-15-33"></a><span class="w">      </span><span class="nt">&quot;model&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;claude-sonnet-4-0&quot;</span>
+</span><span id="__span-15-34"><a id="__codelineno-15-34" name="__codelineno-15-34" href="#__codelineno-15-34"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-15-35"><a id="__codelineno-15-35" name="__codelineno-15-35" href="#__codelineno-15-35"></a><span class="w">  </span><span class="p">],</span>
+</span><span id="__span-15-36"><a id="__codelineno-15-36" name="__codelineno-15-36" href="#__codelineno-15-36"></a>
+</span><span id="__span-15-37"><a id="__codelineno-15-37" name="__codelineno-15-37" href="#__codelineno-15-37"></a><span class="w">  </span><span class="nt">&quot;safety&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-15-38"><a id="__codelineno-15-38" name="__codelineno-15-38" href="#__codelineno-15-38"></a><span class="w">    </span><span class="nt">&quot;maxTokensPerRequest&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">4096</span><span class="p">,</span>
+</span><span id="__span-15-39"><a id="__codelineno-15-39" name="__codelineno-15-39" href="#__codelineno-15-39"></a><span class="w">    </span><span class="nt">&quot;rateLimitPerMinute&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">60</span>
+</span><span id="__span-15-40"><a id="__codelineno-15-40" name="__codelineno-15-40" href="#__codelineno-15-40"></a><span class="w">  </span><span class="p">},</span>
+</span><span id="__span-15-41"><a id="__codelineno-15-41" name="__codelineno-15-41" href="#__codelineno-15-41"></a>
+</span><span id="__span-15-42"><a id="__codelineno-15-42" name="__codelineno-15-42" href="#__codelineno-15-42"></a><span class="w">  </span><span class="nt">&quot;systemPrompt&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-15-43"><a id="__codelineno-15-43" name="__codelineno-15-43" href="#__codelineno-15-43"></a><span class="w">    </span><span class="nt">&quot;files&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-15-44"><a id="__codelineno-15-44" name="__codelineno-15-44" href="#__codelineno-15-44"></a><span class="w">      </span><span class="s2">&quot;/root/clawd/AGENTS.md&quot;</span><span class="p">,</span>
+</span><span id="__span-15-45"><a id="__codelineno-15-45" name="__codelineno-15-45" href="#__codelineno-15-45"></a><span class="w">      </span><span class="s2">&quot;/root/clawd/SOUL.md&quot;</span>
+</span><span id="__span-15-46"><a id="__codelineno-15-46" name="__codelineno-15-46" href="#__codelineno-15-46"></a><span class="w">    </span><span class="p">]</span>
+</span><span id="__span-15-47"><a id="__codelineno-15-47" name="__codelineno-15-47" href="#__codelineno-15-47"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-15-48"><a id="__codelineno-15-48" name="__codelineno-15-48" href="#__codelineno-15-48"></a><span class="p">}</span>
+</span></code></pre></div>
+<h3 id="42-key-field-explanations">4.2 Key Field Explanations<a class="headerlink" href="#42-key-field-explanations" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Purpose</th>
+<th>Example Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>model</code></td>
+<td>Primary AI model</td>
+<td><code>anthropic/claude-opus-4-6</code></td>
+</tr>
+<tr>
+<td><code>fallbackModel</code></td>
+<td>Backup if primary fails</td>
+<td><code>google/gemini-2.5-pro</code></td>
+</tr>
+<tr>
+<td><code>contextTokens</code></td>
+<td>Max context window</td>
+<td><code>200000</code> (200K)</td>
+</tr>
+<tr>
+<td><code>deviceScope</code></td>
+<td>Permissions for OpenClaw</td>
+<td><code>["operator.read", "operator.write"]</code></td>
+</tr>
+<tr>
+<td><code>workspaceRoot</code></td>
+<td>Agent's home directory</td>
+<td><code>/root/clawd</code></td>
+</tr>
+<tr>
+<td><code>channels</code></td>
+<td>Communication platforms</td>
+<td>WhatsApp, Discord, Telegram, etc.</td>
+</tr>
+<tr>
+<td><code>heartbeat.enabled</code></td>
+<td>Auto-check-in system</td>
+<td><code>true</code></td>
+</tr>
+<tr>
+<td><code>heartbeat.intervalMs</code></td>
+<td>Time between heartbeats</td>
+<td><code>3600000</code> (1 hour)</td>
+</tr>
+<tr>
+<td><code>crons</code></td>
+<td>Scheduled tasks</td>
+<td>Morning brief, standup, etc.</td>
+</tr>
+<tr>
+<td><code>safety.maxTokensPerRequest</code></td>
+<td>Token limit per response</td>
+<td><code>4096</code></td>
+</tr>
+<tr>
+<td><code>systemPrompt.files</code></td>
+<td>Files injected into every prompt</td>
+<td><code>AGENTS.md</code>, <code>SOUL.md</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="43-model-configuration">4.3 Model Configuration<a class="headerlink" href="#43-model-configuration" title="Permanent link">&para;</a></h3>
+<p><strong>Recommended Tiers:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Use Case</th>
+<th>Model</th>
+<th>Context</th>
+<th>Cost</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Main session</td>
+<td><code>claude-opus-4-6</code></td>
+<td>200K</td>
+<td>High</td>
+</tr>
+<tr>
+<td>Sub-agents</td>
+<td><code>claude-sonnet-4-5</code></td>
+<td>200K</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>Cron jobs</td>
+<td><code>claude-sonnet-4-0</code></td>
+<td>200K</td>
+<td>Low</td>
+</tr>
+<tr>
+<td>Fallback</td>
+<td><code>google/gemini-2.5-pro</code></td>
+<td>1M+</td>
+<td>Low</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Important:</strong> Set <code>contextTokens</code> to the <strong>smallest</strong> context window in your chain. If your fallback has 200K but primary has 1M, use <code>200000</code>.</p>
+<hr />
+<h2 id="5-whats-next">5. What's Next?<a class="headerlink" href="#5-whats-next" title="Permanent link">&para;</a></h2>
+<p>You've built the infrastructure. Now make it <strong>yours</strong>.</p>
+<h3 id="51-customize-your-persona">5.1 Customize Your Persona<a class="headerlink" href="#51-customize-your-persona" title="Permanent link">&para;</a></h3>
+<p>Edit <code>/root/clawd/SOUL.md</code> to define your bot's personality:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>nano<span class="w"> </span>/root/clawd/SOUL.md
+</span></code></pre></div>
+<p><strong>Suggested sections:</strong>
+- <strong>Core directive:</strong> What's your bot's primary purpose?
+- <strong>Tone:</strong> Formal? Casual? Sarcastic?
+- <strong>Boundaries:</strong> What should it refuse to do?
+- <strong>Expertise:</strong> What domains is it expert in?</p>
+<p><strong>Example:</strong>
+<div class="language-markdown highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a><span class="gh"># SOUL.md</span>
+</span><span id="__span-17-2"><a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>
+</span><span id="__span-17-3"><a id="__codelineno-17-3" name="__codelineno-17-3" href="#__codelineno-17-3"></a><span class="gu">## Primary Directive</span>
+</span><span id="__span-17-4"><a id="__codelineno-17-4" name="__codelineno-17-4" href="#__codelineno-17-4"></a>I am Moltres, Ali&#39;s executive assistant. My purpose is to:
+</span><span id="__span-17-5"><a id="__codelineno-17-5" name="__codelineno-17-5" href="#__codelineno-17-5"></a><span class="k">1.</span> Manage his calendar and priorities
+</span><span id="__span-17-6"><a id="__codelineno-17-6" name="__codelineno-17-6" href="#__codelineno-17-6"></a><span class="k">2.</span> Handle research and data gathering
+</span><span id="__span-17-7"><a id="__codelineno-17-7" name="__codelineno-17-7" href="#__codelineno-17-7"></a><span class="k">3.</span> Draft communications
+</span><span id="__span-17-8"><a id="__codelineno-17-8" name="__codelineno-17-8" href="#__codelineno-17-8"></a><span class="k">4.</span> Monitor systems and alert on issues
+</span><span id="__span-17-9"><a id="__codelineno-17-9" name="__codelineno-17-9" href="#__codelineno-17-9"></a>
+</span><span id="__span-17-10"><a id="__codelineno-17-10" name="__codelineno-17-10" href="#__codelineno-17-10"></a><span class="gu">## Tone</span>
+</span><span id="__span-17-11"><a id="__codelineno-17-11" name="__codelineno-17-11" href="#__codelineno-17-11"></a>Professional but warm. I use first person (&quot;I checked the calendar&quot;).
+</span><span id="__span-17-12"><a id="__codelineno-17-12" name="__codelineno-17-12" href="#__codelineno-17-12"></a>Direct and concise — no fluff.
+</span><span id="__span-17-13"><a id="__codelineno-17-13" name="__codelineno-17-13" href="#__codelineno-17-13"></a>
+</span><span id="__span-17-14"><a id="__codelineno-17-14" name="__codelineno-17-14" href="#__codelineno-17-14"></a><span class="gu">## Boundaries</span>
+</span><span id="__span-17-15"><a id="__codelineno-17-15" name="__codelineno-17-15" href="#__codelineno-17-15"></a>I do not:
+</span><span id="__span-17-16"><a id="__codelineno-17-16" name="__codelineno-17-16" href="#__codelineno-17-16"></a><span class="k">-</span><span class="w"> </span>Make financial decisions without confirmation
+</span><span id="__span-17-17"><a id="__codelineno-17-17" name="__codelineno-17-17" href="#__codelineno-17-17"></a><span class="k">-</span><span class="w"> </span>Send external messages without review
+</span><span id="__span-17-18"><a id="__codelineno-17-18" name="__codelineno-17-18" href="#__codelineno-17-18"></a><span class="k">-</span><span class="w"> </span>Delete data without asking
+</span></code></pre></div></p>
+<h3 id="52-build-daily-rhythms">5.2 Build Daily Rhythms<a class="headerlink" href="#52-build-daily-rhythms" title="Permanent link">&para;</a></h3>
+<p>Create routines using cron jobs:</p>
+<p><strong>Morning Brief (9am UTC):</strong>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a><span class="c1"># /root/clawd/scripts/morning-brief.py</span>
+</span><span id="__span-18-2"><a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a><span class="c1"># - Check calendar for today</span>
+</span><span id="__span-18-3"><a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a><span class="c1"># - Summarize unread emails</span>
+</span><span id="__span-18-4"><a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a><span class="c1"># - Review yesterday&#39;s memory log</span>
+</span><span id="__span-18-5"><a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a><span class="c1"># - Send via WhatsApp</span>
+</span></code></pre></div></p>
+<p><strong>Standup (10am UTC, weekdays only):</strong>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="c1"># /root/clawd/scripts/standup.py</span>
+</span><span id="__span-19-2"><a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a><span class="c1"># - List today&#39;s scheduled tasks</span>
+</span><span id="__span-19-3"><a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a><span class="c1"># - Check active projects</span>
+</span><span id="__span-19-4"><a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a><span class="c1"># - Suggest priorities</span>
+</span></code></pre></div></p>
+<p><strong>Evening Wrap (6pm UTC):</strong>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="c1"># /root/clawd/scripts/evening-wrap.py</span>
+</span><span id="__span-20-2"><a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="c1"># - Summarize what happened today</span>
+</span><span id="__span-20-3"><a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="c1"># - Write to daily memory log</span>
+</span><span id="__span-20-4"><a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="c1"># - Prep tomorrow&#39;s agenda</span>
+</span></code></pre></div></p>
+<p>Add to <code>openclaw.json</code>:
+<div class="language-json highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="nt">&quot;crons&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-21-2"><a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="w">  </span><span class="p">{</span>
+</span><span id="__span-21-3"><a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a><span class="w">    </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;morning-brief&quot;</span><span class="p">,</span>
+</span><span id="__span-21-4"><a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a><span class="w">    </span><span class="nt">&quot;schedule&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;0 9 * * *&quot;</span><span class="p">,</span>
+</span><span id="__span-21-5"><a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a><span class="w">    </span><span class="nt">&quot;command&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;python3 /root/clawd/scripts/morning-brief.py&quot;</span><span class="p">,</span>
+</span><span id="__span-21-6"><a id="__codelineno-21-6" name="__codelineno-21-6" href="#__codelineno-21-6"></a><span class="w">    </span><span class="nt">&quot;deliverTo&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;whatsapp&quot;</span>
+</span><span id="__span-21-7"><a id="__codelineno-21-7" name="__codelineno-21-7" href="#__codelineno-21-7"></a><span class="w">  </span><span class="p">},</span>
+</span><span id="__span-21-8"><a id="__codelineno-21-8" name="__codelineno-21-8" href="#__codelineno-21-8"></a><span class="w">  </span><span class="p">{</span>
+</span><span id="__span-21-9"><a id="__codelineno-21-9" name="__codelineno-21-9" href="#__codelineno-21-9"></a><span class="w">    </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;standup&quot;</span><span class="p">,</span>
+</span><span id="__span-21-10"><a id="__codelineno-21-10" name="__codelineno-21-10" href="#__codelineno-21-10"></a><span class="w">    </span><span class="nt">&quot;schedule&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;0 10 * * 1-5&quot;</span><span class="p">,</span>
+</span><span id="__span-21-11"><a id="__codelineno-21-11" name="__codelineno-21-11" href="#__codelineno-21-11"></a><span class="w">    </span><span class="nt">&quot;command&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;python3 /root/clawd/scripts/standup.py&quot;</span><span class="p">,</span>
+</span><span id="__span-21-12"><a id="__codelineno-21-12" name="__codelineno-21-12" href="#__codelineno-21-12"></a><span class="w">    </span><span class="nt">&quot;deliverTo&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;whatsapp&quot;</span>
+</span><span id="__span-21-13"><a id="__codelineno-21-13" name="__codelineno-21-13" href="#__codelineno-21-13"></a><span class="w">  </span><span class="p">},</span>
+</span><span id="__span-21-14"><a id="__codelineno-21-14" name="__codelineno-21-14" href="#__codelineno-21-14"></a><span class="w">  </span><span class="p">{</span>
+</span><span id="__span-21-15"><a id="__codelineno-21-15" name="__codelineno-21-15" href="#__codelineno-21-15"></a><span class="w">    </span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;evening-wrap&quot;</span><span class="p">,</span>
+</span><span id="__span-21-16"><a id="__codelineno-21-16" name="__codelineno-21-16" href="#__codelineno-21-16"></a><span class="w">    </span><span class="nt">&quot;schedule&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;0 18 * * *&quot;</span><span class="p">,</span>
+</span><span id="__span-21-17"><a id="__codelineno-21-17" name="__codelineno-21-17" href="#__codelineno-21-17"></a><span class="w">    </span><span class="nt">&quot;command&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;python3 /root/clawd/scripts/evening-wrap.py&quot;</span><span class="p">,</span>
+</span><span id="__span-21-18"><a id="__codelineno-21-18" name="__codelineno-21-18" href="#__codelineno-21-18"></a><span class="w">    </span><span class="nt">&quot;deliverTo&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;whatsapp&quot;</span>
+</span><span id="__span-21-19"><a id="__codelineno-21-19" name="__codelineno-21-19" href="#__codelineno-21-19"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-21-20"><a id="__codelineno-21-20" name="__codelineno-21-20" href="#__codelineno-21-20"></a><span class="p">]</span>
+</span></code></pre></div></p>
+<h3 id="53-email-integration">5.3 Email Integration<a class="headerlink" href="#53-email-integration" title="Permanent link">&para;</a></h3>
+<p><strong>Option 1: AgentMail (Dead Simple)</strong>
+1. Sign up at <a href="https://agentmail.to">agentmail.to</a>
+2. Get your bot email: <code>yourname@agentmail.to</code>
+3. Configure webhook in AgentMail settings
+4. Point to: <code>https://webhook.poweker.com/agentmail/YOUR_SECRET</code>
+5. Bot receives emails, processes via event queue</p>
+<p><strong>Option 2: Gmail API (Full Control)</strong>
+1. Already set up if you completed Part 3
+2. Use <code>scripts/gmail-check.py</code> to poll inbox
+3. Run via cron every 15 minutes
+4. Process new emails, summarize, alert</p>
+<h3 id="54-create-custom-skills">5.4 Create Custom Skills<a class="headerlink" href="#54-create-custom-skills" title="Permanent link">&para;</a></h3>
+<p>Skills are reusable tools your bot can invoke.</p>
+<p><strong>Example: Weather Lookup</strong></p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-22-1"><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="c1"># /root/clawd/skills/weather.py</span>
+</span><span id="__span-22-2"><a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a><span class="kn">import</span> <span class="nn">requests</span>
+</span><span id="__span-22-3"><a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a><span class="kn">import</span> <span class="nn">sys</span>
+</span><span id="__span-22-4"><a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a>
+</span><span id="__span-22-5"><a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a><span class="k">def</span> <span class="nf">get_weather</span><span class="p">(</span><span class="n">city</span><span class="p">):</span>
+</span><span id="__span-22-6"><a id="__codelineno-22-6" name="__codelineno-22-6" href="#__codelineno-22-6"></a>    <span class="n">api_key</span> <span class="o">=</span> <span class="s2">&quot;YOUR_OPENWEATHER_API_KEY&quot;</span>
+</span><span id="__span-22-7"><a id="__codelineno-22-7" name="__codelineno-22-7" href="#__codelineno-22-7"></a>    <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;http://api.openweathermap.org/data/2.5/weather?q=</span><span class="si">{</span><span class="n">city</span><span class="si">}</span><span class="s2">&amp;appid=</span><span class="si">{</span><span class="n">api_key</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span id="__span-22-8"><a id="__codelineno-22-8" name="__codelineno-22-8" href="#__codelineno-22-8"></a>    <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+</span><span id="__span-22-9"><a id="__codelineno-22-9" name="__codelineno-22-9" href="#__codelineno-22-9"></a>    <span class="n">data</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+</span><span id="__span-22-10"><a id="__codelineno-22-10" name="__codelineno-22-10" href="#__codelineno-22-10"></a>
+</span><span id="__span-22-11"><a id="__codelineno-22-11" name="__codelineno-22-11" href="#__codelineno-22-11"></a>    <span class="n">temp_k</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;main&#39;</span><span class="p">][</span><span class="s1">&#39;temp&#39;</span><span class="p">]</span>
+</span><span id="__span-22-12"><a id="__codelineno-22-12" name="__codelineno-22-12" href="#__codelineno-22-12"></a>    <span class="n">temp_c</span> <span class="o">=</span> <span class="n">temp_k</span> <span class="o">-</span> <span class="mf">273.15</span>
+</span><span id="__span-22-13"><a id="__codelineno-22-13" name="__codelineno-22-13" href="#__codelineno-22-13"></a>    <span class="n">description</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;weather&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s1">&#39;description&#39;</span><span class="p">]</span>
+</span><span id="__span-22-14"><a id="__codelineno-22-14" name="__codelineno-22-14" href="#__codelineno-22-14"></a>
+</span><span id="__span-22-15"><a id="__codelineno-22-15" name="__codelineno-22-15" href="#__codelineno-22-15"></a>    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">city</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">temp_c</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">°C, </span><span class="si">{</span><span class="n">description</span><span class="si">}</span><span class="s2">&quot;</span>
+</span><span id="__span-22-16"><a id="__codelineno-22-16" name="__codelineno-22-16" href="#__codelineno-22-16"></a>
+</span><span id="__span-22-17"><a id="__codelineno-22-17" name="__codelineno-22-17" href="#__codelineno-22-17"></a><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+</span><span id="__span-22-18"><a id="__codelineno-22-18" name="__codelineno-22-18" href="#__codelineno-22-18"></a>    <span class="n">city</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="s2">&quot;Karachi&quot;</span>
+</span><span id="__span-22-19"><a id="__codelineno-22-19" name="__codelineno-22-19" href="#__codelineno-22-19"></a>    <span class="nb">print</span><span class="p">(</span><span class="n">get_weather</span><span class="p">(</span><span class="n">city</span><span class="p">))</span>
+</span></code></pre></div>
+<p><strong>How to use:</strong>
+1. Save to <code>/root/clawd/skills/weather.py</code>
+2. Make executable: <code>chmod +x /root/clawd/skills/weather.py</code>
+3. Document in <code>/root/clawd/TOOLS.md</code>:
+   <div class="language-markdown highlight"><pre><span></span><code><span id="__span-23-1"><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="gu">## Weather</span>
+</span><span id="__span-23-2"><a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a><span class="sb">`python3 skills/weather.py &quot;City Name&quot;`</span>
+</span><span id="__span-23-3"><a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a>Returns current weather for any city.
+</span></code></pre></div>
+4. Bot can now call it: <code>python3 skills/weather.py "London"</code></p>
+<h3 id="55-join-the-community">5.5 Join the Community<a class="headerlink" href="#55-join-the-community" title="Permanent link">&para;</a></h3>
+<p>Get help, share your setup, contribute back:</p>
+<ul>
+<li><strong>GitHub:</strong> <a href="https://github.com/openclaw/openclaw">openclaw/openclaw</a></li>
+<li><strong>Discord:</strong> <a href="https://discord.gg/openclaw">discord.gg/openclaw</a></li>
+<li><strong>Forum:</strong> <a href="https://discuss.openclaw.dev">discuss.openclaw.dev</a></li>
+</ul>
+<p><strong>Ways to contribute:</strong>
+- Share your custom skills
+- Report bugs or suggest features
+- Write guides for specific integrations
+- Help other users troubleshoot</p>
+<hr />
+<h2 id="6-setup-complete">6. 🎉 Setup Complete!<a class="headerlink" href="#6-setup-complete" title="Permanent link">&para;</a></h2>
+<p><strong>You did it.</strong> You've built a production-grade AI assistant from scratch.</p>
+<h3 id="what-youve-accomplished">What You've Accomplished<a class="headerlink" href="#what-youve-accomplished" title="Permanent link">&para;</a></h3>
+<p>✅ <strong>Hardened VPS</strong> — SSH lockdown, firewall, intrusion detection<br />
+✅ <strong>AI Brain</strong> — GPT-4-class model with fallback<br />
+✅ <strong>WhatsApp Interface</strong> — Chat with your bot anytime, anywhere<br />
+✅ <strong>Calendar Integration</strong> — Google Calendar sync, reminders, red-flagging<br />
+✅ <strong>Email Routing</strong> — Webhook-based email processing<br />
+✅ <strong>Automated Backups</strong> — Hourly code, nightly full system<br />
+✅ <strong>Self-Monitoring</strong> — Heartbeats, health checks, event queue<br />
+✅ <strong>Recovery System</strong> — Config snapshots, rollback scripts  </p>
+<h3 id="your-bot-can-now">Your Bot Can Now<a class="headerlink" href="#your-bot-can-now" title="Permanent link">&para;</a></h3>
+<ul>
+<li><strong>Read and write files</strong> in its workspace</li>
+<li><strong>Search the web</strong> for real-time information</li>
+<li><strong>Manage your calendar</strong> (create, edit, alert)</li>
+<li><strong>Process emails</strong> and draft replies</li>
+<li><strong>Run shell commands</strong> (safely, with oversight)</li>
+<li><strong>Schedule tasks</strong> via cron</li>
+<li><strong>Monitor itself</strong> and alert on failures</li>
+<li><strong>Recover from crashes</strong> automatically</li>
+</ul>
+<h3 id="the-real-work-starts-now">The Real Work Starts Now<a class="headerlink" href="#the-real-work-starts-now" title="Permanent link">&para;</a></h3>
+<p>The infrastructure is done. Now you teach it <strong>how you work</strong>.</p>
+<ul>
+<li>Fill <code>USER.md</code> with your preferences, quirks, pet peeves</li>
+<li>Log everything in daily memory files</li>
+<li>Give feedback when it misses the mark</li>
+<li>Build routines that match your day</li>
+</ul>
+<p><strong>This is not a tool. It's a teammate.</strong></p>
+<p>Treat it like one. It'll learn your style, anticipate your needs, handle the boring stuff, and give you hours back.</p>
+<hr />
+<h2 id="final-checklist">Final Checklist<a class="headerlink" href="#final-checklist" title="Permanent link">&para;</a></h2>
+<p>Before you close this guide:</p>
+<ul>
+<li>[ ] All 21 verification checks passed</li>
+<li>[ ] Bot responds to WhatsApp messages</li>
+<li>[ ] <code>SOUL.md</code> reflects your bot's purpose</li>
+<li>[ ] At least one cron job configured</li>
+<li>[ ] Backups confirmed in Google Drive</li>
+<li>[ ] You know how to check logs: <code>journalctl -u openclaw-gateway -n 50</code></li>
+<li>[ ] You bookmarked the troubleshooting table</li>
+<li>[ ] You know how to restore a snapshot: <code>scripts/restore-snapshot-config.sh</code></li>
+</ul>
+<hr />
+<h2 id="support-resources">Support &amp; Resources<a class="headerlink" href="#support-resources" title="Permanent link">&para;</a></h2>
+<p><strong>Documentation:</strong>
+- Full OpenClaw docs: <a href="https://docs.openclaw.ai">docs.openclaw.ai</a>
+- Source: <a href="https://github.com/openclaw/openclaw">github.com/openclaw/openclaw</a>
+- Community: <a href="https://discord.com/invite/clawd">Discord</a>
+- Skills: <a href="https://clawhub.com">clawhub.com</a></p>
+<p><strong>Quick Commands:</strong>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-24-1"><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="c1"># Check gateway status</span>
+</span><span id="__span-24-2"><a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a>systemctl<span class="w"> </span>status<span class="w"> </span>openclaw-gateway
+</span><span id="__span-24-3"><a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a>
+</span><span id="__span-24-4"><a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a><span class="c1"># Restart gateway</span>
+</span><span id="__span-24-5"><a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a>systemctl<span class="w"> </span>restart<span class="w"> </span>openclaw-gateway
+</span><span id="__span-24-6"><a id="__codelineno-24-6" name="__codelineno-24-6" href="#__codelineno-24-6"></a>
+</span><span id="__span-24-7"><a id="__codelineno-24-7" name="__codelineno-24-7" href="#__codelineno-24-7"></a><span class="c1"># View recent logs</span>
+</span><span id="__span-24-8"><a id="__codelineno-24-8" name="__codelineno-24-8" href="#__codelineno-24-8"></a>journalctl<span class="w"> </span>-u<span class="w"> </span>openclaw-gateway<span class="w"> </span>-n<span class="w"> </span><span class="m">100</span><span class="w"> </span>-f
+</span><span id="__span-24-9"><a id="__codelineno-24-9" name="__codelineno-24-9" href="#__codelineno-24-9"></a>
+</span><span id="__span-24-10"><a id="__codelineno-24-10" name="__codelineno-24-10" href="#__codelineno-24-10"></a><span class="c1"># Re-run verification</span>
+</span><span id="__span-24-11"><a id="__codelineno-24-11" name="__codelineno-24-11" href="#__codelineno-24-11"></a>python3<span class="w"> </span>/root/clawd/scripts/verify-setup.py
+</span><span id="__span-24-12"><a id="__codelineno-24-12" name="__codelineno-24-12" href="#__codelineno-24-12"></a>
+</span><span id="__span-24-13"><a id="__codelineno-24-13" name="__codelineno-24-13" href="#__codelineno-24-13"></a><span class="c1"># Restore config snapshot</span>
+</span><span id="__span-24-14"><a id="__codelineno-24-14" name="__codelineno-24-14" href="#__codelineno-24-14"></a>/root/clawd/scripts/restore-snapshot-config.sh
+</span><span id="__span-24-15"><a id="__codelineno-24-15" name="__codelineno-24-15" href="#__codelineno-24-15"></a>
+</span><span id="__span-24-16"><a id="__codelineno-24-16" name="__codelineno-24-16" href="#__codelineno-24-16"></a><span class="c1"># Test webhook health</span>
+</span><span id="__span-24-17"><a id="__codelineno-24-17" name="__codelineno-24-17" href="#__codelineno-24-17"></a>curl<span class="w"> </span>http://127.0.0.1:8088/health
+</span></code></pre></div></p>
+<p><strong>Emergency Recovery:</strong>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-25-1"><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a><span class="c1"># If everything is broken:</span>
+</span><span id="__span-25-2"><a id="__codelineno-25-2" name="__codelineno-25-2" href="#__codelineno-25-2"></a><span class="nb">cd</span><span class="w"> </span>/root/clawd
+</span><span id="__span-25-3"><a id="__codelineno-25-3" name="__codelineno-25-3" href="#__codelineno-25-3"></a>git<span class="w"> </span>pull
+</span><span id="__span-25-4"><a id="__codelineno-25-4" name="__codelineno-25-4" href="#__codelineno-25-4"></a>systemctl<span class="w"> </span>restart<span class="w"> </span>openclaw-gateway
+</span><span id="__span-25-5"><a id="__codelineno-25-5" name="__codelineno-25-5" href="#__codelineno-25-5"></a>
+</span><span id="__span-25-6"><a id="__codelineno-25-6" name="__codelineno-25-6" href="#__codelineno-25-6"></a><span class="c1"># If config is corrupted:</span>
+</span><span id="__span-25-7"><a id="__codelineno-25-7" name="__codelineno-25-7" href="#__codelineno-25-7"></a>/root/clawd/scripts/restore-snapshot-config.sh
+</span><span id="__span-25-8"><a id="__codelineno-25-8" name="__codelineno-25-8" href="#__codelineno-25-8"></a>
+</span><span id="__span-25-9"><a id="__codelineno-25-9" name="__codelineno-25-9" href="#__codelineno-25-9"></a><span class="c1"># If OpenClaw won&#39;t start:</span>
+</span><span id="__span-25-10"><a id="__codelineno-25-10" name="__codelineno-25-10" href="#__codelineno-25-10"></a>journalctl<span class="w"> </span>-u<span class="w"> </span>openclaw-gateway<span class="w"> </span>-n<span class="w"> </span><span class="m">100</span>
+</span><span id="__span-25-11"><a id="__codelineno-25-11" name="__codelineno-25-11" href="#__codelineno-25-11"></a><span class="c1"># Fix the error shown, then restart</span>
+</span></code></pre></div></p>
+<hr />
+<p><strong>Thank you for building with OpenClaw.</strong></p>
+<p>Now go build something incredible. 🚀</p>
+<hr />
+<p><em>Last updated: 2026-02-22</em><br />
+<em>Guide version: 1.0</em><br />
+<em>OpenClaw version: Latest stable</em></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/aliahmadaziz" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.tracking", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
