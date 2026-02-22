@@ -1,0 +1,72 @@
+site_name: OpenClaw Installation Guide
+site_url: https://aliahmadaziz.github.io/openclaw-guide
+site_description: Complete guide to installing and configuring OpenClaw AI assistant
+site_author: Ali Ahmad Aziz
+
+theme:
+  name: material
+  palette:
+    # Palette toggle for light mode
+    - scheme: default
+      primary: indigo
+      accent: deep purple
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    # Palette toggle for dark mode
+    - scheme: slate
+      primary: indigo
+      accent: deep purple
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - navigation.tracking
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+    - content.code.annotate
+  icon:
+    repo: fontawesome/brands/github
+
+# Repository
+repo_url: https://github.com/aliahmadaziz/openclaw-guide
+edit_uri: ""  # Hide the edit button
+
+# Social links
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/aliahmadaziz
+
+# Navigation
+nav:
+  - Home: index.md
+  - Installation Guide:
+      - Part 1 - Base Install: part1-base-install.md
+      - Part 2 - AI Assistant: part2-ai-assistant.md
+      - Part 3 - Infrastructure: part3-infrastructure.md
+      - Part 4 - Automation: part4-automation.md
+      - Part 5 - Hardening: part5-hardening.md
+      - Part 6 - Verification: part6-verification.md
+
+# Extensions
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - admonition
+  - pymdownx.details
+  - pymdownx.tabbed:
+      alternate_style: true
+  - attr_list
+  - md_in_html
+  - toc:
+      permalink: true
