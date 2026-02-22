@@ -93,7 +93,24 @@ cscli decisions delete --ip YOUR_LOCAL_IP
 
 ---
 
-## 2. Secret Rotation Protocol
+## 2. Secrets Hygiene
+
+**Rule: NEVER hardcode secrets in scripts.** All API keys, tokens, and credentials go in `~/.clawdbot/webhook.env` (chmod 600, gitignored). Scripts source from env:
+
+- **Shell scripts:** `source ~/.clawdbot/webhook.env` then use `$PUSHOVER_TOKEN`, `$GROQ_API_KEY`, etc.
+- **Python scripts:** `from dotenv import load_dotenv; load_dotenv(os.path.expanduser("~/.clawdbot/webhook.env"))` then `os.environ.get("KEY")`
+
+**WHY:** Your workspace is git-backed (hourly push). Hardcoded secrets in scripts = secrets in git history. Even in a private repo, this is a leak waiting to happen. Git history is permanent; `webhook.env` is gitignored and never leaves the server.
+
+Ensure `.gitignore` includes:
+```
+.env
+*.key
+```
+
+And verify no secrets are tracked: `git ls-files | xargs grep -l "sk_\|gsk_\|token=" 2>/dev/null`
+
+## 3. Secret Rotation Protocol
 
 **WHY:** Credentials decay. A compromised token 6 months old can bypass all your other security. Rotation limits the blast radius of any single leak.
 
@@ -279,7 +296,7 @@ Add line:
 
 ---
 
-## 3. Config Snapshots
+## 4. Config Snapshots
 
 **WHY:** Configuration drift is silent. You change a setting, restart a service, something breaks, and you can't remember what worked. Snapshots give you a "gold standard" to restore in 3 seconds.
 
@@ -463,7 +480,7 @@ crontab -l
 
 ---
 
-## 4. Recovery Scripts (Three-Tier System)
+## 5. Recovery Scripts (Three-Tier System)
 
 **WHY:** Failures have tiers. Config typo ≠ corrupted install ≠ dead server. Each tier needs a different recovery tool.
 
@@ -651,7 +668,7 @@ crontab -l | grep backup
 
 ---
 
-## 5. Device Scope Verification (Prevent WhatsApp Pairing Loops)
+## 6. Device Scope Verification (Prevent WhatsApp Pairing Loops)
 
 **WHY:** OpenClaw 1.x introduced stricter device scope requirements. If your paired device doesn't have `operator.write` scope, pairing will loop forever (QR code → "connected" → immediately disconnects → new QR code).
 

@@ -129,47 +129,107 @@ Add this line:
 
 **WHY:** Cloudflare tunnel occasionally drops. This catches outages. Logs to `system-health.log` only on failure.
 
-### 2.3 Add Cron Delivery Monitor (Every 5min)
+### 2.3 Cron Delivery: Two-Tier Guaranteed Delivery
 
-**Purpose:** If an OpenClaw cron job runs successfully but WhatsApp delivery fails, this script detects the failure and pushes the message to the event queue for retry.
+**Problem:** `--best-effort-deliver` prevents jobs from showing false errors when WhatsApp is temporarily down, but it also means delivery failures are silently swallowed. Critical messages (daily briefings, reminders, follow-ups) could vanish without you knowing.
 
-Create the monitor script:
+**Solution: Two tiers.**
+
+**Tier 1 — Critical (must reach you):** Add a MANDATORY directive to the cron prompt telling the agent to send via `message` tool directly as part of its task. Announce becomes a redundant backup. Example:
 
 ```bash
-cat > /root/clawd/scripts/cron-delivery-monitor.py << 'EOF'
+openclaw cron add \
+  --name "morning-agenda" \
+  --cron "0 9 * * *" \
+  --model "claude-sonnet-4-5" \
+  --announce \
+  --best-effort-deliver \
+  --message "Read my calendar for today. Summarize meetings, focus blocks, urgent events. Keep it under 5 lines.
+
+⚠️ MANDATORY: You MUST send your output to Ali via the message tool (action=send, target=+923224780000) as part of your task. Do NOT rely on announce delivery. If your message tool send fails, retry once. This is your primary delivery mechanism."
+```
+
+**Tier 2 — Background (silent fail OK):** Jobs like event-queue-processor, webhook renewal, health checks. If they complete but delivery fails, no one needs to see the output. Job failures still need alerting.
+
+**WHY:** Critical crons now have TWO delivery paths: (1) the agent sends directly via message tool, (2) announce as backup. Even if announce breaks, you get the message.
+
+### 2.4 Add Cron Failure Monitor (Every 5min)
+
+**Purpose:** With bestEffort=true, delivery failures are silently swallowed (by design). This monitor catches REAL job failures (the agent itself errored) and alerts you.
+
+```bash
+cat > /root/clawd/scripts/cron-delivery-monitor.py << 'PYEOF'
 #!/usr/bin/env python3
-import sqlite3
-import json
-import subprocess
-from pathlib import Path
+"""
+Cron Failure Monitor: detects real job failures (not delivery failures).
+With bestEffort=true, delivery failures are swallowed. Critical crons send
+via message tool directly, so announce is just a bonus.
+This catches when the cron agent itself errors out.
+"""
+import json, os, subprocess, sys
+from datetime import datetime, timezone
 
-DB = Path.home() / ".clawdbot" / "event-queue.sqlite"
-OC_LOG = Path.home() / ".openclaw" / "cron-runs.log"  # Hypothetical OC log location
+STATE_FILE = os.path.expanduser("~/.clawdbot/cron-delivery-state.json")
+EVENT_QUEUE = "/root/clawd/scripts/event-queue.py"
+BACKGROUND_JOBS = {
+    "event-queue-processor", "agentmail-health-check",
+    "calendar-webhook-renew", "red-meeting-reconcile",
+    "github-release-monitor",
+}
 
-def check_failed_deliveries():
-    """Check OC cron logs for successful runs with failed delivery."""
-    if not OC_LOG.exists():
-        return
-    
-    # Parse last 100 lines for delivery failures
-    # (Actual implementation depends on OC's log format)
-    # This is a skeleton — adjust to real OC log structure
-    
-    lines = OC_LOG.read_text().splitlines()[-100:]
-    for line in lines:
-        if "delivery_failed" in line.lower():
-            # Extract job name, output, timestamp
-            # Push to event queue
-            subprocess.run([
-                "python3", "/root/clawd/scripts/event-queue.py",
-                "push", "--type", "cron-delivery",
-                "--source", "delivery-monitor",
-                "--payload", json.dumps({"log_line": line})
-            ])
+def load_state():
+    try:
+        with open(STATE_FILE) as f:
+            return set(tuple(x) for x in json.load(f))
+    except (FileNotFoundError, json.JSONDecodeError):
+        return set()
+
+def save_state(state):
+    os.makedirs(os.path.dirname(STATE_FILE), exist_ok=True)
+    recent = sorted(state, key=lambda x: x[1], reverse=True)[:200]
+    with open(STATE_FILE, "w") as f:
+        json.dump(list(recent), f)
+
+def main():
+    state = load_state()
+    r = subprocess.run(["openclaw", "cron", "list", "--json"],
+                       capture_output=True, text=True, timeout=30)
+    jobs = json.loads(r.stdout).get("jobs", [])
+    alerts = []
+
+    for job in jobs:
+        s = job.get("state", {})
+        if s.get("lastStatus") != "error":
+            continue
+        key = (job["id"], str(s.get("lastRunAtMs", "")))
+        if key in state:
+            continue
+        error = s.get("lastError", "")
+        name = job["name"]
+        is_bg = name in BACKGROUND_JOBS
+        emoji = "⚠️" if is_bg else "🔴"
+        consec = s.get("consecutiveErrors", 0)
+        msg = f"{emoji} *Cron failed:* {name}"
+        if consec > 1:
+            msg += f" ({consec}x)"
+        msg += f"\nError: {error[:200]}"
+        alerts.append(msg)
+        state.add(key)
+
+    save_state(state)
+    if alerts:
+        payload = json.dumps({"message": "\n\n".join(alerts), "source": "cron-monitor"})
+        subprocess.run(["python3", EVENT_QUEUE, "push",
+                        "--type", "cron-delivery", "--source", "cron-monitor",
+                        "--payload", payload, "--priority", "5"],
+                       capture_output=True, text=True, timeout=10)
+        print(f"{len(alerts)} failure(s) queued")
+    else:
+        print("No new failures")
 
 if __name__ == "__main__":
-    check_failed_deliveries()
-EOF
+    main()
+PYEOF
 
 chmod +x /root/clawd/scripts/cron-delivery-monitor.py
 ```
@@ -181,12 +241,12 @@ crontab -e
 
 Add:
 ```
-*/5 * * * * /root/clawd/scripts/cron-delivery-monitor.py
+*/5 * * * * /usr/bin/python3 /root/clawd/scripts/cron-delivery-monitor.py >> /tmp/cron-delivery-monitor.log 2>&1
 ```
 
-**WHY:** No cron message ever gets permanently lost. If delivery fails, it gets retried via event queue.
+**WHY:** No real job failure goes unnoticed. Delivery failures are harmless (critical crons send directly). Background job failures still get flagged.
 
-✅ **Verify:** `crontab -l` shows all 4 jobs (hourly backup, nightly backup, tunnel check, delivery monitor).
+✅ **Verify:** `crontab -l` shows all 4 jobs (hourly backup, nightly backup, tunnel check, failure monitor).
 
 ---
 
