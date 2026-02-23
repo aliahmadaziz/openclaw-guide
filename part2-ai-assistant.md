@@ -4,7 +4,8 @@
 
 **Prerequisites:** 
 - Part 1 complete (OpenClaw installed, WhatsApp connected)
-- API keys for Anthropic and Google AI (get from [console.anthropic.com](https://console.anthropic.com) and [aistudio.google.com](https://aistudio.google.com))
+- A Claude subscription (Max plan recommended) OR an Anthropic API key
+- A Google AI Studio account for Gemini access
 
 ---
 
@@ -12,16 +13,46 @@
 
 The model chain determines which AI models handle different tasks. You configure primary (conversations), fallback (backup), sub-agents (background tasks), and cron (scheduled jobs).
 
-### 1.1 Set API Keys
+### 1.1 Get Your AI Credentials
+
+**Option A — Claude Max Plan (Recommended)**
+
+The Claude Max plan ($100/month) gives you Claude access with built-in usage limits and cooldown periods, which is much more cost-predictable than raw API usage.
+
+1. Subscribe to Claude Max at [claude.ai/settings/billing](https://claude.ai/settings/billing)
+2. Install Claude Code CLI: `npm install -g @anthropic-ai/claude-code`
+3. Run `claude` in your terminal — it will prompt you to authenticate
+4. During auth, it generates an access token — copy this token
+5. Set it in OpenClaw:
+
+```bash
+openclaw config set anthropicApiKey YOUR_CLAUDE_CODE_TOKEN
+```
+
+*Why: The Max plan has built-in spend limits and cooldown periods. Raw API keys (from console.anthropic.com) have no guardrails and can run up significant bills fast. Max plan is safer for always-on assistants.*
+
+**Option B — Raw Anthropic API Key**
+
+If you prefer pay-as-you-go: get a key from [console.anthropic.com](https://console.anthropic.com) and set spend limits in the console.
 
 ```bash
 openclaw config set anthropicApiKey YOUR_ANTHROPIC_KEY
-openclaw config set googleApiKey YOUR_GOOGLE_KEY
 ```
 
-*Why: OpenClaw needs API credentials to call the AI models*
+**Google Gemini (Fallback Model)**
 
-✅ **Verify:** `openclaw config get anthropicApiKey` shows your key (first few chars visible)
+1. Go to [aistudio.google.com](https://aistudio.google.com)
+2. Sign in with your Google account
+3. Click "Get API Key" → create a key
+4. Google AI Studio gives you **$300 in free credits** — more than enough for a fallback model
+
+```bash
+openclaw config set googleApiKey YOUR_AISTUDIO_KEY
+```
+
+*Why: AI Studio's free credits make Gemini essentially free as a fallback. You're not paying for a second model — Google is subsidizing your backup.*
+
+✅ **Verify:** `openclaw config get anthropicApiKey` and `openclaw config get googleApiKey` show your keys (first few chars visible)
 
 ### 1.2 Configure Primary Model
 
@@ -333,7 +364,7 @@ openclaw config set reasoning low
 
 You should now have:
 
-- [ ] Anthropic and Google API keys configured
+- [ ] Claude access configured (Max plan token or API key)
 - [ ] Model chain set (Opus 4.6 primary, Gemini fallback, Sonnet sub-agents, Sonnet cron)
 - [ ] Context window set to 200K tokens
 - [ ] Workspace created at `~/clawd`
@@ -392,8 +423,10 @@ ls -lh ~/clawd/*.md
 - Try explicit instruction: "Read SOUL.md and tell me your tone rules"
 
 **API errors:**
-- Verify keys: `openclaw config get anthropicApiKey`
-- Check API quotas at console.anthropic.com
+- Verify keys: `openclaw config get anthropicApiKey` and `openclaw config get googleApiKey`
+- If using Max plan: check usage at claude.ai/settings/usage
+- If using raw API: check quotas at console.anthropic.com
+- Google credits: check at aistudio.google.com → Settings
 - Test fallback: temporarily disable Anthropic key to trigger Gemini
 
 **Context too large errors:**
