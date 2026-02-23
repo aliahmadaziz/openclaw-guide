@@ -1295,7 +1295,7 @@
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>crontab<span class="w"> </span>-e
 </span></code></pre></div>
 <p>Add this line:
-<div class="language-text highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>*/30 * * * * curl -s -o /dev/null -w &quot;%{http_code}&quot; https://webhook.poweker.com/health || echo &quot;Tunnel down: $(date)&quot; &gt;&gt; /root/clawd/memory/system-health.log
+<div class="language-text highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>*/30 * * * * curl -s -o /dev/null -w &quot;%{http_code}&quot; https://webhook.yourdomain.com/health || echo &quot;Tunnel down: $(date)&quot; &gt;&gt; /root/clawd/memory/system-health.log
 </span></code></pre></div></p>
 <p><strong>WHY:</strong> Cloudflare tunnel occasionally drops. This catches outages. Logs to <code>system-health.log</code> only on failure.</p>
 <h3 id="23-add-cron-delivery-monitor-every-5min">2.3 Add Cron Delivery Monitor (Every 5min)<a class="headerlink" href="#23-add-cron-delivery-monitor-every-5min" title="Permanent link">&para;</a></h3>
@@ -1568,7 +1568,7 @@
 </span><span id="__span-17-15"><a id="__codelineno-17-15" name="__codelineno-17-15" href="#__codelineno-17-15"></a><span class="s">   - If pending &gt;10 or any dead letters, process immediately</span>
 </span><span id="__span-17-16"><a id="__codelineno-17-16" name="__codelineno-17-16" href="#__codelineno-17-16"></a>
 </span><span id="__span-17-17"><a id="__codelineno-17-17" name="__codelineno-17-17" href="#__codelineno-17-17"></a><span class="s">3. **Service Health** (Quick check only)</span>
-</span><span id="__span-17-18"><a id="__codelineno-17-18" name="__codelineno-17-18" href="#__codelineno-17-18"></a><span class="s">   - Check tunnel: `curl -s -o /dev/null -w &quot;%{http_code}&quot; https://webhook.poweker.com/health`</span>
+</span><span id="__span-17-18"><a id="__codelineno-17-18" name="__codelineno-17-18" href="#__codelineno-17-18"></a><span class="s">   - Check tunnel: `curl -s -o /dev/null -w &quot;%{http_code}&quot; https://webhook.yourdomain.com/health`</span>
 </span><span id="__span-17-19"><a id="__codelineno-17-19" name="__codelineno-17-19" href="#__codelineno-17-19"></a><span class="s">   - If down, log to `memory/system-health.log`</span>
 </span><span id="__span-17-20"><a id="__codelineno-17-20" name="__codelineno-17-20" href="#__codelineno-17-20"></a>
 </span><span id="__span-17-21"><a id="__codelineno-17-21" name="__codelineno-17-21" href="#__codelineno-17-21"></a><span class="s">## Secondary Checks (When Time Permits)</span>

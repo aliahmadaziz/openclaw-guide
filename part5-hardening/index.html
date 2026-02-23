@@ -1423,7 +1423,7 @@
 </span><span id="__span-6-21"><a id="__codelineno-6-21" name="__codelineno-6-21" href="#__codelineno-6-21"></a><span class="k">1.</span> Generate new secret: <span class="sb">`openssl rand -hex 16`</span>
 </span><span id="__span-6-22"><a id="__codelineno-6-22" name="__codelineno-6-22" href="#__codelineno-6-22"></a><span class="k">2.</span> Update <span class="sb">`~/.clawdbot/webhook.env`</span> → endpoint paths
 </span><span id="__span-6-23"><a id="__codelineno-6-23" name="__codelineno-6-23" href="#__codelineno-6-23"></a><span class="k">3.</span> Update Cloudflare tunnel config (if paths changed)
-</span><span id="__span-6-24"><a id="__codelineno-6-24" name="__codelineno-6-24" href="#__codelineno-6-24"></a><span class="k">4.</span> Restart webhook: <span class="sb">`systemctl restart moltbot-webhook`</span>
+</span><span id="__span-6-24"><a id="__codelineno-6-24" name="__codelineno-6-24" href="#__codelineno-6-24"></a><span class="k">4.</span> Restart webhook: <span class="sb">`systemctl restart openclaw-webhook`</span>
 </span><span id="__span-6-25"><a id="__codelineno-6-25" name="__codelineno-6-25" href="#__codelineno-6-25"></a><span class="k">5.</span> Re-register Google Calendar webhook with new URL
 </span><span id="__span-6-26"><a id="__codelineno-6-26" name="__codelineno-6-26" href="#__codelineno-6-26"></a><span class="k">6.</span> Test: Trigger calendar event, verify delivery
 </span><span id="__span-6-27"><a id="__codelineno-6-27" name="__codelineno-6-27" href="#__codelineno-6-27"></a>
@@ -1472,8 +1472,8 @@
 </span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="nv">AGENTMAIL_WEBHOOK_PATH</span><span class="o">=</span><span class="s2">&quot;/agentmail/NEW_SECRET_HERE&quot;</span>
 </span></code></pre></div>
 <p>Restart webhook server:</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>systemctl<span class="w"> </span>restart<span class="w"> </span>moltbot-webhook
-</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>systemctl<span class="w"> </span>status<span class="w"> </span>moltbot-webhook
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>systemctl<span class="w"> </span>restart<span class="w"> </span>openclaw-webhook
+</span><span id="__span-12-2"><a id="__codelineno-12-2" name="__codelineno-12-2" href="#__codelineno-12-2"></a>systemctl<span class="w"> </span>status<span class="w"> </span>openclaw-webhook
 </span></code></pre></div>
 <p><strong>Then update external services:</strong>
 - Google Calendar: Re-register webhook with new URL
@@ -1558,7 +1558,7 @@
 </span><span id="__span-19-20"><a id="__codelineno-19-20" name="__codelineno-19-20" href="#__codelineno-19-20"></a>
 </span><span id="__span-19-21"><a id="__codelineno-19-21" name="__codelineno-19-21" href="#__codelineno-19-21"></a><span class="w">    </span><span class="c1"># Systemd services</span>
 </span><span id="__span-19-22"><a id="__codelineno-19-22" name="__codelineno-19-22" href="#__codelineno-19-22"></a><span class="w">    </span>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SNAP_PATH</span><span class="s2">/systemd&quot;</span>
-</span><span id="__span-19-23"><a id="__codelineno-19-23" name="__codelineno-19-23" href="#__codelineno-19-23"></a><span class="w">    </span><span class="k">for</span><span class="w"> </span>service<span class="w"> </span><span class="k">in</span><span class="w"> </span>moltbot-webhook.service<span class="p">;</span><span class="w"> </span><span class="k">do</span>
+</span><span id="__span-19-23"><a id="__codelineno-19-23" name="__codelineno-19-23" href="#__codelineno-19-23"></a><span class="w">    </span><span class="k">for</span><span class="w"> </span>service<span class="w"> </span><span class="k">in</span><span class="w"> </span>openclaw-webhook.service<span class="p">;</span><span class="w"> </span><span class="k">do</span>
 </span><span id="__span-19-24"><a id="__codelineno-19-24" name="__codelineno-19-24" href="#__codelineno-19-24"></a><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="o">[</span><span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;/etc/systemd/system/</span><span class="nv">$service</span><span class="s2">&quot;</span><span class="w"> </span><span class="o">]</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
 </span><span id="__span-19-25"><a id="__codelineno-19-25" name="__codelineno-19-25" href="#__codelineno-19-25"></a><span class="w">            </span>cp<span class="w"> </span><span class="s2">&quot;/etc/systemd/system/</span><span class="nv">$service</span><span class="s2">&quot;</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SNAP_PATH</span><span class="s2">/systemd/&quot;</span>
 </span><span id="__span-19-26"><a id="__codelineno-19-26" name="__codelineno-19-26" href="#__codelineno-19-26"></a><span class="w">            </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;  ✓ </span><span class="nv">$service</span><span class="s2">&quot;</span>
@@ -1632,7 +1632,7 @@
 </span><span id="__span-19-94"><a id="__codelineno-19-94" name="__codelineno-19-94" href="#__codelineno-19-94"></a><span class="w">    </span><span class="k">fi</span>
 </span><span id="__span-19-95"><a id="__codelineno-19-95" name="__codelineno-19-95" href="#__codelineno-19-95"></a>
 </span><span id="__span-19-96"><a id="__codelineno-19-96" name="__codelineno-19-96" href="#__codelineno-19-96"></a><span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;✅ Snapshot restored. Restart services as needed.&quot;</span>
-</span><span id="__span-19-97"><a id="__codelineno-19-97" name="__codelineno-19-97" href="#__codelineno-19-97"></a><span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;   Suggested: openclaw gateway restart &amp;&amp; systemctl restart moltbot-webhook&quot;</span>
+</span><span id="__span-19-97"><a id="__codelineno-19-97" name="__codelineno-19-97" href="#__codelineno-19-97"></a><span class="w">    </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;   Suggested: openclaw gateway restart &amp;&amp; systemctl restart openclaw-webhook&quot;</span>
 </span><span id="__span-19-98"><a id="__codelineno-19-98" name="__codelineno-19-98" href="#__codelineno-19-98"></a><span class="o">}</span>
 </span><span id="__span-19-99"><a id="__codelineno-19-99" name="__codelineno-19-99" href="#__codelineno-19-99"></a>
 </span><span id="__span-19-100"><a id="__codelineno-19-100" name="__codelineno-19-100" href="#__codelineno-19-100"></a>list_snapshots<span class="o">()</span><span class="w"> </span><span class="o">{</span>
@@ -1686,7 +1686,7 @@
 <p><strong>After confirming everything works (all parts of this guide complete):</strong></p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-22-1"><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="c1"># Test everything first</span>
 </span><span id="__span-22-2"><a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a>openclaw<span class="w"> </span>gateway<span class="w"> </span>status
-</span><span id="__span-22-3"><a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a>systemctl<span class="w"> </span>status<span class="w"> </span>moltbot-webhook
+</span><span id="__span-22-3"><a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a>systemctl<span class="w"> </span>status<span class="w"> </span>openclaw-webhook
 </span><span id="__span-22-4"><a id="__codelineno-22-4" name="__codelineno-22-4" href="#__codelineno-22-4"></a>ufw<span class="w"> </span>status
 </span><span id="__span-22-5"><a id="__codelineno-22-5" name="__codelineno-22-5" href="#__codelineno-22-5"></a>crontab<span class="w"> </span>-l
 </span><span id="__span-22-6"><a id="__codelineno-22-6" name="__codelineno-22-6" href="#__codelineno-22-6"></a>
@@ -1702,7 +1702,7 @@
 <p><strong>Solution:</strong> Restore last snapshot (covered in section 3)</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-23-1"><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>/root/clawd/scripts/restore-snapshot-config.sh<span class="w"> </span>restore
 </span><span id="__span-23-2"><a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a>openclaw<span class="w"> </span>gateway<span class="w"> </span>restart
-</span><span id="__span-23-3"><a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a>systemctl<span class="w"> </span>restart<span class="w"> </span>moltbot-webhook
+</span><span id="__span-23-3"><a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a>systemctl<span class="w"> </span>restart<span class="w"> </span>openclaw-webhook
 </span></code></pre></div>
 <p><strong>Time to recovery:</strong> 3 seconds<br />
 <strong>What it restores:</strong> Config files only (openclaw.json, systemd services, SSH config, crontab, UFW rules)</p>
@@ -1833,7 +1833,7 @@
 </span><span id="__span-30-8"><a id="__codelineno-30-8" name="__codelineno-30-8" href="#__codelineno-30-8"></a><span class="c1"># (From your phone: send &quot;test&quot; to bot WhatsApp number)</span>
 </span><span id="__span-30-9"><a id="__codelineno-30-9" name="__codelineno-30-9" href="#__codelineno-30-9"></a>
 </span><span id="__span-30-10"><a id="__codelineno-30-10" name="__codelineno-30-10" href="#__codelineno-30-10"></a><span class="c1"># 4. Check critical services</span>
-</span><span id="__span-30-11"><a id="__codelineno-30-11" name="__codelineno-30-11" href="#__codelineno-30-11"></a>systemctl<span class="w"> </span>status<span class="w"> </span>moltbot-webhook<span class="w"> </span>crowdsec
+</span><span id="__span-30-11"><a id="__codelineno-30-11" name="__codelineno-30-11" href="#__codelineno-30-11"></a>systemctl<span class="w"> </span>status<span class="w"> </span>openclaw-webhook<span class="w"> </span>crowdsec
 </span><span id="__span-30-12"><a id="__codelineno-30-12" name="__codelineno-30-12" href="#__codelineno-30-12"></a>
 </span><span id="__span-30-13"><a id="__codelineno-30-13" name="__codelineno-30-13" href="#__codelineno-30-13"></a><span class="c1"># 5. Verify backups still running</span>
 </span><span id="__span-30-14"><a id="__codelineno-30-14" name="__codelineno-30-14" href="#__codelineno-30-14"></a>crontab<span class="w"> </span>-l<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>backup
@@ -1940,7 +1940,7 @@
 </span><span id="__span-36-6"><a id="__codelineno-36-6" name="__codelineno-36-6" href="#__codelineno-36-6"></a>openclaw<span class="w"> </span>status<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>scope
 </span><span id="__span-36-7"><a id="__codelineno-36-7" name="__codelineno-36-7" href="#__codelineno-36-7"></a>
 </span><span id="__span-36-8"><a id="__codelineno-36-8" name="__codelineno-36-8" href="#__codelineno-36-8"></a><span class="c1"># 2. Infrastructure</span>
-</span><span id="__span-36-9"><a id="__codelineno-36-9" name="__codelineno-36-9" href="#__codelineno-36-9"></a>systemctl<span class="w"> </span>status<span class="w"> </span>moltbot-webhook<span class="w"> </span>crowdsec<span class="w"> </span>crowdsec-firewall-bouncer
+</span><span id="__span-36-9"><a id="__codelineno-36-9" name="__codelineno-36-9" href="#__codelineno-36-9"></a>systemctl<span class="w"> </span>status<span class="w"> </span>openclaw-webhook<span class="w"> </span>crowdsec<span class="w"> </span>crowdsec-firewall-bouncer
 </span><span id="__span-36-10"><a id="__codelineno-36-10" name="__codelineno-36-10" href="#__codelineno-36-10"></a>
 </span><span id="__span-36-11"><a id="__codelineno-36-11" name="__codelineno-36-11" href="#__codelineno-36-11"></a><span class="c1"># 3. Backups</span>
 </span><span id="__span-36-12"><a id="__codelineno-36-12" name="__codelineno-36-12" href="#__codelineno-36-12"></a>crontab<span class="w"> </span>-l<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s1">&#39;backup|verify&#39;</span>
@@ -1995,7 +1995,7 @@
 </span><span id="__span-37-24"><a id="__codelineno-37-24" name="__codelineno-37-24" href="#__codelineno-37-24"></a><span class="c1"># Post-Recovery</span>
 </span><span id="__span-37-25"><a id="__codelineno-37-25" name="__codelineno-37-25" href="#__codelineno-37-25"></a>openclaw<span class="w"> </span>doctor<span class="w">                            </span><span class="c1"># Health check</span>
 </span><span id="__span-37-26"><a id="__codelineno-37-26" name="__codelineno-37-26" href="#__codelineno-37-26"></a>openclaw<span class="w"> </span>gateway<span class="w"> </span>probe<span class="w">                     </span><span class="c1"># Connectivity test</span>
-</span><span id="__span-37-27"><a id="__codelineno-37-27" name="__codelineno-37-27" href="#__codelineno-37-27"></a>systemctl<span class="w"> </span>status<span class="w"> </span>crowdsec<span class="w"> </span>moltbot-webhook<span class="w">  </span><span class="c1"># Service status</span>
+</span><span id="__span-37-27"><a id="__codelineno-37-27" name="__codelineno-37-27" href="#__codelineno-37-27"></a>systemctl<span class="w"> </span>status<span class="w"> </span>crowdsec<span class="w"> </span>openclaw-webhook<span class="w">  </span><span class="c1"># Service status</span>
 </span></code></pre></div>
 <hr />
 <p><strong>Estimated time:</strong> 25-30 minutes</p>
