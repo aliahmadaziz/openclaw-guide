@@ -158,7 +158,7 @@ Quick lookup for common issues across all parts.
 | **WhatsApp disconnected** | QR code expired or phone offline | Re-pair: `openclaw gateway restart`, scan QR |
 | **Bot doesn't respond** | Gateway stopped or model API issue | Check status: `systemctl status openclaw-gateway` |
 | **"Model rate limit"** | Too many requests | Wait 60s, or switch to fallback model |
-| **Webhook not receiving** | Tunnel down or server crashed | Restart: `systemctl restart cloudflared moltbot-webhook` |
+| **Webhook not receiving** | Tunnel down or server crashed | Restart: `systemctl restart cloudflared openclaw-webhook` |
 | **Backup not running** | Cron misconfigured | Check: `crontab -l`, verify paths |
 | **Token expired** | Google OAuth needs refresh | Re-auth: `scripts/google-reauth.py` |
 | **"Permission denied" errors** | Wrong file ownership | Fix: `chown -R root:root /root/clawd` |
@@ -236,14 +236,14 @@ curl https://api.anthropic.com/v1/messages \
 ```bash
 # Check both services
 systemctl status cloudflared
-systemctl status moltbot-webhook
+systemctl status openclaw-webhook
 
 # Check tunnel config
 cat ~/.cloudflared/config.yml
 
 # Restart both
 systemctl restart cloudflared
-systemctl restart moltbot-webhook
+systemctl restart openclaw-webhook
 
 # Test local webhook
 curl http://127.0.0.1:8088/health
@@ -495,7 +495,7 @@ nano /root/clawd/SOUL.md
 # SOUL.md
 
 ## Primary Directive
-I am Moltres, Ali's executive assistant. My purpose is to:
+I am MyBot, your executive assistant. My purpose is to:
 1. Manage his calendar and priorities
 2. Handle research and data gathering
 3. Draft communications
@@ -571,7 +571,7 @@ Add to `openclaw.json`:
 1. Sign up at [agentmail.to](https://agentmail.to)
 2. Get your bot email: `yourname@agentmail.to`
 3. Configure webhook in AgentMail settings
-4. Point to: `https://webhook.poweker.com/agentmail/YOUR_SECRET`
+4. Point to: `https://webhook.yourdomain.com/agentmail/YOUR_SECRET`
 5. Bot receives emails, processes via event queue
 
 **Option 2: Gmail API (Full Control)**
@@ -604,7 +604,7 @@ def get_weather(city):
     return f"{city}: {temp_c:.1f}°C, {description}"
 
 if __name__ == "__main__":
-    city = sys.argv[1] if len(sys.argv) > 1 else "Karachi"
+    city = sys.argv[1] if len(sys.argv) > 1 else "Your City"
     print(get_weather(city))
 ```
 

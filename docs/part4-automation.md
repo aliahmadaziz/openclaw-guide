@@ -124,7 +124,7 @@ crontab -e
 
 Add this line:
 ```
-*/30 * * * * curl -s -o /dev/null -w "%{http_code}" https://webhook.poweker.com/health || echo "Tunnel down: $(date)" >> /root/clawd/memory/system-health.log
+*/30 * * * * curl -s -o /dev/null -w "%{http_code}" https://webhook.yourdomain.com/health || echo "Tunnel down: $(date)" >> /root/clawd/memory/system-health.log
 ```
 
 **WHY:** Cloudflare tunnel occasionally drops. This catches outages. Logs to `system-health.log` only on failure.
@@ -443,7 +443,7 @@ Run these checks every heartbeat (when idle, ~30-60min intervals).
    - If pending >10 or any dead letters, process immediately
 
 3. **Service Health** (Quick check only)
-   - Check tunnel: `curl -s -o /dev/null -w "%{http_code}" https://webhook.poweker.com/health`
+   - Check tunnel: `curl -s -o /dev/null -w "%{http_code}" https://webhook.yourdomain.com/health`
    - If down, log to `memory/system-health.log`
 
 ## Secondary Checks (When Time Permits)

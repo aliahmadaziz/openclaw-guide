@@ -68,7 +68,7 @@ Ready to begin? Start with [Part 1 - Base Install](part1-base-install.md) to set
 
 ---
 
-**Credits:** Built by [Ali Ahmad Aziz](https://github.com/aliahmadaziz) with help from Moltbot 🦞
+**Credits:** Built by [Your Name](https://github.com/yourusername) with help from MyBot 🦞
 
 Based on a real production setup running 24/7 since January 2026.
 

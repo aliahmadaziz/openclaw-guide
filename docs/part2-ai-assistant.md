@@ -146,10 +146,10 @@ EOF
 cat > ~/clawd/USER.md << 'EOF'
 # USER.md - About You
 
-**Name:** Ali Aziz  
+**Name:** Your Name  
 **Role:** Founder & CEO  
-**Timezone:** UTC+5 (Pakistan Standard Time)  
-**Location:** Lahore, Pakistan
+**Timezone:** UTC+5 (Your Timezone)  
+**Location:** Your City
 
 ## Communication Preferences
 - **Response time:** Immediate for urgent, batched for routine
@@ -176,7 +176,7 @@ EOF
 cat > ~/clawd/IDENTITY.md << 'EOF'
 # IDENTITY.md - Bot Identity
 
-**Name:** Moltbot  
+**Name:** MyBot  
 **Emoji:** 🤖  
 **Avatar:** (none set)
 
@@ -224,7 +224,7 @@ openclaw config set projectContextFiles '["AGENTS.md","TOOLS.md"]'
 ### 3.3 Set System Prompt (Optional but Recommended)
 
 ```bash
-openclaw config set systemPrompt "You are Moltbot, Ali's personal AI assistant. Read SOUL.md, USER.md, and SECURITY.md before every response. Be direct, efficient, and context-aware."
+openclaw config set systemPrompt "You are MyBot, your personal AI assistant. Read SOUL.md, USER.md, and SECURITY.md before every response. Be direct, efficient, and context-aware."
 ```
 
 *Why: This instruction is prepended to every conversation, ensuring the AI always reads core files*
@@ -258,7 +258,7 @@ Who are you and what's my name?
 ```
 
 **Expected Response:**
-The bot should introduce itself using the identity from `IDENTITY.md` (Moltbot 🤖) and mention your name from `USER.md` (Ali Aziz).
+The bot should introduce itself using the identity from `IDENTITY.md` (MyBot 🤖) and mention your name from `USER.md` (Your Name).
 
 ✅ **Verify:** Bot knows its own name and your name
 
@@ -284,7 +284,7 @@ What timezone am I in?
 ```
 
 **Expected Response:**
-Bot should reference `USER.md` and say UTC+5 / Pakistan Standard Time.
+Bot should reference `USER.md` and say UTC+5 / Your Timezone.
 
 ✅ **Verify:** Bot reads and uses USER.md data
 
