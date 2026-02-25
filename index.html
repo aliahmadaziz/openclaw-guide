@@ -383,10 +383,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#installation-parts" class="md-nav__link">
+  <a href="#what-this-guide-covers" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Installation Parts
+        What This Guide Covers
       
     </span>
   </a>
@@ -427,6 +427,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#status" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Status
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#community" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -438,10 +449,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#getting-started" class="md-nav__link">
+  <a href="#credits" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Getting Started
+        Credits
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#license" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        License
       
     </span>
   </a>
@@ -721,10 +743,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#installation-parts" class="md-nav__link">
+  <a href="#what-this-guide-covers" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Installation Parts
+        What This Guide Covers
       
     </span>
   </a>
@@ -765,6 +787,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#status" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Status
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#community" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -776,10 +809,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#getting-started" class="md-nav__link">
+  <a href="#credits" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Getting Started
+        Credits
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#license" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        License
       
     </span>
   </a>
@@ -807,11 +851,7 @@
 <p>An idiot-proof, copy-paste guide to setting up a <strong>hardened, production-ready OpenClaw AI assistant</strong> from zero in 3-4 hours.</p>
 <h2 id="what-is-openclaw">What is OpenClaw?<a class="headerlink" href="#what-is-openclaw" title="Permanent link">&para;</a></h2>
 <p><a href="https://github.com/openclaw/openclaw">OpenClaw</a> connects AI models (Claude, Gemini, etc.) to messaging platforms (WhatsApp, Telegram, Discord) with persistent memory, automation, and tool use. Think of it as your personal AI assistant that lives in your chat.</p>
-<div class="admonition info">
-<p class="admonition-title">What This Guide Covers</p>
-<p>This comprehensive guide takes you from a blank VPS to a fully hardened, production-ready AI assistant with automated backups, monitoring, and recovery systems.</p>
-</div>
-<h2 id="installation-parts">Installation Parts<a class="headerlink" href="#installation-parts" title="Permanent link">&para;</a></h2>
+<h2 id="what-this-guide-covers">What This Guide Covers<a class="headerlink" href="#what-this-guide-covers" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
@@ -823,37 +863,37 @@
 </thead>
 <tbody>
 <tr>
-<td><a href="part1-base-install/">Part 1 - Base Install</a></td>
+<td><a href="part1-base-install/">Part 1</a></td>
 <td>Base Install</td>
 <td>30 min</td>
 <td>Hardened VPS + OpenClaw + WhatsApp connected</td>
 </tr>
 <tr>
-<td><a href="part2-ai-assistant/">Part 2 - AI Assistant</a></td>
+<td><a href="part2-ai-assistant/">Part 2</a></td>
 <td>Your AI Assistant</td>
 <td>30 min</td>
 <td>Persona, models, workspace configured</td>
 </tr>
 <tr>
-<td><a href="part3-infrastructure/">Part 3 - Infrastructure</a></td>
+<td><a href="part3-infrastructure/">Part 3</a></td>
 <td>Infrastructure</td>
 <td>1 hr</td>
 <td>Google OAuth, webhooks, Cloudflare tunnel, backups</td>
 </tr>
 <tr>
-<td><a href="part4-automation/">Part 4 - Automation</a></td>
+<td><a href="part4-automation/">Part 4</a></td>
 <td>Automation</td>
 <td>1 hr</td>
 <td>Cron jobs, event queue, reminders, heartbeats</td>
 </tr>
 <tr>
-<td><a href="part5-hardening/">Part 5 - Hardening</a></td>
+<td><a href="part5-hardening/">Part 5</a></td>
 <td>Hardening</td>
 <td>30 min</td>
 <td>CrowdSec, secret rotation, snapshots, recovery</td>
 </tr>
 <tr>
-<td><a href="part6-verification/">Part 6 - Verification</a></td>
+<td><a href="part6-verification/">Part 6</a></td>
 <td>Verification</td>
 <td>15 min</td>
 <td>21-point validation + troubleshooting</td>
@@ -861,20 +901,14 @@
 </tbody>
 </table>
 <h2 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">&para;</a></h2>
-<p>Before you begin, make sure you have:</p>
 <ul>
-<li><strong>A VPS</strong> - Guide uses <a href="https://console.hetzner.cloud/">Hetzner</a> CX22 (2 vCPU, 4GB RAM, ~€4/mo)</li>
-<li><strong>WhatsApp account</strong> - For bot pairing</li>
-<li><strong>API keys</strong> - <a href="https://console.anthropic.com">Anthropic</a> and/or <a href="https://aistudio.google.com">Google AI</a></li>
-<li><strong>Domain name</strong> - For webhooks via Cloudflare tunnel</li>
-<li><strong>Time</strong> - ~3-4 hours of uninterrupted time</li>
+<li>A VPS (guide uses <a href="https://console.hetzner.cloud/">Hetzner</a> CX22 — 2 vCPU, 4GB RAM, ~€4/mo)</li>
+<li>A WhatsApp account for bot pairing</li>
+<li>API keys for <a href="https://console.anthropic.com">Anthropic</a> and/or <a href="https://aistudio.google.com">Google AI</a></li>
+<li>A domain name (for webhooks via Cloudflare tunnel)</li>
+<li>~3-4 hours of uninterrupted time</li>
 </ul>
-<div class="admonition warning">
-<p class="admonition-title">Production Environment</p>
-<p>This guide sets up a production-grade system. Do not skip security steps or use weak credentials.</p>
-</div>
 <h2 id="design-principles">Design Principles<a class="headerlink" href="#design-principles" title="Permanent link">&para;</a></h2>
-<p>This guide follows strict principles to ensure reliability:</p>
 <ul>
 <li><strong>Linear, no branching</strong> — One path, one outcome. No "if you want X, do Y."</li>
 <li><strong>Copy-paste ready</strong> — Every command block can be pasted directly into terminal.</li>
@@ -882,17 +916,21 @@
 <li><strong>Production-hardened</strong> — Not a toy setup. Firewall, intrusion detection, encrypted backups, 3-tier recovery.</li>
 </ul>
 <h2 id="what-you-end-up-with">What You End Up With<a class="headerlink" href="#what-you-end-up-with" title="Permanent link">&para;</a></h2>
-<p>By the end of this guide, you'll have:</p>
 <ul>
-<li>🤖 <strong>AI assistant</strong> in WhatsApp with custom personality</li>
-<li>📅 <strong>Google Calendar, Gmail, Drive</strong> integration</li>
-<li>🔄 <strong>Automated backups</strong> - Hourly + nightly to encrypted Google Drive</li>
-<li>⏰ <strong>Cron jobs</strong> - Reminders, event queue with retry logic</li>
-<li>🛡️ <strong>Security</strong> - CrowdSec intrusion detection, UFW firewall, SSH hardening</li>
-<li>🔑 <strong>Secret rotation</strong> - Schedule + automated alerts</li>
-<li>💾 <strong>Recovery</strong> - Config snapshots + 3-tier recovery (3 seconds to full restore)</li>
-<li>✅ <strong>Verification</strong> - 21-point automated validation script</li>
+<li>🤖 AI assistant in WhatsApp with custom personality</li>
+<li>📅 Google Calendar, Gmail, Drive integration</li>
+<li>🔄 Automated backups (hourly + nightly to encrypted Google Drive)</li>
+<li>⏰ Cron jobs, reminders, event queue with retry logic</li>
+<li>🛡️ CrowdSec intrusion detection, UFW firewall, SSH hardening</li>
+<li>🔑 Secret rotation schedule + automated alerts</li>
+<li>💾 Config snapshots + 3-tier recovery (3 seconds to full restore)</li>
+<li>✅ 21-point automated verification script</li>
 </ul>
+<h2 id="status">Status<a class="headerlink" href="#status" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p><strong>Last Updated:</strong> February 25, 2026 (OpenClaw 2026.2.24)</p>
+<p>This guide covers core setup and gets you to a fully working production system. Advanced hardening features (Chinese wall enforcement between work silos, automated config drift detection, cron backup guards) are documented in the codebase but not yet covered here. Core functionality is solid and battle-tested.</p>
+</blockquote>
 <h2 id="community">Community<a class="headerlink" href="#community" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>OpenClaw Docs:</strong> <a href="https://docs.openclaw.ai">docs.openclaw.ai</a></li>
@@ -900,12 +938,11 @@
 <li><strong>Discord:</strong> <a href="https://discord.com/invite/clawd">discord.com/invite/clawd</a></li>
 <li><strong>Skills Marketplace:</strong> <a href="https://clawhub.com">clawhub.com</a></li>
 </ul>
-<h2 id="getting-started">Getting Started<a class="headerlink" href="#getting-started" title="Permanent link">&para;</a></h2>
-<p>Ready to begin? Start with <a href="part1-base-install/">Part 1 - Base Install</a> to set up your VPS and install OpenClaw.</p>
-<hr />
-<p><strong>Credits:</strong> Built by <a href="https://github.com/yourusername">Your Name</a> with help from MyBot 🦞</p>
+<h2 id="credits">Credits<a class="headerlink" href="#credits" title="Permanent link">&para;</a></h2>
+<p>Built by <a href="https://github.com/aliahmadaziz">Ali Aziz</a> with help from Moltbot 🦞</p>
 <p>Based on a real production setup running 24/7 since January 2026.</p>
-<p><strong>License:</strong> MIT — use it, fork it, improve it.</p>
+<h2 id="license">License<a class="headerlink" href="#license" title="Permanent link">&para;</a></h2>
+<p>MIT — use it, fork it, improve it.</p>
 
 
 
