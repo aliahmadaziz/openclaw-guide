@@ -43,6 +43,12 @@ An idiot-proof, copy-paste guide to setting up a **hardened, production-ready Op
 - 💾 Config snapshots + 3-tier recovery (3 seconds to full restore)
 - ✅ 21-point automated verification script
 
+## Status
+
+> **Last Updated:** February 25, 2026 (OpenClaw 2026.2.24)
+>
+> This guide covers core setup and gets you to a fully working production system. Advanced hardening features (Chinese wall enforcement between work silos, automated config drift detection, cron backup guards) are documented in the codebase but not yet covered here. Core functionality is solid and battle-tested.
+
 ## Community
 
 - **OpenClaw Docs:** [docs.openclaw.ai](https://docs.openclaw.ai)
