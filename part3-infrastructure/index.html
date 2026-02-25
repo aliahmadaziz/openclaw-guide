@@ -1728,7 +1728,7 @@
 - <code>token.json</code> — Primary/work account
 - <code>token-gmail.json</code> — Personal Gmail
 - <code>token-work.json</code> — Work calendar
-- <code>tokens/shopdev.json</code> — Per-domain tokens</p>
+- <code>tokens/work.json</code> — Per-domain tokens</p>
 <hr />
 <h2 id="2-cloudflare-tunnel">2. Cloudflare Tunnel<a class="headerlink" href="#2-cloudflare-tunnel" title="Permanent link">&para;</a></h2>
 <p>Cloudflare Tunnel exposes your local webhook server (port 8088) via a public HTTPS URL without opening firewall ports. This is required for Google Calendar push notifications and other webhooks.</p>
@@ -1948,9 +1948,9 @@
 <p>Press <code>Ctrl+C</code> in the server terminal to stop.</p>
 <p>✅ <strong>Verify:</strong> Curl commands succeed, server logs show requests</p>
 <h3 id="35-create-systemd-service">3.5 Create Systemd Service<a class="headerlink" href="#35-create-systemd-service" title="Permanent link">&para;</a></h3>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>/etc/systemd/system/webhook.service<span class="w"> </span><span class="s">&lt;&lt; &#39;EOF&#39;</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>/etc/systemd/system/moltbot-webhook.service<span class="w"> </span><span class="s">&lt;&lt; &#39;EOF&#39;</span>
 </span><span id="__span-21-2"><a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="s">[Unit]</span>
-</span><span id="__span-21-3"><a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a><span class="s">Description=OpenClaw Webhook Server</span>
+</span><span id="__span-21-3"><a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a><span class="s">Description=Moltbot Webhook Server</span>
 </span><span id="__span-21-4"><a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a><span class="s">After=network.target</span>
 </span><span id="__span-21-5"><a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a>
 </span><span id="__span-21-6"><a id="__codelineno-21-6" name="__codelineno-21-6" href="#__codelineno-21-6"></a><span class="s">[Service]</span>
@@ -1968,17 +1968,21 @@
 </span><span id="__span-21-18"><a id="__codelineno-21-18" name="__codelineno-21-18" href="#__codelineno-21-18"></a><span class="s">WantedBy=multi-user.target</span>
 </span><span id="__span-21-19"><a id="__codelineno-21-19" name="__codelineno-21-19" href="#__codelineno-21-19"></a><span class="s">EOF</span>
 </span></code></pre></div>
-<p><em>Why: Runs webhook server as a system service with automatic restart</em></p>
+<p><em>Why: Runs webhook server as a system service with automatic restart. Named "moltbot-webhook" to avoid conflicts with other webhook services.</em></p>
+<p>Secure the env file:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-22-1"><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>chmod<span class="w"> </span><span class="m">600</span><span class="w"> </span>~/.clawdbot/webhook.env
+</span></code></pre></div>
+<p><em>Why: Webhook secrets must be readable only by root</em></p>
 <p>Enable and start:</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-22-1"><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>systemctl<span class="w"> </span>daemon-reload
-</span><span id="__span-22-2"><a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>webhook
-</span><span id="__span-22-3"><a id="__codelineno-22-3" name="__codelineno-22-3" href="#__codelineno-22-3"></a>systemctl<span class="w"> </span>start<span class="w"> </span>webhook
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-23-1"><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>systemctl<span class="w"> </span>daemon-reload
+</span><span id="__span-23-2"><a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>moltbot-webhook
+</span><span id="__span-23-3"><a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a>systemctl<span class="w"> </span>start<span class="w"> </span>moltbot-webhook
 </span></code></pre></div>
 <p><em>Why: Starts webhook server now and on every boot</em></p>
-<p>✅ <strong>Verify:</strong> <code>systemctl status webhook</code> shows "active (running)"</p>
+<p>✅ <strong>Verify:</strong> <code>systemctl status moltbot-webhook</code> shows "active (running)"</p>
 <h3 id="36-test-public-webhook-url">3.6 Test Public Webhook URL<a class="headerlink" href="#36-test-public-webhook-url" title="Permanent link">&para;</a></h3>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-23-1"><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a><span class="nb">source</span><span class="w"> </span>~/.clawdbot/webhook.env
-</span><span id="__span-23-2"><a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a>curl<span class="w"> </span>https://webhook.YOUR_DOMAIN.com/health
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-24-1"><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a><span class="nb">source</span><span class="w"> </span>~/.clawdbot/webhook.env
+</span><span id="__span-24-2"><a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a>curl<span class="w"> </span>https://webhook.YOUR_DOMAIN.com/health
 </span></code></pre></div>
 <p><em>Replace YOUR_DOMAIN.com with your actual domain</em></p>
 <p><em>Expected: Returns JSON with <code>"status": "healthy"</code></em></p>
@@ -1987,12 +1991,12 @@
 <h2 id="4-backup-system">4. Backup System<a class="headerlink" href="#4-backup-system" title="Permanent link">&para;</a></h2>
 <p>Automated backups prevent data loss. You'll set up hourly lightweight backups (git + databases) and nightly full backups (complete workspace + OpenClaw state) to Google Drive.</p>
 <h3 id="41-install-rclone">4.1 Install Rclone<a class="headerlink" href="#41-install-rclone" title="Permanent link">&para;</a></h3>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-24-1"><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a>curl<span class="w"> </span>https://rclone.org/install.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>bash
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-25-1"><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>curl<span class="w"> </span>https://rclone.org/install.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>bash
 </span></code></pre></div>
 <p><em>Why: Rclone syncs files to cloud storage (Google Drive, S3, etc.)</em></p>
 <p>✅ <strong>Verify:</strong> <code>rclone version</code> shows version number</p>
 <h3 id="42-configure-google-drive-remote">4.2 Configure Google Drive Remote<a class="headerlink" href="#42-configure-google-drive-remote" title="Permanent link">&para;</a></h3>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-25-1"><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>rclone<span class="w"> </span>config
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-26-1"><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>rclone<span class="w"> </span>config
 </span></code></pre></div>
 <p><em>Why: Interactive setup to connect rclone to Google Drive</em></p>
 <p><strong>Follow the prompts:</strong></p>
@@ -2015,7 +2019,7 @@
 <p>✅ <strong>Verify:</strong> <code>rclone lsd gdrive:</code> lists your Google Drive folders</p>
 <h3 id="43-configure-encrypted-remote-optional-but-recommended">4.3 Configure Encrypted Remote (Optional but Recommended)<a class="headerlink" href="#43-configure-encrypted-remote-optional-but-recommended" title="Permanent link">&para;</a></h3>
 <p>Encrypt backups before uploading to cloud:</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-26-1"><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>rclone<span class="w"> </span>config
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-27-1"><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a>rclone<span class="w"> </span>config
 </span></code></pre></div>
 <p><strong>Follow the prompts:</strong></p>
 <ol>
@@ -2034,120 +2038,134 @@
 <p>✅ <strong>Verify:</strong> <code>rclone lsd gdrive-crypt:</code> shows empty list (new remote)</p>
 <p><strong>⚠️ SAVE YOUR ENCRYPTION PASSWORD</strong> — losing it means losing all backup access.</p>
 <h3 id="44-create-hourly-backup-script">4.4 Create Hourly Backup Script<a class="headerlink" href="#44-create-hourly-backup-script" title="Permanent link">&para;</a></h3>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-27-1"><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>~/clawd/backup.sh<span class="w"> </span><span class="s">&lt;&lt; &#39;EOF&#39;</span>
-</span><span id="__span-27-2"><a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a><span class="s">#!/bin/bash</span>
-</span><span id="__span-27-3"><a id="__codelineno-27-3" name="__codelineno-27-3" href="#__codelineno-27-3"></a><span class="s"># Hourly backup: git push + rclone databases</span>
-</span><span id="__span-27-4"><a id="__codelineno-27-4" name="__codelineno-27-4" href="#__codelineno-27-4"></a><span class="s">set -e</span>
-</span><span id="__span-27-5"><a id="__codelineno-27-5" name="__codelineno-27-5" href="#__codelineno-27-5"></a>
-</span><span id="__span-27-6"><a id="__codelineno-27-6" name="__codelineno-27-6" href="#__codelineno-27-6"></a><span class="s">cd /root/clawd</span>
-</span><span id="__span-27-7"><a id="__codelineno-27-7" name="__codelineno-27-7" href="#__codelineno-27-7"></a>
-</span><span id="__span-27-8"><a id="__codelineno-27-8" name="__codelineno-27-8" href="#__codelineno-27-8"></a><span class="s"># Git backup</span>
-</span><span id="__span-27-9"><a id="__codelineno-27-9" name="__codelineno-27-9" href="#__codelineno-27-9"></a><span class="s">git add -A</span>
-</span><span id="__span-27-10"><a id="__codelineno-27-10" name="__codelineno-27-10" href="#__codelineno-27-10"></a><span class="s">git commit -m &quot;Hourly backup $(date -u +%Y-%m-%d_%H:%M:%S)&quot; || true</span>
-</span><span id="__span-27-11"><a id="__codelineno-27-11" name="__codelineno-27-11" href="#__codelineno-27-11"></a><span class="s">git push origin main || echo &quot;Git push failed (non-fatal)&quot;</span>
-</span><span id="__span-27-12"><a id="__codelineno-27-12" name="__codelineno-27-12" href="#__codelineno-27-12"></a>
-</span><span id="__span-27-13"><a id="__codelineno-27-13" name="__codelineno-27-13" href="#__codelineno-27-13"></a><span class="s"># Backup SQLite databases to Google Drive</span>
-</span><span id="__span-27-14"><a id="__codelineno-27-14" name="__codelineno-27-14" href="#__codelineno-27-14"></a><span class="s">rclone copy ~/.clawdbot/*.sqlite gdrive-crypt:openclaw-backups/databases/ \</span>
-</span><span id="__span-27-15"><a id="__codelineno-27-15" name="__codelineno-27-15" href="#__codelineno-27-15"></a><span class="s">  --include &quot;*.sqlite&quot; \</span>
-</span><span id="__span-27-16"><a id="__codelineno-27-16" name="__codelineno-27-16" href="#__codelineno-27-16"></a><span class="s">  --log-file=/var/log/backup-hourly.log</span>
-</span><span id="__span-27-17"><a id="__codelineno-27-17" name="__codelineno-27-17" href="#__codelineno-27-17"></a>
-</span><span id="__span-27-18"><a id="__codelineno-27-18" name="__codelineno-27-18" href="#__codelineno-27-18"></a><span class="s">echo &quot;✅ Hourly backup complete: $(date -u)&quot;</span>
-</span><span id="__span-27-19"><a id="__codelineno-27-19" name="__codelineno-27-19" href="#__codelineno-27-19"></a><span class="s">EOF</span>
-</span><span id="__span-27-20"><a id="__codelineno-27-20" name="__codelineno-27-20" href="#__codelineno-27-20"></a>
-</span><span id="__span-27-21"><a id="__codelineno-27-21" name="__codelineno-27-21" href="#__codelineno-27-21"></a>chmod<span class="w"> </span>+x<span class="w"> </span>~/clawd/backup.sh
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-28-1"><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>~/clawd/backup.sh<span class="w"> </span><span class="s">&lt;&lt; &#39;EOF&#39;</span>
+</span><span id="__span-28-2"><a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a><span class="s">#!/bin/bash</span>
+</span><span id="__span-28-3"><a id="__codelineno-28-3" name="__codelineno-28-3" href="#__codelineno-28-3"></a><span class="s"># Hourly backup: git push + rclone databases</span>
+</span><span id="__span-28-4"><a id="__codelineno-28-4" name="__codelineno-28-4" href="#__codelineno-28-4"></a><span class="s">set -e</span>
+</span><span id="__span-28-5"><a id="__codelineno-28-5" name="__codelineno-28-5" href="#__codelineno-28-5"></a>
+</span><span id="__span-28-6"><a id="__codelineno-28-6" name="__codelineno-28-6" href="#__codelineno-28-6"></a><span class="s">cd /root/clawd</span>
+</span><span id="__span-28-7"><a id="__codelineno-28-7" name="__codelineno-28-7" href="#__codelineno-28-7"></a>
+</span><span id="__span-28-8"><a id="__codelineno-28-8" name="__codelineno-28-8" href="#__codelineno-28-8"></a><span class="s"># Git backup</span>
+</span><span id="__span-28-9"><a id="__codelineno-28-9" name="__codelineno-28-9" href="#__codelineno-28-9"></a><span class="s">git add -A</span>
+</span><span id="__span-28-10"><a id="__codelineno-28-10" name="__codelineno-28-10" href="#__codelineno-28-10"></a><span class="s">git commit -m &quot;Hourly backup $(date -u +%Y-%m-%d_%H:%M:%S)&quot; || true</span>
+</span><span id="__span-28-11"><a id="__codelineno-28-11" name="__codelineno-28-11" href="#__codelineno-28-11"></a><span class="s">git push origin main || echo &quot;Git push failed (non-fatal)&quot;</span>
+</span><span id="__span-28-12"><a id="__codelineno-28-12" name="__codelineno-28-12" href="#__codelineno-28-12"></a>
+</span><span id="__span-28-13"><a id="__codelineno-28-13" name="__codelineno-28-13" href="#__codelineno-28-13"></a><span class="s"># Backup SQLite databases to Google Drive</span>
+</span><span id="__span-28-14"><a id="__codelineno-28-14" name="__codelineno-28-14" href="#__codelineno-28-14"></a><span class="s">rclone copy ~/.clawdbot/*.sqlite gdrive-crypt:openclaw-backups/databases/ \</span>
+</span><span id="__span-28-15"><a id="__codelineno-28-15" name="__codelineno-28-15" href="#__codelineno-28-15"></a><span class="s">  --include &quot;*.sqlite&quot; \</span>
+</span><span id="__span-28-16"><a id="__codelineno-28-16" name="__codelineno-28-16" href="#__codelineno-28-16"></a><span class="s">  --log-file=/var/log/backup-hourly.log</span>
+</span><span id="__span-28-17"><a id="__codelineno-28-17" name="__codelineno-28-17" href="#__codelineno-28-17"></a>
+</span><span id="__span-28-18"><a id="__codelineno-28-18" name="__codelineno-28-18" href="#__codelineno-28-18"></a><span class="s">echo &quot;✅ Hourly backup complete: $(date -u)&quot;</span>
+</span><span id="__span-28-19"><a id="__codelineno-28-19" name="__codelineno-28-19" href="#__codelineno-28-19"></a><span class="s">EOF</span>
+</span><span id="__span-28-20"><a id="__codelineno-28-20" name="__codelineno-28-20" href="#__codelineno-28-20"></a>
+</span><span id="__span-28-21"><a id="__codelineno-28-21" name="__codelineno-28-21" href="#__codelineno-28-21"></a>chmod<span class="w"> </span>+x<span class="w"> </span>~/clawd/backup.sh
 </span></code></pre></div>
 <p><em>Why: Frequent lightweight backups capture work-in-progress (memory logs, databases)</em></p>
 <h3 id="45-create-nightly-backup-script">4.5 Create Nightly Backup Script<a class="headerlink" href="#45-create-nightly-backup-script" title="Permanent link">&para;</a></h3>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-28-1"><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>~/clawd/scripts/nightly-backup.sh<span class="w"> </span><span class="s">&lt;&lt; &#39;EOF&#39;</span>
-</span><span id="__span-28-2"><a id="__codelineno-28-2" name="__codelineno-28-2" href="#__codelineno-28-2"></a><span class="s">#!/bin/bash</span>
-</span><span id="__span-28-3"><a id="__codelineno-28-3" name="__codelineno-28-3" href="#__codelineno-28-3"></a><span class="s"># Nightly backup: full workspace + OpenClaw state</span>
-</span><span id="__span-28-4"><a id="__codelineno-28-4" name="__codelineno-28-4" href="#__codelineno-28-4"></a><span class="s">set -e</span>
-</span><span id="__span-28-5"><a id="__codelineno-28-5" name="__codelineno-28-5" href="#__codelineno-28-5"></a>
-</span><span id="__span-28-6"><a id="__codelineno-28-6" name="__codelineno-28-6" href="#__codelineno-28-6"></a><span class="s">BACKUP_DATE=$(date -u +%Y-%m-%d)</span>
-</span><span id="__span-28-7"><a id="__codelineno-28-7" name="__codelineno-28-7" href="#__codelineno-28-7"></a><span class="s">BACKUP_DIR=&quot;/tmp/openclaw-backup-$BACKUP_DATE&quot;</span>
-</span><span id="__span-28-8"><a id="__codelineno-28-8" name="__codelineno-28-8" href="#__codelineno-28-8"></a>
-</span><span id="__span-28-9"><a id="__codelineno-28-9" name="__codelineno-28-9" href="#__codelineno-28-9"></a><span class="s"># Create backup directory</span>
-</span><span id="__span-28-10"><a id="__codelineno-28-10" name="__codelineno-28-10" href="#__codelineno-28-10"></a><span class="s">mkdir -p &quot;$BACKUP_DIR&quot;</span>
-</span><span id="__span-28-11"><a id="__codelineno-28-11" name="__codelineno-28-11" href="#__codelineno-28-11"></a>
-</span><span id="__span-28-12"><a id="__codelineno-28-12" name="__codelineno-28-12" href="#__codelineno-28-12"></a><span class="s"># Backup workspace</span>
-</span><span id="__span-28-13"><a id="__codelineno-28-13" name="__codelineno-28-13" href="#__codelineno-28-13"></a><span class="s">cp -r /root/clawd &quot;$BACKUP_DIR/workspace&quot;</span>
-</span><span id="__span-28-14"><a id="__codelineno-28-14" name="__codelineno-28-14" href="#__codelineno-28-14"></a>
-</span><span id="__span-28-15"><a id="__codelineno-28-15" name="__codelineno-28-15" href="#__codelineno-28-15"></a><span class="s"># Backup OpenClaw config</span>
-</span><span id="__span-28-16"><a id="__codelineno-28-16" name="__codelineno-28-16" href="#__codelineno-28-16"></a><span class="s">cp ~/.config/openclaw/openclaw.json &quot;$BACKUP_DIR/openclaw-config.json&quot; || true</span>
-</span><span id="__span-28-17"><a id="__codelineno-28-17" name="__codelineno-28-17" href="#__codelineno-28-17"></a>
-</span><span id="__span-28-18"><a id="__codelineno-28-18" name="__codelineno-28-18" href="#__codelineno-28-18"></a><span class="s"># Backup credentials</span>
-</span><span id="__span-28-19"><a id="__codelineno-28-19" name="__codelineno-28-19" href="#__codelineno-28-19"></a><span class="s">cp -r ~/.clawdbot &quot;$BACKUP_DIR/clawdbot&quot; || true</span>
-</span><span id="__span-28-20"><a id="__codelineno-28-20" name="__codelineno-28-20" href="#__codelineno-28-20"></a>
-</span><span id="__span-28-21"><a id="__codelineno-28-21" name="__codelineno-28-21" href="#__codelineno-28-21"></a><span class="s"># Backup Cloudflare tunnel config</span>
-</span><span id="__span-28-22"><a id="__codelineno-28-22" name="__codelineno-28-22" href="#__codelineno-28-22"></a><span class="s">cp -r ~/.cloudflared &quot;$BACKUP_DIR/cloudflared&quot; || true</span>
-</span><span id="__span-28-23"><a id="__codelineno-28-23" name="__codelineno-28-23" href="#__codelineno-28-23"></a>
-</span><span id="__span-28-24"><a id="__codelineno-28-24" name="__codelineno-28-24" href="#__codelineno-28-24"></a><span class="s"># Create archive</span>
-</span><span id="__span-28-25"><a id="__codelineno-28-25" name="__codelineno-28-25" href="#__codelineno-28-25"></a><span class="s">cd /tmp</span>
-</span><span id="__span-28-26"><a id="__codelineno-28-26" name="__codelineno-28-26" href="#__codelineno-28-26"></a><span class="s">tar -czf &quot;openclaw-backup-$BACKUP_DATE.tar.gz&quot; &quot;openclaw-backup-$BACKUP_DATE&quot;</span>
-</span><span id="__span-28-27"><a id="__codelineno-28-27" name="__codelineno-28-27" href="#__codelineno-28-27"></a>
-</span><span id="__span-28-28"><a id="__codelineno-28-28" name="__codelineno-28-28" href="#__codelineno-28-28"></a><span class="s"># Upload to Google Drive with 7-day versioning</span>
-</span><span id="__span-28-29"><a id="__codelineno-28-29" name="__codelineno-28-29" href="#__codelineno-28-29"></a><span class="s">rclone copy &quot;openclaw-backup-$BACKUP_DATE.tar.gz&quot; gdrive-crypt:openclaw-backups/full/ \</span>
-</span><span id="__span-28-30"><a id="__codelineno-28-30" name="__codelineno-28-30" href="#__codelineno-28-30"></a><span class="s">  --backup-dir gdrive-crypt:openclaw-backups/versions/$BACKUP_DATE \</span>
-</span><span id="__span-28-31"><a id="__codelineno-28-31" name="__codelineno-28-31" href="#__codelineno-28-31"></a><span class="s">  --log-file=/var/log/backup-nightly.log</span>
-</span><span id="__span-28-32"><a id="__codelineno-28-32" name="__codelineno-28-32" href="#__codelineno-28-32"></a>
-</span><span id="__span-28-33"><a id="__codelineno-28-33" name="__codelineno-28-33" href="#__codelineno-28-33"></a><span class="s"># Cleanup local backup</span>
-</span><span id="__span-28-34"><a id="__codelineno-28-34" name="__codelineno-28-34" href="#__codelineno-28-34"></a><span class="s">rm -rf &quot;$BACKUP_DIR&quot; &quot;openclaw-backup-$BACKUP_DATE.tar.gz&quot;</span>
-</span><span id="__span-28-35"><a id="__codelineno-28-35" name="__codelineno-28-35" href="#__codelineno-28-35"></a>
-</span><span id="__span-28-36"><a id="__codelineno-28-36" name="__codelineno-28-36" href="#__codelineno-28-36"></a><span class="s"># Delete backups older than 30 days</span>
-</span><span id="__span-28-37"><a id="__codelineno-28-37" name="__codelineno-28-37" href="#__codelineno-28-37"></a><span class="s">rclone delete gdrive-crypt:openclaw-backups/full/ --min-age 30d</span>
-</span><span id="__span-28-38"><a id="__codelineno-28-38" name="__codelineno-28-38" href="#__codelineno-28-38"></a>
-</span><span id="__span-28-39"><a id="__codelineno-28-39" name="__codelineno-28-39" href="#__codelineno-28-39"></a><span class="s">echo &quot;✅ Nightly backup complete: $BACKUP_DATE&quot;</span>
-</span><span id="__span-28-40"><a id="__codelineno-28-40" name="__codelineno-28-40" href="#__codelineno-28-40"></a><span class="s">EOF</span>
-</span><span id="__span-28-41"><a id="__codelineno-28-41" name="__codelineno-28-41" href="#__codelineno-28-41"></a>
-</span><span id="__span-28-42"><a id="__codelineno-28-42" name="__codelineno-28-42" href="#__codelineno-28-42"></a>chmod<span class="w"> </span>+x<span class="w"> </span>~/clawd/scripts/nightly-backup.sh
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-29-1"><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>~/clawd/scripts/nightly-backup.sh<span class="w"> </span><span class="s">&lt;&lt; &#39;EOF&#39;</span>
+</span><span id="__span-29-2"><a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a><span class="s">#!/bin/bash</span>
+</span><span id="__span-29-3"><a id="__codelineno-29-3" name="__codelineno-29-3" href="#__codelineno-29-3"></a><span class="s"># Nightly backup: full workspace + OpenClaw state</span>
+</span><span id="__span-29-4"><a id="__codelineno-29-4" name="__codelineno-29-4" href="#__codelineno-29-4"></a><span class="s">set -e</span>
+</span><span id="__span-29-5"><a id="__codelineno-29-5" name="__codelineno-29-5" href="#__codelineno-29-5"></a>
+</span><span id="__span-29-6"><a id="__codelineno-29-6" name="__codelineno-29-6" href="#__codelineno-29-6"></a><span class="s">BACKUP_DATE=$(date -u +%Y-%m-%d)</span>
+</span><span id="__span-29-7"><a id="__codelineno-29-7" name="__codelineno-29-7" href="#__codelineno-29-7"></a><span class="s">BACKUP_DIR=&quot;/tmp/openclaw-backup-$BACKUP_DATE&quot;</span>
+</span><span id="__span-29-8"><a id="__codelineno-29-8" name="__codelineno-29-8" href="#__codelineno-29-8"></a>
+</span><span id="__span-29-9"><a id="__codelineno-29-9" name="__codelineno-29-9" href="#__codelineno-29-9"></a><span class="s"># Create backup directory</span>
+</span><span id="__span-29-10"><a id="__codelineno-29-10" name="__codelineno-29-10" href="#__codelineno-29-10"></a><span class="s">mkdir -p &quot;$BACKUP_DIR&quot;</span>
+</span><span id="__span-29-11"><a id="__codelineno-29-11" name="__codelineno-29-11" href="#__codelineno-29-11"></a>
+</span><span id="__span-29-12"><a id="__codelineno-29-12" name="__codelineno-29-12" href="#__codelineno-29-12"></a><span class="s"># Backup workspace</span>
+</span><span id="__span-29-13"><a id="__codelineno-29-13" name="__codelineno-29-13" href="#__codelineno-29-13"></a><span class="s">cp -r /root/clawd &quot;$BACKUP_DIR/workspace&quot;</span>
+</span><span id="__span-29-14"><a id="__codelineno-29-14" name="__codelineno-29-14" href="#__codelineno-29-14"></a>
+</span><span id="__span-29-15"><a id="__codelineno-29-15" name="__codelineno-29-15" href="#__codelineno-29-15"></a><span class="s"># Backup OpenClaw config</span>
+</span><span id="__span-29-16"><a id="__codelineno-29-16" name="__codelineno-29-16" href="#__codelineno-29-16"></a><span class="s">cp ~/.config/openclaw/openclaw.json &quot;$BACKUP_DIR/openclaw-config.json&quot; || true</span>
+</span><span id="__span-29-17"><a id="__codelineno-29-17" name="__codelineno-29-17" href="#__codelineno-29-17"></a>
+</span><span id="__span-29-18"><a id="__codelineno-29-18" name="__codelineno-29-18" href="#__codelineno-29-18"></a><span class="s"># Backup credentials</span>
+</span><span id="__span-29-19"><a id="__codelineno-29-19" name="__codelineno-29-19" href="#__codelineno-29-19"></a><span class="s">cp -r ~/.clawdbot &quot;$BACKUP_DIR/clawdbot&quot; || true</span>
+</span><span id="__span-29-20"><a id="__codelineno-29-20" name="__codelineno-29-20" href="#__codelineno-29-20"></a>
+</span><span id="__span-29-21"><a id="__codelineno-29-21" name="__codelineno-29-21" href="#__codelineno-29-21"></a><span class="s"># Backup Cloudflare tunnel config</span>
+</span><span id="__span-29-22"><a id="__codelineno-29-22" name="__codelineno-29-22" href="#__codelineno-29-22"></a><span class="s">cp -r ~/.cloudflared &quot;$BACKUP_DIR/cloudflared&quot; || true</span>
+</span><span id="__span-29-23"><a id="__codelineno-29-23" name="__codelineno-29-23" href="#__codelineno-29-23"></a>
+</span><span id="__span-29-24"><a id="__codelineno-29-24" name="__codelineno-29-24" href="#__codelineno-29-24"></a><span class="s"># Create archive</span>
+</span><span id="__span-29-25"><a id="__codelineno-29-25" name="__codelineno-29-25" href="#__codelineno-29-25"></a><span class="s">cd /tmp</span>
+</span><span id="__span-29-26"><a id="__codelineno-29-26" name="__codelineno-29-26" href="#__codelineno-29-26"></a><span class="s">tar -czf &quot;openclaw-backup-$BACKUP_DATE.tar.gz&quot; &quot;openclaw-backup-$BACKUP_DATE&quot;</span>
+</span><span id="__span-29-27"><a id="__codelineno-29-27" name="__codelineno-29-27" href="#__codelineno-29-27"></a>
+</span><span id="__span-29-28"><a id="__codelineno-29-28" name="__codelineno-29-28" href="#__codelineno-29-28"></a><span class="s"># Upload to Google Drive with 7-day versioning</span>
+</span><span id="__span-29-29"><a id="__codelineno-29-29" name="__codelineno-29-29" href="#__codelineno-29-29"></a><span class="s">rclone copy &quot;openclaw-backup-$BACKUP_DATE.tar.gz&quot; gdrive-crypt:openclaw-backups/full/ \</span>
+</span><span id="__span-29-30"><a id="__codelineno-29-30" name="__codelineno-29-30" href="#__codelineno-29-30"></a><span class="s">  --backup-dir gdrive-crypt:openclaw-backups/versions/$BACKUP_DATE \</span>
+</span><span id="__span-29-31"><a id="__codelineno-29-31" name="__codelineno-29-31" href="#__codelineno-29-31"></a><span class="s">  --log-file=/var/log/backup-nightly.log</span>
+</span><span id="__span-29-32"><a id="__codelineno-29-32" name="__codelineno-29-32" href="#__codelineno-29-32"></a>
+</span><span id="__span-29-33"><a id="__codelineno-29-33" name="__codelineno-29-33" href="#__codelineno-29-33"></a><span class="s"># Cleanup local backup</span>
+</span><span id="__span-29-34"><a id="__codelineno-29-34" name="__codelineno-29-34" href="#__codelineno-29-34"></a><span class="s">rm -rf &quot;$BACKUP_DIR&quot; &quot;openclaw-backup-$BACKUP_DATE.tar.gz&quot;</span>
+</span><span id="__span-29-35"><a id="__codelineno-29-35" name="__codelineno-29-35" href="#__codelineno-29-35"></a>
+</span><span id="__span-29-36"><a id="__codelineno-29-36" name="__codelineno-29-36" href="#__codelineno-29-36"></a><span class="s"># Delete backups older than 30 days</span>
+</span><span id="__span-29-37"><a id="__codelineno-29-37" name="__codelineno-29-37" href="#__codelineno-29-37"></a><span class="s">rclone delete gdrive-crypt:openclaw-backups/full/ --min-age 30d</span>
+</span><span id="__span-29-38"><a id="__codelineno-29-38" name="__codelineno-29-38" href="#__codelineno-29-38"></a>
+</span><span id="__span-29-39"><a id="__codelineno-29-39" name="__codelineno-29-39" href="#__codelineno-29-39"></a><span class="s">echo &quot;✅ Nightly backup complete: $BACKUP_DATE&quot;</span>
+</span><span id="__span-29-40"><a id="__codelineno-29-40" name="__codelineno-29-40" href="#__codelineno-29-40"></a><span class="s">EOF</span>
+</span><span id="__span-29-41"><a id="__codelineno-29-41" name="__codelineno-29-41" href="#__codelineno-29-41"></a>
+</span><span id="__span-29-42"><a id="__codelineno-29-42" name="__codelineno-29-42" href="#__codelineno-29-42"></a>chmod<span class="w"> </span>+x<span class="w"> </span>~/clawd/scripts/nightly-backup.sh
 </span></code></pre></div>
 <p><em>Why: Complete system snapshot for disaster recovery. 7-day versioning allows rollback to any recent state.</em></p>
+<p><strong>📝 Note on Production Nightly Backups:</strong></p>
+<p>The script above shows a simplified version. Production nightly backups (as of 2026-02-25) are an 8-step comprehensive process:</p>
+<ol>
+<li>Workspace backup (encrypted, batched for memory efficiency)</li>
+<li>OpenClaw state backup</li>
+<li>SQLite databases backup</li>
+<li>Git repos backup</li>
+<li><strong>DR bundle generation</strong> (hash-deduped, emailed to designated contacts)</li>
+<li><strong>Systems verification</strong> (infra audit + cron audit)</li>
+<li><strong>Snapshot drift detection</strong> (compare against gold snapshot, auto-save if intentional changes)</li>
+<li><strong>WhatsApp summary</strong> (send backup report to user)</li>
+</ol>
+<p>Each step self-verifies and logs. Failures alert via Pushover.</p>
+<p>The script shown here covers steps 1-4. Steps 5-8 are advanced features you can add later as your setup matures. For now, focus on getting basic nightly backups working reliably.</p>
 <h3 id="46-initialize-git-repository-if-not-already">4.6 Initialize Git Repository (If Not Already)<a class="headerlink" href="#46-initialize-git-repository-if-not-already" title="Permanent link">&para;</a></h3>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-29-1"><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a><span class="nb">cd</span><span class="w"> </span>~/clawd
-</span><span id="__span-29-2"><a id="__codelineno-29-2" name="__codelineno-29-2" href="#__codelineno-29-2"></a>git<span class="w"> </span>init
-</span><span id="__span-29-3"><a id="__codelineno-29-3" name="__codelineno-29-3" href="#__codelineno-29-3"></a>git<span class="w"> </span>config<span class="w"> </span>user.email<span class="w"> </span><span class="s2">&quot;bot@yourdomain.com&quot;</span>
-</span><span id="__span-29-4"><a id="__codelineno-29-4" name="__codelineno-29-4" href="#__codelineno-29-4"></a>git<span class="w"> </span>config<span class="w"> </span>user.name<span class="w"> </span><span class="s2">&quot;OpenClaw Bot&quot;</span>
-</span><span id="__span-29-5"><a id="__codelineno-29-5" name="__codelineno-29-5" href="#__codelineno-29-5"></a>git<span class="w"> </span>add<span class="w"> </span>-A
-</span><span id="__span-29-6"><a id="__codelineno-29-6" name="__codelineno-29-6" href="#__codelineno-29-6"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Initial commit&quot;</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-30-1"><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a><span class="nb">cd</span><span class="w"> </span>~/clawd
+</span><span id="__span-30-2"><a id="__codelineno-30-2" name="__codelineno-30-2" href="#__codelineno-30-2"></a>git<span class="w"> </span>init
+</span><span id="__span-30-3"><a id="__codelineno-30-3" name="__codelineno-30-3" href="#__codelineno-30-3"></a>git<span class="w"> </span>config<span class="w"> </span>user.email<span class="w"> </span><span class="s2">&quot;bot@yourdomain.com&quot;</span>
+</span><span id="__span-30-4"><a id="__codelineno-30-4" name="__codelineno-30-4" href="#__codelineno-30-4"></a>git<span class="w"> </span>config<span class="w"> </span>user.name<span class="w"> </span><span class="s2">&quot;OpenClaw Bot&quot;</span>
+</span><span id="__span-30-5"><a id="__codelineno-30-5" name="__codelineno-30-5" href="#__codelineno-30-5"></a>git<span class="w"> </span>add<span class="w"> </span>-A
+</span><span id="__span-30-6"><a id="__codelineno-30-6" name="__codelineno-30-6" href="#__codelineno-30-6"></a>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Initial commit&quot;</span>
 </span></code></pre></div>
 <p><em>Why: Git tracks all workspace changes, provides version history</em></p>
 <p><strong>Optional:</strong> Push to GitHub for off-site redundancy:</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-30-1"><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a><span class="c1"># Create private repo on GitHub, then:</span>
-</span><span id="__span-30-2"><a id="__codelineno-30-2" name="__codelineno-30-2" href="#__codelineno-30-2"></a>git<span class="w"> </span>remote<span class="w"> </span>add<span class="w"> </span>origin<span class="w"> </span>git@github.com:YOUR_USERNAME/clawd-backup.git
-</span><span id="__span-30-3"><a id="__codelineno-30-3" name="__codelineno-30-3" href="#__codelineno-30-3"></a>git<span class="w"> </span>push<span class="w"> </span>-u<span class="w"> </span>origin<span class="w"> </span>main
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-31-1"><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a><span class="c1"># Create private repo on GitHub, then:</span>
+</span><span id="__span-31-2"><a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a>git<span class="w"> </span>remote<span class="w"> </span>add<span class="w"> </span>origin<span class="w"> </span>git@github.com:YOUR_USERNAME/clawd-backup.git
+</span><span id="__span-31-3"><a id="__codelineno-31-3" name="__codelineno-31-3" href="#__codelineno-31-3"></a>git<span class="w"> </span>push<span class="w"> </span>-u<span class="w"> </span>origin<span class="w"> </span>main
 </span></code></pre></div>
 <p><em>Why: GitHub provides additional backup layer and remote access to workspace</em></p>
 <h3 id="47-test-backups-manually">4.7 Test Backups Manually<a class="headerlink" href="#47-test-backups-manually" title="Permanent link">&para;</a></h3>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-31-1"><a id="__codelineno-31-1" name="__codelineno-31-1" href="#__codelineno-31-1"></a><span class="c1"># Test hourly backup</span>
-</span><span id="__span-31-2"><a id="__codelineno-31-2" name="__codelineno-31-2" href="#__codelineno-31-2"></a>~/clawd/backup.sh
-</span><span id="__span-31-3"><a id="__codelineno-31-3" name="__codelineno-31-3" href="#__codelineno-31-3"></a>
-</span><span id="__span-31-4"><a id="__codelineno-31-4" name="__codelineno-31-4" href="#__codelineno-31-4"></a><span class="c1"># Test nightly backup</span>
-</span><span id="__span-31-5"><a id="__codelineno-31-5" name="__codelineno-31-5" href="#__codelineno-31-5"></a>~/clawd/scripts/nightly-backup.sh
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-32-1"><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a><span class="c1"># Test hourly backup</span>
+</span><span id="__span-32-2"><a id="__codelineno-32-2" name="__codelineno-32-2" href="#__codelineno-32-2"></a>~/clawd/backup.sh
+</span><span id="__span-32-3"><a id="__codelineno-32-3" name="__codelineno-32-3" href="#__codelineno-32-3"></a>
+</span><span id="__span-32-4"><a id="__codelineno-32-4" name="__codelineno-32-4" href="#__codelineno-32-4"></a><span class="c1"># Test nightly backup</span>
+</span><span id="__span-32-5"><a id="__codelineno-32-5" name="__codelineno-32-5" href="#__codelineno-32-5"></a>~/clawd/scripts/nightly-backup.sh
 </span></code></pre></div>
 <p><em>Why: Verify both scripts work before scheduling</em></p>
 <p>✅ <strong>Verify:</strong> Scripts complete without errors, check Google Drive for uploaded files:</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-32-1"><a id="__codelineno-32-1" name="__codelineno-32-1" href="#__codelineno-32-1"></a>rclone<span class="w"> </span>ls<span class="w"> </span>gdrive-crypt:openclaw-backups/databases/
-</span><span id="__span-32-2"><a id="__codelineno-32-2" name="__codelineno-32-2" href="#__codelineno-32-2"></a>rclone<span class="w"> </span>ls<span class="w"> </span>gdrive-crypt:openclaw-backups/full/
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-33-1"><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a>rclone<span class="w"> </span>ls<span class="w"> </span>gdrive-crypt:openclaw-backups/databases/
+</span><span id="__span-33-2"><a id="__codelineno-33-2" name="__codelineno-33-2" href="#__codelineno-33-2"></a>rclone<span class="w"> </span>ls<span class="w"> </span>gdrive-crypt:openclaw-backups/full/
 </span></code></pre></div>
 <h3 id="48-schedule-backups-in-crontab">4.8 Schedule Backups in Crontab<a class="headerlink" href="#48-schedule-backups-in-crontab" title="Permanent link">&para;</a></h3>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-33-1"><a id="__codelineno-33-1" name="__codelineno-33-1" href="#__codelineno-33-1"></a>crontab<span class="w"> </span>-e
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-34-1"><a id="__codelineno-34-1" name="__codelineno-34-1" href="#__codelineno-34-1"></a>crontab<span class="w"> </span>-e
 </span></code></pre></div>
 <p><em>Select your editor (nano recommended for beginners), then add these lines:</em></p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-34-1"><a id="__codelineno-34-1" name="__codelineno-34-1" href="#__codelineno-34-1"></a># Hourly backup (git + databases)
-</span><span id="__span-34-2"><a id="__codelineno-34-2" name="__codelineno-34-2" href="#__codelineno-34-2"></a>0 * * * * /root/clawd/backup.sh &gt;&gt; /var/log/backup-hourly.log 2&gt;&amp;1
-</span><span id="__span-34-3"><a id="__codelineno-34-3" name="__codelineno-34-3" href="#__codelineno-34-3"></a>
-</span><span id="__span-34-4"><a id="__codelineno-34-4" name="__codelineno-34-4" href="#__codelineno-34-4"></a># Nightly backup (full system) at 4 AM UTC
-</span><span id="__span-34-5"><a id="__codelineno-34-5" name="__codelineno-34-5" href="#__codelineno-34-5"></a>0 4 * * * /root/clawd/scripts/nightly-backup.sh &gt;&gt; /var/log/backup-nightly.log 2&gt;&amp;1
+<div class="language-text highlight"><pre><span></span><code><span id="__span-35-1"><a id="__codelineno-35-1" name="__codelineno-35-1" href="#__codelineno-35-1"></a># Hourly backup (git + databases)
+</span><span id="__span-35-2"><a id="__codelineno-35-2" name="__codelineno-35-2" href="#__codelineno-35-2"></a>0 * * * * /root/clawd/backup.sh &gt;&gt; /var/log/backup-hourly.log 2&gt;&amp;1
+</span><span id="__span-35-3"><a id="__codelineno-35-3" name="__codelineno-35-3" href="#__codelineno-35-3"></a>
+</span><span id="__span-35-4"><a id="__codelineno-35-4" name="__codelineno-35-4" href="#__codelineno-35-4"></a># Nightly backup (full system) at 4 AM UTC
+</span><span id="__span-35-5"><a id="__codelineno-35-5" name="__codelineno-35-5" href="#__codelineno-35-5"></a>0 4 * * * /root/clawd/scripts/nightly-backup.sh &gt;&gt; /var/log/backup-nightly.log 2&gt;&amp;1
 </span></code></pre></div>
 <p><em>Why: Hourly captures frequent changes, nightly creates restore points</em></p>
 <p>Save and exit (Ctrl+X, Y, Enter in nano).</p>
 <p>✅ <strong>Verify:</strong> <code>crontab -l</code> shows both backup jobs</p>
 <h3 id="49-monitor-backup-logs">4.9 Monitor Backup Logs<a class="headerlink" href="#49-monitor-backup-logs" title="Permanent link">&para;</a></h3>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-35-1"><a id="__codelineno-35-1" name="__codelineno-35-1" href="#__codelineno-35-1"></a><span class="c1"># View hourly backup log</span>
-</span><span id="__span-35-2"><a id="__codelineno-35-2" name="__codelineno-35-2" href="#__codelineno-35-2"></a>tail<span class="w"> </span>-f<span class="w"> </span>/var/log/backup-hourly.log
-</span><span id="__span-35-3"><a id="__codelineno-35-3" name="__codelineno-35-3" href="#__codelineno-35-3"></a>
-</span><span id="__span-35-4"><a id="__codelineno-35-4" name="__codelineno-35-4" href="#__codelineno-35-4"></a><span class="c1"># View nightly backup log</span>
-</span><span id="__span-35-5"><a id="__codelineno-35-5" name="__codelineno-35-5" href="#__codelineno-35-5"></a>tail<span class="w"> </span>-f<span class="w"> </span>/var/log/backup-nightly.log
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-36-1"><a id="__codelineno-36-1" name="__codelineno-36-1" href="#__codelineno-36-1"></a><span class="c1"># View hourly backup log</span>
+</span><span id="__span-36-2"><a id="__codelineno-36-2" name="__codelineno-36-2" href="#__codelineno-36-2"></a>tail<span class="w"> </span>-f<span class="w"> </span>/var/log/backup-hourly.log
+</span><span id="__span-36-3"><a id="__codelineno-36-3" name="__codelineno-36-3" href="#__codelineno-36-3"></a>
+</span><span id="__span-36-4"><a id="__codelineno-36-4" name="__codelineno-36-4" href="#__codelineno-36-4"></a><span class="c1"># View nightly backup log</span>
+</span><span id="__span-36-5"><a id="__codelineno-36-5" name="__codelineno-36-5" href="#__codelineno-36-5"></a>tail<span class="w"> </span>-f<span class="w"> </span>/var/log/backup-nightly.log
 </span></code></pre></div>
 <p><em>Press Ctrl+C to exit tail</em></p>
 <p>✅ <strong>Verify:</strong> Wait for next hour, check logs show successful run</p>
@@ -2192,34 +2210,34 @@
 <p><strong>Next:</strong> Part 4 — Automation (cron jobs, event queue, reminders, heartbeats)</p>
 <hr />
 <h2 id="quick-reference-commands">Quick Reference Commands<a class="headerlink" href="#quick-reference-commands" title="Permanent link">&para;</a></h2>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-36-1"><a id="__codelineno-36-1" name="__codelineno-36-1" href="#__codelineno-36-1"></a><span class="c1"># Google OAuth</span>
-</span><span id="__span-36-2"><a id="__codelineno-36-2" name="__codelineno-36-2" href="#__codelineno-36-2"></a>python3<span class="w"> </span>~/clawd/scripts/google-auth.py<span class="w">              </span><span class="c1"># Reauthorize</span>
-</span><span id="__span-36-3"><a id="__codelineno-36-3" name="__codelineno-36-3" href="#__codelineno-36-3"></a>python3<span class="w"> </span>~/clawd/scripts/test-calendar.py<span class="w">            </span><span class="c1"># Test API access</span>
-</span><span id="__span-36-4"><a id="__codelineno-36-4" name="__codelineno-36-4" href="#__codelineno-36-4"></a>
-</span><span id="__span-36-5"><a id="__codelineno-36-5" name="__codelineno-36-5" href="#__codelineno-36-5"></a><span class="c1"># Cloudflare Tunnel</span>
-</span><span id="__span-36-6"><a id="__codelineno-36-6" name="__codelineno-36-6" href="#__codelineno-36-6"></a>systemctl<span class="w"> </span>status<span class="w"> </span>cloudflared<span class="w">                        </span><span class="c1"># Check tunnel status</span>
-</span><span id="__span-36-7"><a id="__codelineno-36-7" name="__codelineno-36-7" href="#__codelineno-36-7"></a>systemctl<span class="w"> </span>restart<span class="w"> </span>cloudflared<span class="w">                       </span><span class="c1"># Restart tunnel</span>
-</span><span id="__span-36-8"><a id="__codelineno-36-8" name="__codelineno-36-8" href="#__codelineno-36-8"></a>cloudflared<span class="w"> </span>tunnel<span class="w"> </span>list<span class="w">                             </span><span class="c1"># List tunnels</span>
-</span><span id="__span-36-9"><a id="__codelineno-36-9" name="__codelineno-36-9" href="#__codelineno-36-9"></a>journalctl<span class="w"> </span>-u<span class="w"> </span>cloudflared<span class="w"> </span>-f<span class="w">                        </span><span class="c1"># View tunnel logs</span>
-</span><span id="__span-36-10"><a id="__codelineno-36-10" name="__codelineno-36-10" href="#__codelineno-36-10"></a>
-</span><span id="__span-36-11"><a id="__codelineno-36-11" name="__codelineno-36-11" href="#__codelineno-36-11"></a><span class="c1"># Webhook Server</span>
-</span><span id="__span-36-12"><a id="__codelineno-36-12" name="__codelineno-36-12" href="#__codelineno-36-12"></a>systemctl<span class="w"> </span>status<span class="w"> </span>webhook<span class="w">                            </span><span class="c1"># Check webhook status</span>
-</span><span id="__span-36-13"><a id="__codelineno-36-13" name="__codelineno-36-13" href="#__codelineno-36-13"></a>systemctl<span class="w"> </span>restart<span class="w"> </span>webhook<span class="w">                           </span><span class="c1"># Restart webhook</span>
-</span><span id="__span-36-14"><a id="__codelineno-36-14" name="__codelineno-36-14" href="#__codelineno-36-14"></a>journalctl<span class="w"> </span>-u<span class="w"> </span>webhook<span class="w"> </span>-f<span class="w">                            </span><span class="c1"># View webhook logs</span>
-</span><span id="__span-36-15"><a id="__codelineno-36-15" name="__codelineno-36-15" href="#__codelineno-36-15"></a>curl<span class="w"> </span>http://localhost:8088/health<span class="w">                   </span><span class="c1"># Test local endpoint</span>
-</span><span id="__span-36-16"><a id="__codelineno-36-16" name="__codelineno-36-16" href="#__codelineno-36-16"></a>
-</span><span id="__span-36-17"><a id="__codelineno-36-17" name="__codelineno-36-17" href="#__codelineno-36-17"></a><span class="c1"># Backups</span>
-</span><span id="__span-36-18"><a id="__codelineno-36-18" name="__codelineno-36-18" href="#__codelineno-36-18"></a>~/clawd/backup.sh<span class="w">                                   </span><span class="c1"># Manual hourly backup</span>
-</span><span id="__span-36-19"><a id="__codelineno-36-19" name="__codelineno-36-19" href="#__codelineno-36-19"></a>~/clawd/scripts/nightly-backup.sh<span class="w">                   </span><span class="c1"># Manual nightly backup</span>
-</span><span id="__span-36-20"><a id="__codelineno-36-20" name="__codelineno-36-20" href="#__codelineno-36-20"></a>rclone<span class="w"> </span>ls<span class="w"> </span>gdrive-crypt:openclaw-backups/<span class="w">            </span><span class="c1"># List backups</span>
-</span><span id="__span-36-21"><a id="__codelineno-36-21" name="__codelineno-36-21" href="#__codelineno-36-21"></a>tail<span class="w"> </span>-f<span class="w"> </span>/var/log/backup-hourly.log<span class="w">                  </span><span class="c1"># Monitor hourly backups</span>
-</span><span id="__span-36-22"><a id="__codelineno-36-22" name="__codelineno-36-22" href="#__codelineno-36-22"></a>tail<span class="w"> </span>-f<span class="w"> </span>/var/log/backup-nightly.log<span class="w">                 </span><span class="c1"># Monitor nightly backups</span>
-</span><span id="__span-36-23"><a id="__codelineno-36-23" name="__codelineno-36-23" href="#__codelineno-36-23"></a>crontab<span class="w"> </span>-l<span class="w">                                          </span><span class="c1"># View scheduled backups</span>
-</span><span id="__span-36-24"><a id="__codelineno-36-24" name="__codelineno-36-24" href="#__codelineno-36-24"></a>
-</span><span id="__span-36-25"><a id="__codelineno-36-25" name="__codelineno-36-25" href="#__codelineno-36-25"></a><span class="c1"># System Health</span>
-</span><span id="__span-36-26"><a id="__codelineno-36-26" name="__codelineno-36-26" href="#__codelineno-36-26"></a>systemctl<span class="w"> </span>status<span class="w"> </span>cloudflared<span class="w"> </span>webhook<span class="w">                </span><span class="c1"># Check both services</span>
-</span><span id="__span-36-27"><a id="__codelineno-36-27" name="__codelineno-36-27" href="#__codelineno-36-27"></a>journalctl<span class="w"> </span>--since<span class="w"> </span><span class="s2">&quot;1 hour ago&quot;</span><span class="w"> </span>-u<span class="w"> </span>webhook<span class="w">          </span><span class="c1"># Recent webhook logs</span>
-</span><span id="__span-36-28"><a id="__codelineno-36-28" name="__codelineno-36-28" href="#__codelineno-36-28"></a>ls<span class="w"> </span>-lh<span class="w"> </span>~/.clawdbot/google/<span class="w">                          </span><span class="c1"># Check tokens exist</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-37-1"><a id="__codelineno-37-1" name="__codelineno-37-1" href="#__codelineno-37-1"></a><span class="c1"># Google OAuth</span>
+</span><span id="__span-37-2"><a id="__codelineno-37-2" name="__codelineno-37-2" href="#__codelineno-37-2"></a>python3<span class="w"> </span>~/clawd/scripts/google-auth.py<span class="w">              </span><span class="c1"># Reauthorize</span>
+</span><span id="__span-37-3"><a id="__codelineno-37-3" name="__codelineno-37-3" href="#__codelineno-37-3"></a>python3<span class="w"> </span>~/clawd/scripts/test-calendar.py<span class="w">            </span><span class="c1"># Test API access</span>
+</span><span id="__span-37-4"><a id="__codelineno-37-4" name="__codelineno-37-4" href="#__codelineno-37-4"></a>
+</span><span id="__span-37-5"><a id="__codelineno-37-5" name="__codelineno-37-5" href="#__codelineno-37-5"></a><span class="c1"># Cloudflare Tunnel</span>
+</span><span id="__span-37-6"><a id="__codelineno-37-6" name="__codelineno-37-6" href="#__codelineno-37-6"></a>systemctl<span class="w"> </span>status<span class="w"> </span>cloudflared<span class="w">                        </span><span class="c1"># Check tunnel status</span>
+</span><span id="__span-37-7"><a id="__codelineno-37-7" name="__codelineno-37-7" href="#__codelineno-37-7"></a>systemctl<span class="w"> </span>restart<span class="w"> </span>cloudflared<span class="w">                       </span><span class="c1"># Restart tunnel</span>
+</span><span id="__span-37-8"><a id="__codelineno-37-8" name="__codelineno-37-8" href="#__codelineno-37-8"></a>cloudflared<span class="w"> </span>tunnel<span class="w"> </span>list<span class="w">                             </span><span class="c1"># List tunnels</span>
+</span><span id="__span-37-9"><a id="__codelineno-37-9" name="__codelineno-37-9" href="#__codelineno-37-9"></a>journalctl<span class="w"> </span>-u<span class="w"> </span>cloudflared<span class="w"> </span>-f<span class="w">                        </span><span class="c1"># View tunnel logs</span>
+</span><span id="__span-37-10"><a id="__codelineno-37-10" name="__codelineno-37-10" href="#__codelineno-37-10"></a>
+</span><span id="__span-37-11"><a id="__codelineno-37-11" name="__codelineno-37-11" href="#__codelineno-37-11"></a><span class="c1"># Webhook Server</span>
+</span><span id="__span-37-12"><a id="__codelineno-37-12" name="__codelineno-37-12" href="#__codelineno-37-12"></a>systemctl<span class="w"> </span>status<span class="w"> </span>moltbot-webhook<span class="w">                    </span><span class="c1"># Check webhook status</span>
+</span><span id="__span-37-13"><a id="__codelineno-37-13" name="__codelineno-37-13" href="#__codelineno-37-13"></a>systemctl<span class="w"> </span>restart<span class="w"> </span>moltbot-webhook<span class="w">                   </span><span class="c1"># Restart webhook</span>
+</span><span id="__span-37-14"><a id="__codelineno-37-14" name="__codelineno-37-14" href="#__codelineno-37-14"></a>journalctl<span class="w"> </span>-u<span class="w"> </span>webhook<span class="w"> </span>-f<span class="w">                            </span><span class="c1"># View webhook logs</span>
+</span><span id="__span-37-15"><a id="__codelineno-37-15" name="__codelineno-37-15" href="#__codelineno-37-15"></a>curl<span class="w"> </span>http://localhost:8088/health<span class="w">                   </span><span class="c1"># Test local endpoint</span>
+</span><span id="__span-37-16"><a id="__codelineno-37-16" name="__codelineno-37-16" href="#__codelineno-37-16"></a>
+</span><span id="__span-37-17"><a id="__codelineno-37-17" name="__codelineno-37-17" href="#__codelineno-37-17"></a><span class="c1"># Backups</span>
+</span><span id="__span-37-18"><a id="__codelineno-37-18" name="__codelineno-37-18" href="#__codelineno-37-18"></a>~/clawd/backup.sh<span class="w">                                   </span><span class="c1"># Manual hourly backup</span>
+</span><span id="__span-37-19"><a id="__codelineno-37-19" name="__codelineno-37-19" href="#__codelineno-37-19"></a>~/clawd/scripts/nightly-backup.sh<span class="w">                   </span><span class="c1"># Manual nightly backup</span>
+</span><span id="__span-37-20"><a id="__codelineno-37-20" name="__codelineno-37-20" href="#__codelineno-37-20"></a>rclone<span class="w"> </span>ls<span class="w"> </span>gdrive-crypt:openclaw-backups/<span class="w">            </span><span class="c1"># List backups</span>
+</span><span id="__span-37-21"><a id="__codelineno-37-21" name="__codelineno-37-21" href="#__codelineno-37-21"></a>tail<span class="w"> </span>-f<span class="w"> </span>/var/log/backup-hourly.log<span class="w">                  </span><span class="c1"># Monitor hourly backups</span>
+</span><span id="__span-37-22"><a id="__codelineno-37-22" name="__codelineno-37-22" href="#__codelineno-37-22"></a>tail<span class="w"> </span>-f<span class="w"> </span>/var/log/backup-nightly.log<span class="w">                 </span><span class="c1"># Monitor nightly backups</span>
+</span><span id="__span-37-23"><a id="__codelineno-37-23" name="__codelineno-37-23" href="#__codelineno-37-23"></a>crontab<span class="w"> </span>-l<span class="w">                                          </span><span class="c1"># View scheduled backups</span>
+</span><span id="__span-37-24"><a id="__codelineno-37-24" name="__codelineno-37-24" href="#__codelineno-37-24"></a>
+</span><span id="__span-37-25"><a id="__codelineno-37-25" name="__codelineno-37-25" href="#__codelineno-37-25"></a><span class="c1"># System Health</span>
+</span><span id="__span-37-26"><a id="__codelineno-37-26" name="__codelineno-37-26" href="#__codelineno-37-26"></a>systemctl<span class="w"> </span>status<span class="w"> </span>cloudflared<span class="w"> </span>moltbot-webhook<span class="w">        </span><span class="c1"># Check both services</span>
+</span><span id="__span-37-27"><a id="__codelineno-37-27" name="__codelineno-37-27" href="#__codelineno-37-27"></a>journalctl<span class="w"> </span>--since<span class="w"> </span><span class="s2">&quot;1 hour ago&quot;</span><span class="w"> </span>-u<span class="w"> </span>webhook<span class="w">          </span><span class="c1"># Recent webhook logs</span>
+</span><span id="__span-37-28"><a id="__codelineno-37-28" name="__codelineno-37-28" href="#__codelineno-37-28"></a>ls<span class="w"> </span>-lh<span class="w"> </span>~/.clawdbot/google/<span class="w">                          </span><span class="c1"># Check tokens exist</span>
 </span></code></pre></div>
 <hr />
 <h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h2>
@@ -2238,7 +2256,7 @@
 - Ensure DNS CNAME record exists (check Cloudflare dashboard)
 - Test local service first: <code>curl http://localhost:8088/health</code></p>
 <p><strong>Webhook server not receiving requests:</strong>
-- Check service is running: <code>systemctl status webhook</code>
+- Check service is running: <code>systemctl status moltbot-webhook</code>
 - Verify tunnel routes to correct port (8088)
 - Test locally before testing publicly
 - Check logs: <code>journalctl -u webhook -f</code>
@@ -2247,7 +2265,7 @@
 - Verify Cloudflare tunnel is running
 - Check webhook server is listening on localhost:8088
 - Test health endpoint: <code>curl https://webhook.yourdomain.com/health</code>
-- Check both services: <code>systemctl status cloudflared webhook</code></p>
+- Check both services: <code>systemctl status cloudflared moltbot-webhook</code></p>
 <p><strong>Rclone "Failed to create file system" error:</strong>
 - Re-run <code>rclone config</code> to reconfigure remote
 - Test authentication: <code>rclone lsd gdrive:</code>
@@ -2320,10 +2338,10 @@
 </tbody>
 </table>
 <p><strong>To get actual URLs:</strong></p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-37-1"><a id="__codelineno-37-1" name="__codelineno-37-1" href="#__codelineno-37-1"></a><span class="nb">source</span><span class="w"> </span>~/.clawdbot/webhook.env
-</span><span id="__span-37-2"><a id="__codelineno-37-2" name="__codelineno-37-2" href="#__codelineno-37-2"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Calendar: https://webhook.YOUR_DOMAIN.com/</span><span class="nv">$WEBHOOK_CALENDAR_SECRET</span><span class="s2">&quot;</span>
-</span><span id="__span-37-3"><a id="__codelineno-37-3" name="__codelineno-37-3" href="#__codelineno-37-3"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Email: https://webhook.YOUR_DOMAIN.com/email/</span><span class="nv">$WEBHOOK_EMAIL_SECRET</span><span class="s2">&quot;</span>
-</span><span id="__span-37-4"><a id="__codelineno-37-4" name="__codelineno-37-4" href="#__codelineno-37-4"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Alerts: https://webhook.YOUR_DOMAIN.com/alerts/</span><span class="nv">$WEBHOOK_ALERT_SECRET</span><span class="s2">&quot;</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-38-1"><a id="__codelineno-38-1" name="__codelineno-38-1" href="#__codelineno-38-1"></a><span class="nb">source</span><span class="w"> </span>~/.clawdbot/webhook.env
+</span><span id="__span-38-2"><a id="__codelineno-38-2" name="__codelineno-38-2" href="#__codelineno-38-2"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Calendar: https://webhook.YOUR_DOMAIN.com/</span><span class="nv">$WEBHOOK_CALENDAR_SECRET</span><span class="s2">&quot;</span>
+</span><span id="__span-38-3"><a id="__codelineno-38-3" name="__codelineno-38-3" href="#__codelineno-38-3"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Email: https://webhook.YOUR_DOMAIN.com/email/</span><span class="nv">$WEBHOOK_EMAIL_SECRET</span><span class="s2">&quot;</span>
+</span><span id="__span-38-4"><a id="__codelineno-38-4" name="__codelineno-38-4" href="#__codelineno-38-4"></a><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;Alerts: https://webhook.YOUR_DOMAIN.com/alerts/</span><span class="nv">$WEBHOOK_ALERT_SECRET</span><span class="s2">&quot;</span>
 </span></code></pre></div>
 <p><em>Use these URLs when configuring external services (Google Calendar watch, AgentMail, monitoring alerts)</em></p>
 <hr />
