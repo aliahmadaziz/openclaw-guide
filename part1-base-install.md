@@ -131,7 +131,7 @@ swapon /swapfile
 echo '/swapfile none swap sw 0 0' >> /etc/fstab
 ```
 
-*Why: 2GB swap prevents OOM kills during memory spikes*
+*Why: 2GB swap prevents OOM kills during memory spikes. OpenClaw with 200K context can spike to 3GB RAM usage with large Claude model responses.*
 
 ✅ **Verify:** `free -h` shows ~2G swap
 
@@ -167,7 +167,7 @@ apt install -y nodejs
 
 *Why: OpenClaw requires Node.js runtime*
 
-✅ **Verify:** `node --version` shows `v22.x.x`, `npm --version` shows version number
+✅ **Verify:** `node --version` shows `v22.22.0` or later (minimum v22.x required), `npm --version` shows `10.x` or later
 
 ---
 
@@ -181,7 +181,7 @@ npm install -g openclaw
 
 *Why: Global install makes `openclaw` command available system-wide*
 
-✅ **Verify:** `openclaw --version` shows version number (e.g., 1.x.x)
+✅ **Verify:** `openclaw --version` shows version 2026.2.x or later
 
 ---
 
@@ -217,6 +217,8 @@ openclaw gateway start
 
 ✅ **Verify:** `openclaw gateway status` shows "running"
 
+**⚠️ Pairing Loop Troubleshooting:** If QR code scans successfully but immediately disconnects (repeats continuously), this is a device scope issue. See Part 5, Section 5 for troubleshooting. This happens if WhatsApp doesn't grant proper permissions during pairing.
+
 ---
 
 ## 7. Verification
@@ -239,6 +241,39 @@ openclaw gateway logs
 *Why: Confirms message processing is working*
 
 ✅ **Verify:** Logs show incoming message and outgoing response
+
+---
+
+## 8. Future Upgrades
+
+### 8.1 How to Upgrade OpenClaw
+
+**⚠️ IMPORTANT:** Always backup before upgrading. Never use `npm update -g openclaw` directly.
+
+```bash
+# Check for updates
+openclaw update
+
+# The command will show available updates and prompt for confirmation
+```
+
+*Why: `openclaw update` handles pre-upgrade backups, config migration, and rollback if upgrade fails. Raw npm updates can break your setup.*
+
+### 8.2 Upgrade Best Practices
+
+**Before upgrading:**
+1. Save config snapshot (see Part 5, Section 3)
+2. Test WhatsApp is working
+3. Note current version: `openclaw --version`
+4. Read release notes at [github.com/openclaw/openclaw/releases](https://github.com/openclaw/openclaw/releases)
+
+**After upgrading:**
+1. Verify gateway starts: `openclaw gateway status`
+2. Test WhatsApp message exchange
+3. Check device scope: `openclaw status | grep scope` (should show `operator.read,operator.write`)
+4. If anything breaks: restore snapshot and report issue
+
+✅ **Verify:** You know how to check for updates (`openclaw update`) and where to find release notes
 
 ---
 

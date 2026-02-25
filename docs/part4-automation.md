@@ -32,17 +32,27 @@ openclaw cron runs --name "morning-agenda"
 
 ### 1.2 Add Morning Agenda (Daily 9am)
 
+**⚠️ About Timezones:**
+
+Production OpenClaw crons use **Asia/Karachi timezone** (UTC+5) to avoid mental UTC math. Examples below show both UTC and timezone-aware syntax:
+
 ```bash
 openclaw cron add \
   --name "morning-agenda" \
-  --cron "0 9 * * *" \
+  --cron "0 9 * * * @ Asia/Karachi" \
   --model "claude-sonnet-4-0" \
   --announce \
   --best-effort-deliver \
   --message "Read my calendar for today. Summarize: meetings (time, title, attendees if available), focus blocks, and any red/urgent events. Keep it under 5 lines. End with one practical tip based on my schedule density."
 ```
 
-**WHY:** Daily calendar summary delivered to WhatsApp at 9am. Uses cheap Sonnet 4.0 model. `--best-effort-deliver` prevents job from failing if WhatsApp is temporarily down.
+**Syntax:** `--cron "CRON_EXPRESSION @ TIMEZONE"`
+
+**Why timezone suffix?**
+- `0 9 * * *` = 9am UTC = 2pm PKT (confusing!)
+- `0 9 * * * @ Asia/Karachi` = 9am PKT exactly (clear!)
+
+**WHY this cron:** Daily calendar summary delivered to WhatsApp at 9am local time. Uses cheap Sonnet 4.0 model. `--best-effort-deliver` prevents job from failing if WhatsApp is temporarily down.
 
 ✅ **Verify:** `openclaw cron list` shows the job. Wait until 9am UTC or test with near-future time.
 
@@ -51,27 +61,27 @@ openclaw cron add \
 ```bash
 openclaw cron add \
   --name "evening-wrap" \
-  --cron "30 22 * * *" \
+  --cron "30 22 * * * @ Asia/Karachi" \
   --model "claude-sonnet-4-0" \
   --announce \
   --best-effort-deliver \
   --message "Read today's daily log (memory/YYYY-MM-DD.md). Summarize the day in 3 sentences: what got done, what's pending, one insight or pattern you noticed. Be honest but not harsh."
 ```
 
-**WHY:** End-of-day reflection. Helps catch incomplete tasks and patterns.
+**WHY:** End-of-day reflection at 10:30pm local time. Helps catch incomplete tasks and patterns.
 
 ### 1.4 Add Weekly Health Check-in (Sunday 10am)
 
 ```bash
 openclaw cron add \
   --name "health-checkin" \
-  --cron "0 10 * * 0" \
+  --cron "0 10 * * 0 @ Asia/Karachi" \
   --model "claude-sonnet-4-0" \
   --announce \
   --message "Read health-os/STATUS.md. Ask me for this week's weight, energy level (1-10), and one health win. Keep it conversational and brief."
 ```
 
-**WHY:** Weekly health tracking. Sunday morning timing catches weekend reflection window.
+**WHY:** Weekly health tracking. Sunday 10am local time catches weekend reflection window.
 
 ### 1.5 One-Shot Reminder Example
 
@@ -129,47 +139,135 @@ Add this line:
 
 **WHY:** Cloudflare tunnel occasionally drops. This catches outages. Logs to `system-health.log` only on failure.
 
-### 2.3 Add Cron Delivery Monitor (Every 5min)
+### 2.3 Understanding Cron Delivery (Critical Concept)
 
-**Purpose:** If an OpenClaw cron job runs successfully but WhatsApp delivery fails, this script detects the failure and pushes the message to the event queue for retry.
+**The Problem:**
 
-Create the monitor script:
+Early OpenClaw setups used `--announce` to deliver cron output. When WhatsApp hiccups, the job would fail even though the work completed successfully. False failures are noisy and undermine trust in your system.
+
+**The Evolution:**
+
+1. **v1:** `--announce` only → false failures on transient network issues
+2. **v2:** Added `--best-effort-deliver` → swallows delivery failures, but now critical messages can vanish silently
+3. **v3 (Current Production):** Two-tier architecture
+
+**Production Architecture (as of 2026-02-25):**
+
+**ALL 35+ OpenClaw crons have `--best-effort-deliver`** — job never fails due to delivery issues.
+
+**But how do critical messages get delivered?**
+
+### 2.4 Two-Tier Cron Delivery
+
+**Tier 1 — Critical Messages (29 crons):**
+
+Add a MANDATORY directive telling the agent to send via `message` tool **as part of its task**, not relying on announce:
 
 ```bash
-cat > /root/clawd/scripts/cron-delivery-monitor.py << 'EOF'
+openclaw cron add \
+  --name "morning-agenda" \
+  --cron "0 9 * * * @ Asia/Karachi" \
+  --model "claude-sonnet-4-5" \
+  --announce \
+  --best-effort-deliver \
+  --message "Read my calendar for today. Summarize meetings, focus blocks, urgent events. Keep it under 5 lines.
+
+⚠️ MANDATORY: You MUST send your output via the message tool (action=send) as part of your task. Announce delivery is a redundant backup only. If message tool send fails, retry once. This is your PRIMARY delivery mechanism."
+```
+
+**Why this works:**
+- Agent sends via `message` tool = part of task execution
+- If message tool fails, agent retries (task-level failure recovery)
+- Announce is just a backup (if it fails, no biggie — message tool already delivered)
+- `--best-effort-deliver` prevents job from showing as "failed" if announce hiccups
+
+**Tier 2 — Background Jobs (6 crons):**
+
+Jobs like `event-queue-processor`, `agentmail-health-check`, `calendar-webhook-renew` don't need delivery:
+- They do work silently (process queue, renew webhook, etc.)
+- No output to deliver
+- If the JOB fails (agent error), that's caught by the monitor (next section)
+- If delivery fails, who cares — there was no output anyway
+
+**Key Insight:** Delivery failure ≠ job failure. With `--best-effort-deliver`, only REAL failures (agent crashes, task errors) are flagged.
+
+### 2.5 Add Cron Failure Monitor (Every 5min)
+
+**Purpose:** With `--best-effort-deliver` on all crons, delivery failures are silently swallowed (by design — they're not real failures). This monitor catches REAL job failures: when the agent itself errors out, task fails, or model crashes. Those need alerting.
+
+```bash
+cat > /root/clawd/scripts/cron-delivery-monitor.py << 'PYEOF'
 #!/usr/bin/env python3
-import sqlite3
-import json
-import subprocess
-from pathlib import Path
+"""
+Cron Failure Monitor: detects real job failures (not delivery failures).
+With bestEffort=true, delivery failures are swallowed. Critical crons send
+via message tool directly, so announce is just a bonus.
+This catches when the cron agent itself errors out.
+"""
+import json, os, subprocess, sys
+from datetime import datetime, timezone
 
-DB = Path.home() / ".clawdbot" / "event-queue.sqlite"
-OC_LOG = Path.home() / ".openclaw" / "cron-runs.log"  # Hypothetical OC log location
+STATE_FILE = os.path.expanduser("~/.clawdbot/cron-delivery-state.json")
+EVENT_QUEUE = "/root/clawd/scripts/event-queue.py"
+BACKGROUND_JOBS = {
+    "event-queue-processor", "agentmail-health-check",
+    "calendar-webhook-renew", "red-meeting-reconcile",
+    "github-release-monitor",
+}
 
-def check_failed_deliveries():
-    """Check OC cron logs for successful runs with failed delivery."""
-    if not OC_LOG.exists():
-        return
-    
-    # Parse last 100 lines for delivery failures
-    # (Actual implementation depends on OC's log format)
-    # This is a skeleton — adjust to real OC log structure
-    
-    lines = OC_LOG.read_text().splitlines()[-100:]
-    for line in lines:
-        if "delivery_failed" in line.lower():
-            # Extract job name, output, timestamp
-            # Push to event queue
-            subprocess.run([
-                "python3", "/root/clawd/scripts/event-queue.py",
-                "push", "--type", "cron-delivery",
-                "--source", "delivery-monitor",
-                "--payload", json.dumps({"log_line": line})
-            ])
+def load_state():
+    try:
+        with open(STATE_FILE) as f:
+            return set(tuple(x) for x in json.load(f))
+    except (FileNotFoundError, json.JSONDecodeError):
+        return set()
+
+def save_state(state):
+    os.makedirs(os.path.dirname(STATE_FILE), exist_ok=True)
+    recent = sorted(state, key=lambda x: x[1], reverse=True)[:200]
+    with open(STATE_FILE, "w") as f:
+        json.dump(list(recent), f)
+
+def main():
+    state = load_state()
+    r = subprocess.run(["openclaw", "cron", "list", "--json"],
+                       capture_output=True, text=True, timeout=30)
+    jobs = json.loads(r.stdout).get("jobs", [])
+    alerts = []
+
+    for job in jobs:
+        s = job.get("state", {})
+        if s.get("lastStatus") != "error":
+            continue
+        key = (job["id"], str(s.get("lastRunAtMs", "")))
+        if key in state:
+            continue
+        error = s.get("lastError", "")
+        name = job["name"]
+        is_bg = name in BACKGROUND_JOBS
+        emoji = "⚠️" if is_bg else "🔴"
+        consec = s.get("consecutiveErrors", 0)
+        msg = f"{emoji} *Cron failed:* {name}"
+        if consec > 1:
+            msg += f" ({consec}x)"
+        msg += f"\nError: {error[:200]}"
+        alerts.append(msg)
+        state.add(key)
+
+    save_state(state)
+    if alerts:
+        payload = json.dumps({"message": "\n\n".join(alerts), "source": "cron-monitor"})
+        subprocess.run(["python3", EVENT_QUEUE, "push",
+                        "--type", "cron-delivery", "--source", "cron-monitor",
+                        "--payload", payload, "--priority", "5"],
+                       capture_output=True, text=True, timeout=10)
+        print(f"{len(alerts)} failure(s) queued")
+    else:
+        print("No new failures")
 
 if __name__ == "__main__":
-    check_failed_deliveries()
-EOF
+    main()
+PYEOF
 
 chmod +x /root/clawd/scripts/cron-delivery-monitor.py
 ```
@@ -181,12 +279,12 @@ crontab -e
 
 Add:
 ```
-*/5 * * * * /root/clawd/scripts/cron-delivery-monitor.py
+*/5 * * * * /usr/bin/python3 /root/clawd/scripts/cron-delivery-monitor.py >> /tmp/cron-delivery-monitor.log 2>&1
 ```
 
-**WHY:** No cron message ever gets permanently lost. If delivery fails, it gets retried via event queue.
+**WHY:** No real job failure goes unnoticed. Delivery failures are harmless (critical crons send directly). Background job failures still get flagged.
 
-✅ **Verify:** `crontab -l` shows all 4 jobs (hourly backup, nightly backup, tunnel check, delivery monitor).
+✅ **Verify:** `crontab -l` shows all 4 jobs (hourly backup, nightly backup, tunnel check, failure monitor).
 
 ---
 

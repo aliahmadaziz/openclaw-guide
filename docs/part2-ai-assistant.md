@@ -4,7 +4,8 @@
 
 **Prerequisites:** 
 - Part 1 complete (OpenClaw installed, WhatsApp connected)
-- API keys for Anthropic and Google AI (get from [console.anthropic.com](https://console.anthropic.com) and [aistudio.google.com](https://aistudio.google.com))
+- A Claude subscription (Max plan recommended) OR an Anthropic API key
+- A Google AI Studio account for Gemini access
 
 ---
 
@@ -12,58 +13,120 @@
 
 The model chain determines which AI models handle different tasks. You configure primary (conversations), fallback (backup), sub-agents (background tasks), and cron (scheduled jobs).
 
-### 1.1 Set API Keys
+### 1.1 Get Your AI Credentials
+
+**Option A — Claude Max Plan (Recommended)**
+
+The Claude Max plan ($100/month) gives you Claude access with built-in usage limits and cooldown periods, which is much more cost-predictable than raw API usage.
+
+1. Subscribe to Claude Max at [claude.ai/settings/billing](https://claude.ai/settings/billing)
+2. Install Claude Code CLI: `npm install -g @anthropic-ai/claude-code`
+3. Run `claude` in your terminal — it will prompt you to authenticate
+4. During auth, it generates an access token — copy this token
+5. Set it in OpenClaw:
+
+```bash
+# Edit config file directly (OpenClaw 2026.2.x doesn't have config set commands)
+nano ~/.openclaw/openclaw.json
+```
+
+Add your API key under the `auth` section:
+```json
+{
+  "auth": {
+    "profiles": {
+      "anthropic:default": {
+        "provider": "anthropic",
+        "mode": "token",
+        "token": "YOUR_CLAUDE_CODE_TOKEN"
+      }
+    }
+  }
+}
+```
+
+*Why: The Max plan has built-in spend limits and cooldown periods. Raw API keys (from console.anthropic.com) have no guardrails and can run up significant bills fast. Max plan is safer for always-on assistants.*
+
+**Option B — Raw Anthropic API Key**
+
+If you prefer pay-as-you-go: get a key from [console.anthropic.com](https://console.anthropic.com) and set spend limits in the console.
 
 ```bash
 openclaw config set anthropicApiKey YOUR_ANTHROPIC_KEY
-openclaw config set googleApiKey YOUR_GOOGLE_KEY
 ```
 
-*Why: OpenClaw needs API credentials to call the AI models*
+**Google Gemini (Fallback Model)**
 
-✅ **Verify:** `openclaw config get anthropicApiKey` shows your key (first few chars visible)
+1. Go to [aistudio.google.com](https://aistudio.google.com)
+2. Sign in with your Google account
+3. Click "Get API Key" → create a key
+4. Google AI Studio gives you **$300 in free credits** — more than enough for a fallback model
 
-### 1.2 Configure Primary Model
-
-```bash
-openclaw config set defaultModel anthropic/claude-opus-4-6
+Add Google API key to the same config file:
+```json
+{
+  "auth": {
+    "profiles": {
+      "anthropic:default": {
+        "provider": "anthropic",
+        "mode": "token",
+        "token": "YOUR_CLAUDE_CODE_TOKEN"
+      },
+      "google:default": {
+        "provider": "google",
+        "mode": "token",
+        "token": "YOUR_AISTUDIO_KEY"
+      }
+    }
+  }
+}
 ```
 
-*Why: Primary model handles all conversations and complex reasoning. Opus 4 is the most capable.*
+*Why: AI Studio's free credits make Gemini essentially free as a fallback. You're not paying for a second model — Google is subsidizing your backup.*
 
-### 1.3 Configure Fallback Model
+✅ **Verify:** `openclaw config get anthropicApiKey` and `openclaw config get googleApiKey` show your keys (first few chars visible)
 
-```bash
-openclaw config set fallbackModels '["google/gemini-2.5-pro"]'
+### 1.2 Configure Models and Context
+
+Edit `~/.openclaw/openclaw.json` and add the `agents` section:
+
+```json
+{
+  "agents": {
+    "defaults": {
+      "model": {
+        "primary": "anthropic/claude-opus-4-6",
+        "fallbacks": ["google/gemini-2.5-pro"]
+      },
+      "contextTokens": 200000,
+      "subagents": {
+        "model": {
+          "primary": "anthropic/claude-sonnet-4-5"
+        }
+      }
+    },
+    "list": [
+      {
+        "id": "main",
+        "default": true,
+        "agentDir": "/root/clawd"
+      }
+    ]
+  }
+}
 ```
 
-*Why: If Anthropic API is down, OpenClaw automatically switches to Gemini. You stay online.*
+**What each setting does:**
+- `model.primary`: Main conversational model (Opus 4.6 — most capable)
+- `model.fallbacks`: Backup models if primary fails (Gemini 2.5 Pro)
+- `contextTokens`: Max context window (200K = ~150K words, never exceed smallest model in chain)
+- `subagents.model.primary`: Background worker model (Sonnet 4.5 — fast, cost-effective)
+- `agents.list[0].id`: Agent identifier ("main" is the default agent)
+- `agentDir`: Workspace path where personality files live
 
-### 1.4 Configure Sub-Agent Model
+**About cron model:** Cron jobs specify their model per-job (typically `claude-sonnet-4-0` for cheap routine tasks). No global cron model setting.
 
-```bash
-openclaw config set subagentModel anthropic/claude-sonnet-4-5
-```
-
-*Why: Sub-agents handle background tasks (research, file processing). Sonnet 4.5 is fast and cost-effective.*
-
-### 1.5 Configure Cron Model
-
-```bash
-openclaw config set cronModel anthropic/claude-sonnet-4-0
-```
-
-*Why: Scheduled jobs use the older, cheaper Sonnet 4.0 for routine tasks (reminders, checks).*
-
-### 1.6 Set Context Window
-
-```bash
-openclaw config set contextTokens 200000
-```
-
-*Why: 200K tokens = ~150K words of context. Never exceed the smallest model in your chain.*
-
-✅ **Verify:** Run `openclaw config list | grep -E 'Model|context'` — should show all four models configured
+✅ **Verify:** `cat ~/.openclaw/openclaw.json | grep -A5 '"model"'` shows your model configuration
 
 **Model Summary:**
 - **Primary (Opus 4.6):** Your main conversation partner, handles all direct messages
@@ -89,12 +152,14 @@ cd ~/clawd
 ### 2.2 Create Core Files
 
 ```bash
-touch SOUL.md USER.md IDENTITY.md AGENTS.md MEMORY.md HANDOFF.md HEARTBEAT.md TOOLS.md SECURITY.md
+touch SOUL.md USER.md IDENTITY.md AGENTS.md MEMORY.md HANDOFF.md HEARTBEAT.md TOOLS.md SECURITY.md RECOVERY.md WALL-POLICY.md
+mkdir -p memory
+touch memory/friction-log.md
 ```
 
 *Why: Each file serves a specific purpose in how your AI thinks and acts*
 
-✅ **Verify:** `ls ~/clawd/*.md` shows all 9 files
+✅ **Verify:** `ls ~/clawd/*.md` shows all 11 files, `ls ~/clawd/memory/friction-log.md` exists
 
 **File Purposes:**
 
@@ -109,7 +174,10 @@ touch SOUL.md USER.md IDENTITY.md AGENTS.md MEMORY.md HANDOFF.md HEARTBEAT.md TO
 | `HEARTBEAT.md` | Periodic check-in tasks — what to do during idle time |
 | `TOOLS.md` | Local tool notes and wrapper scripts — custom commands |
 | `SECURITY.md` | Security policies — what requires permission, what's forbidden |
+| `RECOVERY.md` | Recovery procedures — what to do when things break |
+| `WALL-POLICY.md` | (Optional) Chinese wall enforcement for multi-company work |
 | `memory/` | Daily logs (YYYY-MM-DD.md) — raw record of what happened each day |
+| `memory/friction-log.md` | Contradictions and unresolved tensions — meta-learning |
 | `scripts/` | Utility scripts — custom automation tools |
 
 ### 2.3 Create SOUL.md Template
@@ -194,50 +262,100 @@ EOF
 
 ---
 
-## 3. Persona Configuration
+## 3. Workspace Configuration
 
-Now point OpenClaw to your workspace so these files are injected into every conversation.
+Now configure OpenClaw to use your workspace files.
 
 ### 3.1 Set Workspace Path
 
-```bash
-openclaw config set workspace ~/clawd
+The workspace path was already set in Section 1.2 when you configured the agents section:
+
+```json
+{
+  "agents": {
+    "defaults": {
+      "workspace": "/root/clawd"
+    }
+  }
+}
 ```
+
+If you haven't added this yet, edit `~/.openclaw/openclaw.json` and add the `workspace` field under `agents.defaults`.
 
 *Why: Tells OpenClaw where to find personality and memory files*
 
-### 3.2 Configure Project Context Files
+### 3.2 How Files Are Loaded
 
-```bash
-openclaw config set projectContextFiles '["AGENTS.md","TOOLS.md"]'
-```
+OpenClaw automatically loads these files when present in your workspace:
 
-*Why: These files are loaded into EVERY conversation as context. The AI reads them before responding.*
+**Always loaded:**
+- `AGENTS.md` — Session instructions, safety rules
+- `TOOLS.md` — Custom tool notes
+- `SOUL.md` — Personality and tone
+- `USER.md` — Info about you
 
-**Why these two files?**
-- **AGENTS.md:** Session instructions (how to search memory, safety rules, when to spawn sub-agents)
-- **TOOLS.md:** Local tool notes (custom scripts, API credentials, wrapper commands)
+**Loaded on demand:**
+- `MEMORY.md` — Long-term memory (main session only)
+- `HANDOFF.md` — Working state (after reset/compaction)
+- `HEARTBEAT.md` — During heartbeat checks
+- `SECURITY.md` — Referenced for safety checks
 
-**Why not SOUL.md or USER.md?**
-- Those are loaded via system prompts and persona config (set in next section)
+**Note:** OpenClaw 2026.2.x loads files based on workspace directory structure automatically. No need to explicitly configure `projectContextFiles` — just ensure files exist in the workspace root.
 
-### 3.3 Set System Prompt (Optional but Recommended)
-
-```bash
-openclaw config set systemPrompt "You are MyBot, your personal AI assistant. Read SOUL.md, USER.md, and SECURITY.md before every response. Be direct, efficient, and context-aware."
-```
-
-*Why: This instruction is prepended to every conversation, ensuring the AI always reads core files*
-
-✅ **Verify:** `openclaw config get workspace` shows `/root/clawd`
+✅ **Verify:** `ls ~/clawd/*.md` shows all core files
 
 ---
 
-## 4. First Real Conversation
+## 4. Memory Search Configuration (Critical)
+
+**⚠️ IMPORTANT:** OpenClaw's built-in `memory_search` and `memory_get` tools are disabled in production setups. You must use a custom memory search script.
+
+### 4.1 Why Disable Built-in Memory Search?
+
+The built-in memory tools are basic keyword search. Production setups need:
+- Hybrid search (BM25 + vector embeddings)
+- Reranking for relevance
+- Cross-file indexing
+- Custom weighting for different file types
+
+### 4.2 Configure Memory Search Ban
+
+Edit `~/.openclaw/openclaw.json` and add to the `tools` section:
+
+```json
+{
+  "tools": {
+    "deny": [
+      "memory_search",
+      "memory_get"
+    ],
+    "web": {
+      "search": {
+        "apiKey": "YOUR_BRAVE_SEARCH_KEY"
+      }
+    }
+  }
+}
+```
+
+*Why: Prevents AI from using inferior built-in search. Forces use of custom script.*
+
+### 4.3 Custom Memory Search (Preview)
+
+Part 3 will cover setting up `scripts/memory-search.py` with hybrid search and reranking. For now, just ensure the built-in tools are banned.
+
+**The AI should call:** `python3 scripts/memory-search.py "query" --deep`  
+**NOT:** Use built-in `memory_search` tool
+
+✅ **Verify:** `cat ~/.openclaw/openclaw.json | grep -A3 '"deny"'` shows memory tools banned
+
+---
+
+## 5. First Real Conversation
 
 Time to restart OpenClaw and talk to your newly configured AI assistant.
 
-### 4.1 Restart Gateway
+### 5.1 Restart Gateway
 
 ```bash
 openclaw gateway restart
@@ -249,7 +367,7 @@ Wait 5-10 seconds for full restart.
 
 ✅ **Verify:** `openclaw gateway status` shows "running"
 
-### 4.2 Send Test Message
+### 5.2 Send Test Message
 
 **From WhatsApp, send:**
 
@@ -262,7 +380,7 @@ The bot should introduce itself using the identity from `IDENTITY.md` (MyBot �
 
 ✅ **Verify:** Bot knows its own name and your name
 
-### 4.3 Test Personality
+### 5.3 Test Personality
 
 **Send:**
 
@@ -275,7 +393,7 @@ The bot should refuse or push back based on `SOUL.md` forbidden rules (no corpor
 
 ✅ **Verify:** Bot follows SOUL.md tone rules
 
-### 4.4 Test Timezone Awareness
+### 5.4 Test Timezone Awareness
 
 **Send:**
 
@@ -288,7 +406,7 @@ Bot should reference `USER.md` and say UTC+5 / Your Timezone.
 
 ✅ **Verify:** Bot reads and uses USER.md data
 
-### 4.5 Check Logs
+### 5.5 Check Logs
 
 ```bash
 openclaw gateway logs --tail 50
@@ -300,9 +418,9 @@ openclaw gateway logs --tail 50
 
 ---
 
-## 5. Fine-Tuning (Optional)
+## 6. Fine-Tuning (Optional)
 
-### 5.1 Adjust Memory Settings
+### 6.1 Adjust Memory Settings
 
 ```bash
 openclaw config set memoryEnabled true
@@ -311,7 +429,7 @@ openclaw config set memoryMaxTokens 50000
 
 *Why: Enables conversation memory (stores recent messages for context)*
 
-### 5.2 Set Message Limits
+### 6.2 Set Message Limits
 
 ```bash
 openclaw config set maxReplyLength 2000
@@ -319,7 +437,7 @@ openclaw config set maxReplyLength 2000
 
 *Why: Prevents excessively long responses (especially on WhatsApp)*
 
-### 5.3 Enable Thinking (Reasoning)
+### 6.3 Enable Thinking (Reasoning)
 
 ```bash
 openclaw config set reasoning low
@@ -333,7 +451,7 @@ openclaw config set reasoning low
 
 You should now have:
 
-- [ ] Anthropic and Google API keys configured
+- [ ] Claude access configured (Max plan token or API key)
 - [ ] Model chain set (Opus 4.6 primary, Gemini fallback, Sonnet sub-agents, Sonnet cron)
 - [ ] Context window set to 200K tokens
 - [ ] Workspace created at `~/clawd`
@@ -392,8 +510,10 @@ ls -lh ~/clawd/*.md
 - Try explicit instruction: "Read SOUL.md and tell me your tone rules"
 
 **API errors:**
-- Verify keys: `openclaw config get anthropicApiKey`
-- Check API quotas at console.anthropic.com
+- Verify keys: `openclaw config get anthropicApiKey` and `openclaw config get googleApiKey`
+- If using Max plan: check usage at claude.ai/settings/usage
+- If using raw API: check quotas at console.anthropic.com
+- Google credits: check at aistudio.google.com → Settings
 - Test fallback: temporarily disable Anthropic key to trigger Gemini
 
 **Context too large errors:**

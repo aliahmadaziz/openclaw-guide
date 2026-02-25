@@ -228,7 +228,7 @@ python3 google-auth.py  # Rename output to token-gmail.json
 - `token.json` — Primary/work account
 - `token-gmail.json` — Personal Gmail
 - `token-work.json` — Work calendar
-- `tokens/shopdev.json` — Per-domain tokens
+- `tokens/work.json` — Per-domain tokens
 
 ---
 
@@ -530,9 +530,9 @@ Press `Ctrl+C` in the server terminal to stop.
 ### 3.5 Create Systemd Service
 
 ```bash
-cat > /etc/systemd/system/webhook.service << 'EOF'
+cat > /etc/systemd/system/moltbot-webhook.service << 'EOF'
 [Unit]
-Description=OpenClaw Webhook Server
+Description=Moltbot Webhook Server
 After=network.target
 
 [Service]
@@ -551,19 +551,27 @@ WantedBy=multi-user.target
 EOF
 ```
 
-*Why: Runs webhook server as a system service with automatic restart*
+*Why: Runs webhook server as a system service with automatic restart. Named "moltbot-webhook" to avoid conflicts with other webhook services.*
+
+Secure the env file:
+
+```bash
+chmod 600 ~/.clawdbot/webhook.env
+```
+
+*Why: Webhook secrets must be readable only by root*
 
 Enable and start:
 
 ```bash
 systemctl daemon-reload
-systemctl enable webhook
-systemctl start webhook
+systemctl enable moltbot-webhook
+systemctl start moltbot-webhook
 ```
 
 *Why: Starts webhook server now and on every boot*
 
-✅ **Verify:** `systemctl status webhook` shows "active (running)"
+✅ **Verify:** `systemctl status moltbot-webhook` shows "active (running)"
 
 ### 3.6 Test Public Webhook URL
 
@@ -725,6 +733,23 @@ chmod +x ~/clawd/scripts/nightly-backup.sh
 
 *Why: Complete system snapshot for disaster recovery. 7-day versioning allows rollback to any recent state.*
 
+**📝 Note on Production Nightly Backups:**
+
+The script above shows a simplified version. Production nightly backups (as of 2026-02-25) are an 8-step comprehensive process:
+
+1. Workspace backup (encrypted, batched for memory efficiency)
+2. OpenClaw state backup
+3. SQLite databases backup
+4. Git repos backup
+5. **DR bundle generation** (hash-deduped, emailed to designated contacts)
+6. **Systems verification** (infra audit + cron audit)
+7. **Snapshot drift detection** (compare against gold snapshot, auto-save if intentional changes)
+8. **WhatsApp summary** (send backup report to user)
+
+Each step self-verifies and logs. Failures alert via Pushover.
+
+The script shown here covers steps 1-4. Steps 5-8 are advanced features you can add later as your setup matures. For now, focus on getting basic nightly backups working reliably.
+
 ### 4.6 Initialize Git Repository (If Not Already)
 
 ```bash
@@ -866,8 +891,8 @@ cloudflared tunnel list                             # List tunnels
 journalctl -u cloudflared -f                        # View tunnel logs
 
 # Webhook Server
-systemctl status webhook                            # Check webhook status
-systemctl restart webhook                           # Restart webhook
+systemctl status moltbot-webhook                    # Check webhook status
+systemctl restart moltbot-webhook                   # Restart webhook
 journalctl -u webhook -f                            # View webhook logs
 curl http://localhost:8088/health                   # Test local endpoint
 
@@ -880,7 +905,7 @@ tail -f /var/log/backup-nightly.log                 # Monitor nightly backups
 crontab -l                                          # View scheduled backups
 
 # System Health
-systemctl status cloudflared webhook                # Check both services
+systemctl status cloudflared moltbot-webhook        # Check both services
 journalctl --since "1 hour ago" -u webhook          # Recent webhook logs
 ls -lh ~/.clawdbot/google/                          # Check tokens exist
 ```
@@ -907,7 +932,7 @@ ls -lh ~/.clawdbot/google/                          # Check tokens exist
 - Test local service first: `curl http://localhost:8088/health`
 
 **Webhook server not receiving requests:**
-- Check service is running: `systemctl status webhook`
+- Check service is running: `systemctl status moltbot-webhook`
 - Verify tunnel routes to correct port (8088)
 - Test locally before testing publicly
 - Check logs: `journalctl -u webhook -f`
@@ -917,7 +942,7 @@ ls -lh ~/.clawdbot/google/                          # Check tokens exist
 - Verify Cloudflare tunnel is running
 - Check webhook server is listening on localhost:8088
 - Test health endpoint: `curl https://webhook.yourdomain.com/health`
-- Check both services: `systemctl status cloudflared webhook`
+- Check both services: `systemctl status cloudflared moltbot-webhook`
 
 **Rclone "Failed to create file system" error:**
 - Re-run `rclone config` to reconfigure remote

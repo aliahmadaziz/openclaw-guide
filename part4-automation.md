@@ -32,17 +32,27 @@ openclaw cron runs --name "morning-agenda"
 
 ### 1.2 Add Morning Agenda (Daily 9am)
 
+**⚠️ About Timezones:**
+
+Production OpenClaw crons use **Asia/Karachi timezone** (UTC+5) to avoid mental UTC math. Examples below show both UTC and timezone-aware syntax:
+
 ```bash
 openclaw cron add \
   --name "morning-agenda" \
-  --cron "0 9 * * *" \
+  --cron "0 9 * * * @ Asia/Karachi" \
   --model "claude-sonnet-4-0" \
   --announce \
   --best-effort-deliver \
   --message "Read my calendar for today. Summarize: meetings (time, title, attendees if available), focus blocks, and any red/urgent events. Keep it under 5 lines. End with one practical tip based on my schedule density."
 ```
 
-**WHY:** Daily calendar summary delivered to WhatsApp at 9am. Uses cheap Sonnet 4.0 model. `--best-effort-deliver` prevents job from failing if WhatsApp is temporarily down.
+**Syntax:** `--cron "CRON_EXPRESSION @ TIMEZONE"`
+
+**Why timezone suffix?**
+- `0 9 * * *` = 9am UTC = 2pm PKT (confusing!)
+- `0 9 * * * @ Asia/Karachi` = 9am PKT exactly (clear!)
+
+**WHY this cron:** Daily calendar summary delivered to WhatsApp at 9am local time. Uses cheap Sonnet 4.0 model. `--best-effort-deliver` prevents job from failing if WhatsApp is temporarily down.
 
 ✅ **Verify:** `openclaw cron list` shows the job. Wait until 9am UTC or test with near-future time.
 
@@ -51,27 +61,27 @@ openclaw cron add \
 ```bash
 openclaw cron add \
   --name "evening-wrap" \
-  --cron "30 22 * * *" \
+  --cron "30 22 * * * @ Asia/Karachi" \
   --model "claude-sonnet-4-0" \
   --announce \
   --best-effort-deliver \
   --message "Read today's daily log (memory/YYYY-MM-DD.md). Summarize the day in 3 sentences: what got done, what's pending, one insight or pattern you noticed. Be honest but not harsh."
 ```
 
-**WHY:** End-of-day reflection. Helps catch incomplete tasks and patterns.
+**WHY:** End-of-day reflection at 10:30pm local time. Helps catch incomplete tasks and patterns.
 
 ### 1.4 Add Weekly Health Check-in (Sunday 10am)
 
 ```bash
 openclaw cron add \
   --name "health-checkin" \
-  --cron "0 10 * * 0" \
+  --cron "0 10 * * 0 @ Asia/Karachi" \
   --model "claude-sonnet-4-0" \
   --announce \
   --message "Read health-os/STATUS.md. Ask me for this week's weight, energy level (1-10), and one health win. Keep it conversational and brief."
 ```
 
-**WHY:** Weekly health tracking. Sunday morning timing catches weekend reflection window.
+**WHY:** Weekly health tracking. Sunday 10am local time catches weekend reflection window.
 
 ### 1.5 One-Shot Reminder Example
 
@@ -129,33 +139,61 @@ Add this line:
 
 **WHY:** Cloudflare tunnel occasionally drops. This catches outages. Logs to `system-health.log` only on failure.
 
-### 2.3 Cron Delivery: Two-Tier Guaranteed Delivery
+### 2.3 Understanding Cron Delivery (Critical Concept)
 
-**Problem:** `--best-effort-deliver` prevents jobs from showing false errors when WhatsApp is temporarily down, but it also means delivery failures are silently swallowed. Critical messages (daily briefings, reminders, follow-ups) could vanish without you knowing.
+**The Problem:**
 
-**Solution: Two tiers.**
+Early OpenClaw setups used `--announce` to deliver cron output. When WhatsApp hiccups, the job would fail even though the work completed successfully. False failures are noisy and undermine trust in your system.
 
-**Tier 1 — Critical (must reach you):** Add a MANDATORY directive to the cron prompt telling the agent to send via `message` tool directly as part of its task. Announce becomes a redundant backup. Example:
+**The Evolution:**
+
+1. **v1:** `--announce` only → false failures on transient network issues
+2. **v2:** Added `--best-effort-deliver` → swallows delivery failures, but now critical messages can vanish silently
+3. **v3 (Current Production):** Two-tier architecture
+
+**Production Architecture (as of 2026-02-25):**
+
+**ALL 35+ OpenClaw crons have `--best-effort-deliver`** — job never fails due to delivery issues.
+
+**But how do critical messages get delivered?**
+
+### 2.4 Two-Tier Cron Delivery
+
+**Tier 1 — Critical Messages (29 crons):**
+
+Add a MANDATORY directive telling the agent to send via `message` tool **as part of its task**, not relying on announce:
 
 ```bash
 openclaw cron add \
   --name "morning-agenda" \
-  --cron "0 9 * * *" \
+  --cron "0 9 * * * @ Asia/Karachi" \
   --model "claude-sonnet-4-5" \
   --announce \
   --best-effort-deliver \
   --message "Read my calendar for today. Summarize meetings, focus blocks, urgent events. Keep it under 5 lines.
 
-⚠️ MANDATORY: You MUST send your output to Ali via the message tool (action=send, target=+923224780000) as part of your task. Do NOT rely on announce delivery. If your message tool send fails, retry once. This is your primary delivery mechanism."
+⚠️ MANDATORY: You MUST send your output via the message tool (action=send) as part of your task. Announce delivery is a redundant backup only. If message tool send fails, retry once. This is your PRIMARY delivery mechanism."
 ```
 
-**Tier 2 — Background (silent fail OK):** Jobs like event-queue-processor, webhook renewal, health checks. If they complete but delivery fails, no one needs to see the output. Job failures still need alerting.
+**Why this works:**
+- Agent sends via `message` tool = part of task execution
+- If message tool fails, agent retries (task-level failure recovery)
+- Announce is just a backup (if it fails, no biggie — message tool already delivered)
+- `--best-effort-deliver` prevents job from showing as "failed" if announce hiccups
 
-**WHY:** Critical crons now have TWO delivery paths: (1) the agent sends directly via message tool, (2) announce as backup. Even if announce breaks, you get the message.
+**Tier 2 — Background Jobs (6 crons):**
 
-### 2.4 Add Cron Failure Monitor (Every 5min)
+Jobs like `event-queue-processor`, `agentmail-health-check`, `calendar-webhook-renew` don't need delivery:
+- They do work silently (process queue, renew webhook, etc.)
+- No output to deliver
+- If the JOB fails (agent error), that's caught by the monitor (next section)
+- If delivery fails, who cares — there was no output anyway
 
-**Purpose:** With bestEffort=true, delivery failures are silently swallowed (by design). This monitor catches REAL job failures (the agent itself errored) and alerts you.
+**Key Insight:** Delivery failure ≠ job failure. With `--best-effort-deliver`, only REAL failures (agent crashes, task errors) are flagged.
+
+### 2.5 Add Cron Failure Monitor (Every 5min)
+
+**Purpose:** With `--best-effort-deliver` on all crons, delivery failures are silently swallowed (by design — they're not real failures). This monitor catches REAL job failures: when the agent itself errors out, task fails, or model crashes. Those need alerting.
 
 ```bash
 cat > /root/clawd/scripts/cron-delivery-monitor.py << 'PYEOF'

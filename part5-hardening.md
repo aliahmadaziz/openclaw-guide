@@ -668,13 +668,96 @@ crontab -l | grep backup
 
 ---
 
-## 6. Device Scope Verification (Prevent WhatsApp Pairing Loops)
+## 6. Safe Gateway Restart Protocol (Critical)
+
+**WHY:** Raw `openclaw gateway restart` can lose OpenClaw cron jobs (they're stored in memory during restart). You need a safe restart wrapper that backs up crons before restart and verifies after.
+
+### 6.1 Create Safe Restart Script
+
+```bash
+nano /root/clawd/scripts/safe-gateway-restart.sh
+```
+
+```bash
+#!/bin/bash
+# safe-gateway-restart.sh - ALWAYS use instead of raw "openclaw gateway restart"
+# Backs up crons before restart, verifies after, alerts on job loss
+
+set -e
+
+echo "🔄 Safe gateway restart starting..."
+
+# Step 1: Backup current cron jobs
+echo "  → Backing up cron jobs..."
+openclaw cron list --json > /root/.clawdbot/cron-backup-prerestart.json
+CRON_COUNT_BEFORE=$(openclaw cron list --json | jq '. jobs | length')
+echo "    ✓ $CRON_COUNT_BEFORE jobs backed up"
+
+# Step 2: Restart gateway
+echo "  → Restarting gateway..."
+openclaw gateway restart
+
+# Step 3: Wait for gateway to be ready
+echo "  → Waiting for gateway..."
+sleep 5
+
+# Step 4: Verify cron jobs survived
+CRON_COUNT_AFTER=$(openclaw cron list --json | jq '.jobs | length')
+echo "    ✓ $CRON_COUNT_AFTER jobs after restart"
+
+if [ "$CRON_COUNT_BEFORE" != "$CRON_COUNT_AFTER" ]; then
+    echo "❌ CRON JOB LOSS DETECTED: $CRON_COUNT_BEFORE before, $CRON_COUNT_AFTER after"
+    echo "    Backup at: /root/.clawdbot/cron-backup-prerestart.json"
+    echo "    Manual recovery required: openclaw cron import < backup.json"
+    exit 1
+else
+    echo "✅ Safe restart complete. All $CRON_COUNT_AFTER cron jobs intact."
+fi
+```
+
+Make executable:
+
+```bash
+chmod +x /root/clawd/scripts/safe-gateway-restart.sh
+```
+
+*Why: This wrapper ensures you never lose cron jobs during restart. Always use this instead of raw restart.*
+
+### 6.2 Usage
+
+**NEVER do this:**
+```bash
+openclaw gateway restart  # ❌ UNSAFE — can lose crons
+```
+
+**ALWAYS do this:**
+```bash
+/root/clawd/scripts/safe-gateway-restart.sh  # ✅ SAFE
+```
+
+### 6.3 Add to PATH (Optional)
+
+```bash
+echo 'export PATH="/root/clawd/scripts:$PATH"' >> ~/.bashrc
+source ~/.bashrc
+```
+
+Now you can just run:
+```bash
+safe-gateway-restart.sh
+```
+
+**Bookmark this:** After every config change, use safe restart.
+
+---
+
+## 7. Device Scope Verification (Prevent WhatsApp Pairing Loops)
 
 **WHY:** OpenClaw 1.x introduced stricter device scope requirements. If your paired device doesn't have `operator.write` scope, pairing will loop forever (QR code → "connected" → immediately disconnects → new QR code).
 
 **Reference:** [OpenClaw GitHub Issue #23006](https://github.com/openclaw/openclaw/issues/23006)
 
-### 5.1 Check Current Scope
+### 7.1 Check Current Scope
 
 ```bash
 # View current device info
@@ -696,7 +779,7 @@ Look for the `devices` section:
 
 **Problem:** Scope only has `operator.read`. OpenClaw now requires `operator.write` for message sending.
 
-### 5.2 Fix: Re-pair with Correct Scope
+### 7.2 Fix: Re-pair with Correct Scope
 
 If scope is missing `operator.write`:
 
@@ -729,7 +812,7 @@ openclaw status
 }
 ```
 
-### 5.3 Symptoms of Scope Issues
+### 7.3 Symptoms of Scope Issues
 
 - QR code scans successfully but disconnects within 2 seconds
 - Gateway logs show "device not authorized" or "missing scope"
@@ -738,9 +821,9 @@ openclaw status
 
 **Solution:** Always re-pair (steps in 5.2) after major OpenClaw updates or if pairing loops occur.
 
-### 5.4 Post-Update Verification Routine
+### 7.4 Post-Update Verification Routine
 
-**After every `npm update -g openclaw`:**
+**After every `openclaw update`:**
 
 ```bash
 # 1. Check version
@@ -755,7 +838,7 @@ openclaw status | grep scope
 # 4. Send test message to confirm send/receive works
 # (WhatsApp message from your phone to bot)
 
-# 5. If anything fails: re-pair (section 5.2)
+# 5. If anything fails: re-pair (section 7.2)
 ```
 
 *Why: Catches scope issues before they cause production failures*
