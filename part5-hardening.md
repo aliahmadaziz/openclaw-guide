@@ -148,7 +148,7 @@ Add this section:
 1. Generate new secret: `openssl rand -hex 16`
 2. Update `~/.clawdbot/webhook.env` → endpoint paths
 3. Update Cloudflare tunnel config (if paths changed)
-4. Restart webhook: `systemctl restart moltbot-webhook`
+4. Restart webhook: `systemctl restart openclaw-webhook`
 5. Re-register Google Calendar webhook with new URL
 6. Test: Trigger calendar event, verify delivery
 
@@ -224,8 +224,8 @@ AGENTMAIL_WEBHOOK_PATH="/agentmail/NEW_SECRET_HERE"
 Restart webhook server:
 
 ```bash
-systemctl restart moltbot-webhook
-systemctl status moltbot-webhook
+systemctl restart openclaw-webhook
+systemctl status openclaw-webhook
 ```
 
 **Then update external services:**
@@ -336,7 +336,7 @@ save_snapshot() {
     
     # Systemd services
     mkdir -p "$SNAP_PATH/systemd"
-    for service in moltbot-webhook.service; do
+    for service in openclaw-webhook.service; do
         if [ -f "/etc/systemd/system/$service" ]; then
             cp "/etc/systemd/system/$service" "$SNAP_PATH/systemd/"
             echo "  ✓ $service"
@@ -410,7 +410,7 @@ restore_snapshot() {
     fi
     
     echo "✅ Snapshot restored. Restart services as needed."
-    echo "   Suggested: openclaw gateway restart && systemctl restart moltbot-webhook"
+    echo "   Suggested: openclaw gateway restart && systemctl restart openclaw-webhook"
 }
 
 list_snapshots() {
@@ -475,7 +475,7 @@ chmod +x /root/clawd/scripts/restore-snapshot-config.sh
 ```bash
 # Test everything first
 openclaw gateway status
-systemctl status moltbot-webhook
+systemctl status openclaw-webhook
 ufw status
 crontab -l
 
@@ -500,7 +500,7 @@ crontab -l
 ```bash
 /root/clawd/scripts/restore-snapshot-config.sh restore
 openclaw gateway restart
-systemctl restart moltbot-webhook
+systemctl restart openclaw-webhook
 ```
 
 **Time to recovery:** 3 seconds  
@@ -662,7 +662,7 @@ openclaw gateway status
 # (From your phone: send "test" to bot WhatsApp number)
 
 # 4. Check critical services
-systemctl status moltbot-webhook crowdsec
+systemctl status openclaw-webhook crowdsec
 
 # 5. Verify backups still running
 crontab -l | grep backup
@@ -884,7 +884,7 @@ openclaw gateway status
 openclaw status | grep scope
 
 # 2. Infrastructure
-systemctl status moltbot-webhook crowdsec crowdsec-firewall-bouncer
+systemctl status openclaw-webhook crowdsec crowdsec-firewall-bouncer
 
 # 3. Backups
 crontab -l | grep -E 'backup|verify'
@@ -945,7 +945,7 @@ openssl rand -hex 32  # Then update gateway.auth.token in ~/.openclaw/openclaw.j
 # Post-Recovery
 openclaw status                            # Health check
 openclaw gateway status                     # Connectivity test
-systemctl status crowdsec moltbot-webhook  # Service status
+systemctl status crowdsec openclaw-webhook  # Service status
 ```
 
 ---

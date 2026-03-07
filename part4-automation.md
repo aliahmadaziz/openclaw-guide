@@ -34,12 +34,12 @@ openclaw cron runs --name "morning-agenda"
 
 **⚠️ About Timezones:**
 
-Production OpenClaw crons use **Asia/Karachi timezone** (UTC+5) to avoid mental UTC math. Examples below show both UTC and timezone-aware syntax:
+Production OpenClaw crons use **America/New_York timezone** (UTC-5) to avoid mental UTC math. Examples below show both UTC and timezone-aware syntax:
 
 ```bash
 openclaw cron add \
   --name "morning-agenda" \
-  --cron "0 9 * * *" --tz "Asia/Karachi" \
+  --cron "0 9 * * *" --tz "America/New_York" \
   --model "anthropic/claude-sonnet-4-5" --session isolated \
   --announce \
   --best-effort-deliver \
@@ -49,8 +49,8 @@ openclaw cron add \
 **Syntax:** `--cron "CRON_EXPRESSION" --tz "TIMEZONE"`
 
 **Why timezone flag?**
-- `--cron "0 9 * * *"` alone = 9am UTC = 2pm PKT (confusing!)
-- `--cron "0 9 * * *" --tz "Asia/Karachi"` = 9am PKT exactly (clear!)
+- `--cron "0 9 * * *"` alone = 9am UTC = 2pm local (confusing!)
+- `--cron "0 9 * * *" --tz "America/New_York"` = 9am local exactly (clear!)
 
 **WHY this cron:** Daily calendar summary delivered to WhatsApp at 9am local time. Uses cheap Sonnet 4.0 model. `--best-effort-deliver` prevents job from failing if WhatsApp is temporarily down.
 
@@ -61,7 +61,7 @@ openclaw cron add \
 ```bash
 openclaw cron add \
   --name "evening-wrap" \
-  --cron "30 22 * * *" --tz "Asia/Karachi" \
+  --cron "30 22 * * *" --tz "America/New_York" \
   --model "anthropic/claude-sonnet-4-5" --session isolated \
   --announce \
   --best-effort-deliver \
@@ -75,7 +75,7 @@ openclaw cron add \
 ```bash
 openclaw cron add \
   --name "health-checkin" \
-  --cron "0 10 * * 0" --tz "Asia/Karachi" \
+  --cron "0 10 * * 0" --tz "America/New_York" \
   --model "anthropic/claude-sonnet-4-5" --session isolated \
   --announce \
   --message "Read health-os/STATUS.md. Ask me for this week's weight, energy level (1-10), and one health win. Keep it conversational and brief."
@@ -166,7 +166,7 @@ Add a MANDATORY directive telling the agent to send via `message` tool **as part
 ```bash
 openclaw cron add \
   --name "morning-agenda" \
-  --cron "0 9 * * *" --tz "Asia/Karachi" \
+  --cron "0 9 * * *" --tz "America/New_York" \
   --model "anthropic/claude-sonnet-4-5" --session isolated \
   --announce \
   --best-effort-deliver \

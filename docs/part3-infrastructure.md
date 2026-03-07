@@ -529,12 +529,12 @@ Press `Ctrl+C` in the server terminal to stop.
 
 ### 3.5 Create Systemd Service
 
-**⚠️ Note:** The service is named `moltbot-webhook` in this guide. You can rename it to whatever you like (e.g., `my-webhook.service`), just be consistent.
+**⚠️ Note:** The service is named `openclaw-webhook` in this guide. You can rename it to whatever you like (e.g., `my-webhook.service`), just be consistent.
 
 ```bash
-cat > /etc/systemd/system/moltbot-webhook.service << 'EOF'
+cat > /etc/systemd/system/openclaw-webhook.service << 'EOF'
 [Unit]
-Description=Moltbot Webhook Server
+Description=OpenClaw Webhook Server
 After=network.target
 
 [Service]
@@ -553,7 +553,7 @@ WantedBy=multi-user.target
 EOF
 ```
 
-*Why: Runs webhook server as a system service with automatic restart. Named "moltbot-webhook" to avoid conflicts with other webhook services.*
+*Why: Runs webhook server as a system service with automatic restart. You can rename this to anything you prefer.*
 
 Secure the env file:
 
@@ -567,13 +567,13 @@ Enable and start:
 
 ```bash
 systemctl daemon-reload
-systemctl enable moltbot-webhook
-systemctl start moltbot-webhook
+systemctl enable openclaw-webhook
+systemctl start openclaw-webhook
 ```
 
 *Why: Starts webhook server now and on every boot*
 
-✅ **Verify:** `systemctl status moltbot-webhook` shows "active (running)"
+✅ **Verify:** `systemctl status openclaw-webhook` shows "active (running)"
 
 ### 3.6 Test Public Webhook URL
 
@@ -893,8 +893,8 @@ cloudflared tunnel list                             # List tunnels
 journalctl -u cloudflared-tunnel -f                  # View tunnel logs
 
 # Webhook Server
-systemctl status moltbot-webhook                    # Check webhook status
-systemctl restart moltbot-webhook                   # Restart webhook
+systemctl status openclaw-webhook                    # Check webhook status
+systemctl restart openclaw-webhook                   # Restart webhook
 journalctl -u webhook -f                            # View webhook logs
 curl http://localhost:8088/health                   # Test local endpoint
 
@@ -907,8 +907,8 @@ tail -f /var/log/backup-nightly.log                 # Monitor nightly backups
 crontab -l                                          # View scheduled backups
 
 # System Health
-systemctl status cloudflared-tunnel moltbot-webhook  # Check both services
-journalctl --since "1 hour ago" -u moltbot-webhook  # Recent webhook logs
+systemctl status cloudflared-tunnel openclaw-webhook  # Check both services
+journalctl --since "1 hour ago" -u openclaw-webhook  # Recent webhook logs
 ls -lh ~/.clawdbot/google/                          # Check tokens exist
 ```
 
@@ -934,7 +934,7 @@ ls -lh ~/.clawdbot/google/                          # Check tokens exist
 - Test local service first: `curl http://localhost:8088/health`
 
 **Webhook server not receiving requests:**
-- Check service is running: `systemctl status moltbot-webhook`
+- Check service is running: `systemctl status openclaw-webhook`
 - Verify tunnel routes to correct port (8088)
 - Test locally before testing publicly
 - Check logs: `journalctl -u webhook -f`
@@ -944,7 +944,7 @@ ls -lh ~/.clawdbot/google/                          # Check tokens exist
 - Verify Cloudflare tunnel is running
 - Check webhook server is listening on localhost:8088
 - Test health endpoint: `curl https://webhook.yourdomain.com/health`
-- Check both services: `systemctl status cloudflared-tunnel moltbot-webhook`
+- Check both services: `systemctl status cloudflared-tunnel openclaw-webhook`
 
 **Rclone "Failed to create file system" error:**
 - Re-run `rclone config` to reconfigure remote

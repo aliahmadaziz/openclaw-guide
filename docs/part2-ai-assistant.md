@@ -221,7 +221,7 @@ cat > ~/clawd/USER.md << 'EOF'
 
 **Name:** Your Name  
 **Role:** Founder & CEO  
-**Timezone:** UTC+5 (Your Timezone)  
+**Timezone:** UTC-5 (Your Timezone)  
 **Location:** Your City
 
 ## Communication Preferences
@@ -408,7 +408,7 @@ What timezone am I in?
 ```
 
 **Expected Response:**
-Bot should reference `USER.md` and say UTC+5 / Your Timezone.
+Bot should reference `USER.md` and say UTC-5 / Your Timezone.
 
 ✅ **Verify:** Bot reads and uses USER.md data
 
