@@ -221,7 +221,7 @@ cat > ~/clawd/USER.md << 'EOF'
 
 **Name:** Your Name  
 **Role:** Founder & CEO  
-**Timezone:** UTC-5 (Your Timezone)  
+**Timezone:** America/New_York (← replace with YOUR timezone, e.g., Europe/London, Asia/Tokyo, Asia/Karachi)  
 **Location:** Your City
 
 ## Communication Preferences

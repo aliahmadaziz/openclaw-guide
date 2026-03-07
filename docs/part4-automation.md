@@ -34,7 +34,9 @@ openclaw cron runs --name "morning-agenda"
 
 **⚠️ About Timezones:**
 
-Production OpenClaw crons use **America/New_York timezone** (UTC-5) to avoid mental UTC math. Examples below show both UTC and timezone-aware syntax:
+Production OpenClaw crons use a timezone flag to avoid mental UTC math. Examples below use `America/New_York` — **replace this with your own timezone** (e.g., `Asia/Karachi`, `Europe/London`, `Asia/Tokyo`). Find yours at [IANA timezone list](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones).
+
+Examples below show both UTC and timezone-aware syntax:
 
 ```bash
 openclaw cron add \
@@ -49,8 +51,10 @@ openclaw cron add \
 **Syntax:** `--cron "CRON_EXPRESSION" --tz "TIMEZONE"`
 
 **Why timezone flag?**
-- `--cron "0 9 * * *"` alone = 9am UTC = 2pm local (confusing!)
-- `--cron "0 9 * * *" --tz "America/New_York"` = 9am local exactly (clear!)
+- `--cron "0 9 * * *"` alone = 9am **UTC** (probably not your local time!)
+- `--cron "0 9 * * *" --tz "America/New_York"` = 9am **your local time** exactly
+
+**💡 Replace `America/New_York` with your timezone throughout this guide.** Common examples: `Europe/London`, `Asia/Tokyo`, `Asia/Karachi`, `America/Los_Angeles`, `Australia/Sydney`.
 
 **WHY this cron:** Daily calendar summary delivered to WhatsApp at 9am local time. Uses cheap Sonnet 4.0 model. `--best-effort-deliver` prevents job from failing if WhatsApp is temporarily down.
 
@@ -555,7 +559,7 @@ Run these checks every heartbeat (when idle, ~30-60min intervals).
 
 ## Quiet Hours
 
-**23:00-08:00 UTC:** Only Priority #1 (urgent calendar events). Skip everything else.
+**23:00-08:00 local time:** Only Priority #1 (urgent calendar events). Skip everything else. *(Adjust these hours to match your sleep schedule and timezone.)*
 
 ## Notes
 

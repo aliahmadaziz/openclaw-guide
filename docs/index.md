@@ -58,7 +58,7 @@ An idiot-proof, copy-paste guide to setting up a **hardened, production-ready Op
 
 ## Credits
 
-Built with help from OpenClaw community 🦞
+Built by [Ali Ahmad Aziz](https://github.com/aliahmadaziz) with help from the OpenClaw community 🦞
 
 Based on a real production setup running 24/7 since January 2026.
 
