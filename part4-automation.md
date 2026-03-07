@@ -39,18 +39,18 @@ Production OpenClaw crons use **Asia/Karachi timezone** (UTC+5) to avoid mental 
 ```bash
 openclaw cron add \
   --name "morning-agenda" \
-  --cron "0 9 * * * @ Asia/Karachi" \
-  --model "claude-sonnet-4-0" \
+  --cron "0 9 * * *" --tz "Asia/Karachi" \
+  --model "anthropic/claude-sonnet-4-5" --session isolated \
   --announce \
   --best-effort-deliver \
   --message "Read my calendar for today. Summarize: meetings (time, title, attendees if available), focus blocks, and any red/urgent events. Keep it under 5 lines. End with one practical tip based on my schedule density."
 ```
 
-**Syntax:** `--cron "CRON_EXPRESSION @ TIMEZONE"`
+**Syntax:** `--cron "CRON_EXPRESSION" --tz "TIMEZONE"`
 
-**Why timezone suffix?**
-- `0 9 * * *` = 9am UTC = 2pm PKT (confusing!)
-- `0 9 * * * @ Asia/Karachi` = 9am PKT exactly (clear!)
+**Why timezone flag?**
+- `--cron "0 9 * * *"` alone = 9am UTC = 2pm PKT (confusing!)
+- `--cron "0 9 * * *" --tz "Asia/Karachi"` = 9am PKT exactly (clear!)
 
 **WHY this cron:** Daily calendar summary delivered to WhatsApp at 9am local time. Uses cheap Sonnet 4.0 model. `--best-effort-deliver` prevents job from failing if WhatsApp is temporarily down.
 
@@ -61,8 +61,8 @@ openclaw cron add \
 ```bash
 openclaw cron add \
   --name "evening-wrap" \
-  --cron "30 22 * * * @ Asia/Karachi" \
-  --model "claude-sonnet-4-0" \
+  --cron "30 22 * * *" --tz "Asia/Karachi" \
+  --model "anthropic/claude-sonnet-4-5" --session isolated \
   --announce \
   --best-effort-deliver \
   --message "Read today's daily log (memory/YYYY-MM-DD.md). Summarize the day in 3 sentences: what got done, what's pending, one insight or pattern you noticed. Be honest but not harsh."
@@ -75,8 +75,8 @@ openclaw cron add \
 ```bash
 openclaw cron add \
   --name "health-checkin" \
-  --cron "0 10 * * 0 @ Asia/Karachi" \
-  --model "claude-sonnet-4-0" \
+  --cron "0 10 * * 0" --tz "Asia/Karachi" \
+  --model "anthropic/claude-sonnet-4-5" --session isolated \
   --announce \
   --message "Read health-os/STATUS.md. Ask me for this week's weight, energy level (1-10), and one health win. Keep it conversational and brief."
 ```
@@ -166,8 +166,8 @@ Add a MANDATORY directive telling the agent to send via `message` tool **as part
 ```bash
 openclaw cron add \
   --name "morning-agenda" \
-  --cron "0 9 * * * @ Asia/Karachi" \
-  --model "claude-sonnet-4-5" \
+  --cron "0 9 * * *" --tz "Asia/Karachi" \
+  --model "anthropic/claude-sonnet-4-5" --session isolated \
   --announce \
   --best-effort-deliver \
   --message "Read my calendar for today. Summarize meetings, focus blocks, urgent events. Keep it under 5 lines.
@@ -482,7 +482,7 @@ python3 /root/clawd/scripts/event-queue.py status
 openclaw cron add \
   --name "event-queue-processor" \
   --cron "*/15 * * * *" \
-  --model "claude-sonnet-4-0" \
+  --model "anthropic/claude-sonnet-4-5" --session isolated \
   --message "Run: python3 /root/clawd/scripts/event-queue.py process --all. If there are dead letter events (check with 'dead' command), alert me with details."
 ```
 
@@ -576,35 +576,34 @@ OpenClaw handles heartbeat timing automatically. You configure it in `openclaw.j
 nano ~/.openclaw/openclaw.json
 ```
 
-Add/verify this section:
+Add/verify this section under `agents.defaults`:
 ```json
 {
-  "heartbeat": {
-    "enabled": true,
-    "intervalMinutes": 45,
-    "quietHoursStart": "23:00",
-    "quietHoursEnd": "08:00"
+  "agents": {
+    "defaults": {
+      "heartbeat": {
+        "every": "45m"
+      }
+    }
   }
 }
 ```
 
-**WHY:** Heartbeat every 45 minutes when idle. Quiet hours prevent nighttime spam.
+Or via CLI:
+```bash
+openclaw config set agents.defaults.heartbeat.every "45m"
+```
+
+**WHY:** Heartbeat every 45 minutes when idle. OpenClaw reads `HEARTBEAT.md` from your workspace on each heartbeat tick.
 
 Restart OpenClaw:
 ```bash
 openclaw gateway restart
 ```
 
-✅ **Verify:** After 45 minutes of idle time, check your chat for a heartbeat check-in (or check `openclaw logs`).
+✅ **Verify:** After 45 minutes of idle time, check your chat logs for heartbeat activity. OpenClaw will read `HEARTBEAT.md` and process the tasks listed there.
 
-### 4.4 Test Heartbeat Manually
-
-```bash
-# Trigger immediate heartbeat (if OpenClaw supports it)
-openclaw heartbeat --now
-```
-
-**WHY:** Tests heartbeat logic without waiting 45 minutes.
+**Note:** Quiet hours are handled in `HEARTBEAT.md` itself (add a "Quiet Hours" section telling the AI to skip non-urgent checks at night), not in config.
 
 ---
 

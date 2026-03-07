@@ -21,38 +21,39 @@ The Claude Max plan ($100/month) gives you Claude access with built-in usage lim
 
 1. Subscribe to Claude Max at [claude.ai/settings/billing](https://claude.ai/settings/billing)
 2. Install Claude Code CLI: `npm install -g @anthropic-ai/claude-code`
-3. Run `claude` in your terminal — it will prompt you to authenticate
-4. During auth, it generates an access token — copy this token
-5. Set it in OpenClaw:
+3. Run `claude` in your terminal — it will prompt you to authenticate via browser
+4. After authenticating, Claude Code stores credentials that OpenClaw can use
+
+Now configure OpenClaw to use your Claude credentials. Edit the config file:
 
 ```bash
-# Edit config file directly (OpenClaw 2026.2.x doesn't have config set commands)
 nano ~/.openclaw/openclaw.json
 ```
 
-Add your API key under the `auth` section:
+Add or update the `auth` section:
 ```json
 {
   "auth": {
     "profiles": {
       "anthropic:default": {
         "provider": "anthropic",
-        "mode": "token",
-        "token": "YOUR_CLAUDE_CODE_TOKEN"
+        "mode": "claude-code"
       }
     }
   }
 }
 ```
 
-*Why: The Max plan has built-in spend limits and cooldown periods. Raw API keys (from console.anthropic.com) have no guardrails and can run up significant bills fast. Max plan is safer for always-on assistants.*
+*Why: `mode: "claude-code"` tells OpenClaw to use the Claude Code CLI credentials, which are tied to your Max plan subscription. No API key needed — just your Max plan login.*
 
 **Option B — Raw Anthropic API Key**
 
 If you prefer pay-as-you-go: get a key from [console.anthropic.com](https://console.anthropic.com) and set spend limits in the console.
 
 ```bash
-openclaw config set anthropicApiKey YOUR_ANTHROPIC_KEY
+openclaw config set auth.profiles.anthropic:default.provider anthropic
+openclaw config set auth.profiles.anthropic:default.mode token
+openclaw config set auth.profiles.anthropic:default.token YOUR_ANTHROPIC_API_KEY
 ```
 
 **Google Gemini (Fallback Model)**
@@ -62,42 +63,40 @@ openclaw config set anthropicApiKey YOUR_ANTHROPIC_KEY
 3. Click "Get API Key" → create a key
 4. Google AI Studio gives you **$300 in free credits** — more than enough for a fallback model
 
-Add Google API key to the same config file:
-```json
-{
-  "auth": {
-    "profiles": {
-      "anthropic:default": {
-        "provider": "anthropic",
-        "mode": "token",
-        "token": "YOUR_CLAUDE_CODE_TOKEN"
-      },
-      "google:default": {
-        "provider": "google",
-        "mode": "token",
-        "token": "YOUR_AISTUDIO_KEY"
-      }
-    }
-  }
-}
+```bash
+openclaw config set auth.profiles.google:default.provider google
+openclaw config set auth.profiles.google:default.mode token
+openclaw config set auth.profiles.google:default.token YOUR_AISTUDIO_KEY
 ```
 
 *Why: AI Studio's free credits make Gemini essentially free as a fallback. You're not paying for a second model — Google is subsidizing your backup.*
 
-✅ **Verify:** `openclaw config get anthropicApiKey` and `openclaw config get googleApiKey` show your keys (first few chars visible)
+✅ **Verify:** `openclaw config get auth.profiles` shows your configured providers
 
 ### 1.2 Configure Models and Context
 
-Edit `~/.openclaw/openclaw.json` and add the `agents` section:
+Configure models using the CLI:
+
+```bash
+# Set primary model (your main conversation partner)
+openclaw config set agents.defaults.model.primary "anthropic/claude-sonnet-4-5"
+
+# Set fallback model(s) — kicks in if primary fails
+# Edit openclaw.json directly for array values:
+nano ~/.openclaw/openclaw.json
+```
+
+In `~/.openclaw/openclaw.json`, set the agents section:
 
 ```json
 {
   "agents": {
     "defaults": {
       "model": {
-        "primary": "anthropic/claude-opus-4-6",
+        "primary": "anthropic/claude-sonnet-4-5",
         "fallbacks": ["google/gemini-2.5-pro"]
       },
+      "workspace": "/root/clawd",
       "contextTokens": 200000,
       "subagents": {
         "model": {
@@ -117,22 +116,28 @@ Edit `~/.openclaw/openclaw.json` and add the `agents` section:
 ```
 
 **What each setting does:**
-- `model.primary`: Main conversational model (Opus 4.6 — most capable)
-- `model.fallbacks`: Backup models if primary fails (Gemini 2.5 Pro)
-- `contextTokens`: Max context window (200K = ~150K words, never exceed smallest model in chain)
-- `subagents.model.primary`: Background worker model (Sonnet 4.5 — fast, cost-effective)
+- `model.primary`: Main conversational model — handles all direct messages
+- `model.fallbacks`: Backup models if primary fails (array, tried in order)
+- `workspace`: Path to your agent workspace (where personality files live)
+- `contextTokens`: Max context window (200K = ~150K words). Set this to the **smallest** context window across all models in your chain.
+- `subagents.model.primary`: Background worker model — used for sub-agent tasks
 - `agents.list[0].id`: Agent identifier ("main" is the default agent)
-- `agentDir`: Workspace path where personality files live
+- `agentDir`: Workspace path where `AGENTS.md`, `SOUL.md`, etc. live
 
-**About cron model:** Cron jobs specify their model per-job (typically `claude-sonnet-4-0` for cheap routine tasks). No global cron model setting.
+**About cron model:** Cron jobs specify their model per-job (typically `anthropic/claude-sonnet-4-5` for cost-effective routine tasks). No global cron model setting needed.
 
-✅ **Verify:** `cat ~/.openclaw/openclaw.json | grep -A5 '"model"'` shows your model configuration
+✅ **Verify:** `openclaw config get agents.defaults.model.primary` shows your configured model
 
-**Model Summary:**
-- **Primary (Opus 4.6):** Your main conversation partner, handles all direct messages
-- **Fallback (Gemini 2.5 Pro):** Backup if primary is down, keeps you online 24/7
-- **Sub-agents (Sonnet 4.5):** Background workers for research, file parsing, parallel tasks
-- **Cron (Sonnet 4.0):** Scheduled jobs like reminders, alerts, periodic checks
+**Model Tiers (Recommended):**
+
+| Use Case | Model | Notes |
+|----------|-------|-------|
+| **Primary** | `anthropic/claude-sonnet-4-5` | Great balance of capability and speed. Upgrade to `claude-opus-4-6` if on Max plan. |
+| **Fallback** | `google/gemini-2.5-pro` | Backup if primary is down, keeps you online 24/7 |
+| **Sub-agents** | `anthropic/claude-sonnet-4-5` | Background workers for research, file parsing, parallel tasks |
+| **Cron jobs** | `anthropic/claude-sonnet-4-5` | Scheduled jobs like reminders, alerts, periodic checks (set per-job) |
+
+**💡 Tip:** If you're on the Claude Max plan, use `anthropic/claude-opus-4-6` as primary for the most capable experience. Model names use the format `provider/model-name`.
 
 ---
 
@@ -268,19 +273,17 @@ Now configure OpenClaw to use your workspace files.
 
 ### 3.1 Set Workspace Path
 
-The workspace path was already set in Section 1.2 when you configured the agents section:
+The workspace path was already set in Section 1.2 when you configured the agents section. Verify it:
 
-```json
-{
-  "agents": {
-    "defaults": {
-      "workspace": "/root/clawd"
-    }
-  }
-}
+```bash
+openclaw config get agents.defaults.workspace
 ```
 
-If you haven't added this yet, edit `~/.openclaw/openclaw.json` and add the `workspace` field under `agents.defaults`.
+If it doesn't show `/root/clawd`, set it:
+
+```bash
+openclaw config set agents.defaults.workspace /root/clawd
+```
 
 *Why: Tells OpenClaw where to find personality and memory files*
 
@@ -331,6 +334,7 @@ Edit `~/.openclaw/openclaw.json` and add to the `tools` section:
     ],
     "web": {
       "search": {
+        "provider": "brave",
         "apiKey": "YOUR_BRAVE_SEARCH_KEY"
       }
     }
@@ -338,7 +342,9 @@ Edit `~/.openclaw/openclaw.json` and add to the `tools` section:
 }
 ```
 
-*Why: Prevents AI from using inferior built-in search. Forces use of custom script.*
+To get a Brave Search API key: go to [api.search.brave.com](https://api.search.brave.com) → sign up → create a key (free tier: 2,000 queries/month).
+
+*Why: Prevents AI from using inferior built-in search. Forces use of custom script. Brave Search gives your AI web search capability.*
 
 ### 4.3 Custom Memory Search (Preview)
 
@@ -347,7 +353,7 @@ Part 3 will cover setting up `scripts/memory-search.py` with hybrid search and r
 **The AI should call:** `python3 scripts/memory-search.py "query" --deep`  
 **NOT:** Use built-in `memory_search` tool
 
-✅ **Verify:** `cat ~/.openclaw/openclaw.json | grep -A3 '"deny"'` shows memory tools banned
+✅ **Verify:** `openclaw config get tools.deny` shows `["memory_search","memory_get"]`
 
 ---
 
@@ -420,30 +426,32 @@ openclaw gateway logs --tail 50
 
 ## 6. Fine-Tuning (Optional)
 
-### 6.1 Adjust Memory Settings
+### 6.1 Configure Heartbeat (Idle Maintenance)
 
 ```bash
-openclaw config set memoryEnabled true
-openclaw config set memoryMaxTokens 50000
+# Edit openclaw.json and add under agents.defaults:
+nano ~/.openclaw/openclaw.json
 ```
 
-*Why: Enables conversation memory (stores recent messages for context)*
-
-### 6.2 Set Message Limits
-
-```bash
-openclaw config set maxReplyLength 2000
+```json
+{
+  "agents": {
+    "defaults": {
+      "heartbeat": {
+        "every": "45m"
+      }
+    }
+  }
+}
 ```
 
-*Why: Prevents excessively long responses (especially on WhatsApp)*
+*Why: Heartbeats let your AI do periodic maintenance tasks (check calendar, process events) during idle time. `"45m"` means every 45 minutes when no conversations are active.*
 
-### 6.3 Enable Thinking (Reasoning)
+### 6.2 Enable Thinking (Reasoning)
 
-```bash
-openclaw config set reasoning low
-```
+Thinking/reasoning can be configured per-session. This is set in the system prompt or via the `/reasoning` command in chat, not via config.
 
-*Why: Shows brief reasoning traces for debugging AI decisions. Options: off, low, high, stream*
+*Why: Brief reasoning traces help debug AI decisions. Options: off, low, medium, high*
 
 ---
 
@@ -452,14 +460,13 @@ openclaw config set reasoning low
 You should now have:
 
 - [ ] Claude access configured (Max plan token or API key)
-- [ ] Model chain set (Opus 4.6 primary, Gemini fallback, Sonnet sub-agents, Sonnet cron)
+- [ ] Model chain set (primary + fallback + sub-agents configured)
 - [ ] Context window set to 200K tokens
 - [ ] Workspace created at `~/clawd`
 - [ ] Core files created (SOUL.md, USER.md, IDENTITY.md, etc.)
 - [ ] Minimal templates populated (personality, user info, identity)
 - [ ] Workspace path configured in OpenClaw
-- [ ] Project context files set (AGENTS.md, TOOLS.md)
-- [ ] System prompt configured
+- [ ] Workspace files auto-loaded by OpenClaw (AGENTS.md, SOUL.md, TOOLS.md, USER.md)
 - [ ] Gateway restarted with new config
 - [ ] Bot responds with configured personality
 - [ ] Bot knows your name and timezone from USER.md
@@ -467,19 +474,16 @@ You should now have:
 
 **Next:** Part 3 — Infrastructure (Google OAuth, Cloudflare tunnel, webhooks, backups)
 
-**⚠️ Note:** Some `openclaw config` paths may vary by version. Run `openclaw doctor` after configuration to validate. If a config path doesn't exist, check `openclaw config --help` or the docs at docs.openclaw.ai.
+**⚠️ Note:** If a config path doesn't work, check `openclaw config --help` or the docs at [docs.openclaw.ai](https://docs.openclaw.ai). You can always edit `~/.openclaw/openclaw.json` directly.
 
 ---
 
 ## Quick Reference Commands
 
 ```bash
-# View all config
-openclaw config list
-
 # Check specific settings
-openclaw config get defaultModel
-openclaw config get workspace
+openclaw config get agents.defaults.model.primary
+openclaw config get agents.defaults.workspace
 
 # Edit personality files
 nano ~/clawd/SOUL.md
@@ -500,24 +504,23 @@ ls -lh ~/clawd/*.md
 ## Troubleshooting
 
 **Bot doesn't know my name:**
-- Check `openclaw config get workspace` points to `~/clawd`
+- Check `openclaw config get agents.defaults.workspace` points to `/root/clawd`
 - Verify `~/clawd/USER.md` exists and has your name
 - Restart gateway: `openclaw gateway restart`
 
 **Bot ignores SOUL.md rules:**
-- Ensure `systemPrompt` is set: `openclaw config get systemPrompt`
 - Check files exist: `ls ~/clawd/SOUL.md`
 - Try explicit instruction: "Read SOUL.md and tell me your tone rules"
 
 **API errors:**
-- Verify keys: `openclaw config get anthropicApiKey` and `openclaw config get googleApiKey`
+- Verify keys: `openclaw config get auth.profiles`
 - If using Max plan: check usage at claude.ai/settings/usage
 - If using raw API: check quotas at console.anthropic.com
 - Google credits: check at aistudio.google.com → Settings
 - Test fallback: temporarily disable Anthropic key to trigger Gemini
 
 **Context too large errors:**
-- Reduce `contextTokens`: `openclaw config set contextTokens 150000`
+- Reduce `contextTokens`: edit `~/.openclaw/openclaw.json` → `agents.defaults.contextTokens`
 - Remove large files from workspace
 - Trim daily logs in `~/clawd/memory/`
 

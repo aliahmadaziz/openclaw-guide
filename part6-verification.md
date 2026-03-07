@@ -154,11 +154,11 @@ Quick lookup for common issues across all parts.
 |---------|-------------|-----|
 | **Can't SSH to server** | SSH service not running | `systemctl restart sshd` |
 | **"Permission denied (publickey)"** | SSH key not added to server | Re-add key: `ssh-copy-id root@SERVER_IP` |
-| **Gateway won't start** | Port conflict or bad config | Check logs: `journalctl -u openclaw-gateway -n 50` |
+| **Gateway won't start** | Port conflict or bad config | Check logs: `openclaw gateway logs` |
 | **WhatsApp disconnected** | QR code expired or phone offline | Re-pair: `openclaw gateway restart`, scan QR |
-| **Bot doesn't respond** | Gateway stopped or model API issue | Check status: `systemctl status openclaw-gateway` |
+| **Bot doesn't respond** | Gateway stopped or model API issue | Check status: `openclaw gateway status` |
 | **"Model rate limit"** | Too many requests | Wait 60s, or switch to fallback model |
-| **Webhook not receiving** | Tunnel down or server crashed | Restart: `systemctl restart cloudflared openclaw-webhook` |
+| **Webhook not receiving** | Tunnel down or server crashed | Restart: `systemctl restart cloudflared moltbot-webhook` |
 | **Backup not running** | Cron misconfigured | Check: `crontab -l`, verify paths |
 | **Token expired** | Google OAuth needs refresh | Re-auth: `scripts/google-reauth.py` |
 | **"Permission denied" errors** | Wrong file ownership | Fix: `chown -R root:root /root/clawd` |
@@ -173,7 +173,7 @@ Quick lookup for common issues across all parts.
 **Fix:**
 ```bash
 # Check gateway logs
-journalctl -u openclaw-gateway -n 100 | grep -i whatsapp
+openclaw gateway logs | grep -i whatsapp
 
 # If disconnected, restart and re-pair
 openclaw gateway restart
@@ -183,23 +183,23 @@ openclaw gateway restart
 ---
 
 #### 2. Gateway Fails to Start
-**Symptom:** `systemctl status openclaw-gateway` shows "failed" or "inactive (dead)"
+**Symptom:** `openclaw gateway status` shows "failed" or "inactive (dead)"
 
 **Cause:** Usually bad `openclaw.json` syntax or missing API key.
 
 **Fix:**
 ```bash
 # Check the exact error
-journalctl -u openclaw-gateway -n 50
+openclaw gateway logs
 
 # Validate JSON syntax
-cat ~/.clawdbot/openclaw.json | jq .
+cat ~/.openclaw/openclaw.json | jq .
 
 # If syntax error, edit and fix
-nano ~/.clawdbot/openclaw.json
+nano ~/.openclaw/openclaw.json
 
 # Restart
-systemctl restart openclaw-gateway
+openclaw gateway restart
 ```
 
 ---
@@ -212,10 +212,10 @@ systemctl restart openclaw-gateway
 **Fix:**
 ```bash
 # Check logs for specific error
-journalctl -u openclaw-gateway -n 50 | grep -i error
+openclaw gateway logs | grep -i error
 
 # Verify API key is set correctly in openclaw.json
-cat ~/.clawdbot/openclaw.json | jq '.model, .fallbackModel'
+cat ~/.openclaw/openclaw.json | jq '.agents.defaults.model'
 
 # Test API key manually (for Anthropic)
 curl https://api.anthropic.com/v1/messages \
@@ -235,15 +235,15 @@ curl https://api.anthropic.com/v1/messages \
 **Fix:**
 ```bash
 # Check both services
-systemctl status cloudflared
-systemctl status openclaw-webhook
+systemctl status cloudflared-tunnel
+systemctl status moltbot-webhook
 
 # Check tunnel config
 cat ~/.cloudflared/config.yml
 
 # Restart both
 systemctl restart cloudflared
-systemctl restart openclaw-webhook
+systemctl restart moltbot-webhook
 
 # Test local webhook
 curl http://127.0.0.1:8088/health
@@ -388,87 +388,114 @@ systemctl stop crowdsec-firewall-bouncer
 
 Here's an annotated `openclaw.json` showing all key fields. **Do not copy values verbatim** — this is a structure reference.
 
-### 4.1 Complete Structure
+### 4.1 Config Structure Overview
+
+OpenClaw config lives at `~/.openclaw/openclaw.json`. Here are the key sections:
 
 ```json
 {
-  "model": "anthropic/claude-opus-4-6",
-  "fallbackModel": "google/gemini-2.5-pro",
-  "contextTokens": 200000,
-  
-  "deviceScope": [
-    "operator.read",
-    "operator.write"
-  ],
-  
-  "workspaceRoot": "/root/clawd",
-  
-  "channels": [
-    {
-      "type": "whatsapp",
-      "sessionName": "default",
-      "autoReconnect": true
+  "auth": {
+    "profiles": {
+      "anthropic:default": {
+        "provider": "anthropic",
+        "mode": "claude-code"
+      },
+      "google:default": {
+        "provider": "google",
+        "mode": "token",
+        "token": "YOUR_KEY"
+      }
     }
-  ],
-  
-  "heartbeat": {
-    "enabled": true,
-    "intervalMs": 3600000,
-    "checkPath": "/root/clawd/HEARTBEAT.md"
   },
-  
-  "crons": [
-    {
-      "name": "morning-brief",
-      "schedule": "0 9 * * *",
-      "command": "python3 /root/clawd/scripts/morning-brief.py",
-      "deliverTo": "whatsapp",
-      "model": "claude-sonnet-4-0"
-    }
-  ],
-  
-  "safety": {
-    "maxTokensPerRequest": 4096,
-    "rateLimitPerMinute": 60
-  },
-  
-  "systemPrompt": {
-    "files": [
-      "/root/clawd/AGENTS.md",
-      "/root/clawd/SOUL.md"
+  "agents": {
+    "defaults": {
+      "model": {
+        "primary": "anthropic/claude-sonnet-4-5",
+        "fallbacks": ["google/gemini-2.5-pro"]
+      },
+      "workspace": "/root/clawd",
+      "contextTokens": 200000,
+      "heartbeat": {
+        "every": "45m"
+      },
+      "subagents": {
+        "model": {
+          "primary": "anthropic/claude-sonnet-4-5"
+        }
+      }
+    },
+    "list": [
+      {
+        "id": "main",
+        "default": true,
+        "agentDir": "/root/clawd"
+      }
     ]
+  },
+  "channels": {
+    "whatsapp": {
+      "enabled": true
+    }
+  },
+  "tools": {
+    "deny": ["memory_search", "memory_get"],
+    "web": {
+      "search": {
+        "provider": "brave",
+        "apiKey": "YOUR_BRAVE_KEY"
+      }
+    }
+  },
+  "gateway": {
+    "mode": "local"
   }
 }
 ```
 
 ### 4.2 Key Field Explanations
 
-| Field | Purpose | Example Value |
-|-------|---------|---------------|
-| `model` | Primary AI model | `anthropic/claude-opus-4-6` |
-| `fallbackModel` | Backup if primary fails | `google/gemini-2.5-pro` |
-| `contextTokens` | Max context window | `200000` (200K) |
-| `deviceScope` | Permissions for OpenClaw | `["operator.read", "operator.write"]` |
-| `workspaceRoot` | Agent's home directory | `/root/clawd` |
-| `channels` | Communication platforms | WhatsApp, Discord, Telegram, etc. |
-| `heartbeat.enabled` | Auto-check-in system | `true` |
-| `heartbeat.intervalMs` | Time between heartbeats | `3600000` (1 hour) |
-| `crons` | Scheduled tasks | Morning brief, standup, etc. |
-| `safety.maxTokensPerRequest` | Token limit per response | `4096` |
-| `systemPrompt.files` | Files injected into every prompt | `AGENTS.md`, `SOUL.md` |
+| Field (dot path) | Purpose | Example Value |
+|-------------------|---------|---------------|
+| `auth.profiles` | API credentials per provider | See auth section |
+| `agents.defaults.model.primary` | Primary AI model | `anthropic/claude-sonnet-4-5` |
+| `agents.defaults.model.fallbacks` | Backup models (array) | `["google/gemini-2.5-pro"]` |
+| `agents.defaults.contextTokens` | Max context window | `200000` (200K) |
+| `agents.defaults.workspace` | Agent workspace directory | `/root/clawd` |
+| `agents.defaults.heartbeat.every` | Heartbeat interval | `"45m"` |
+| `agents.defaults.subagents.model.primary` | Sub-agent model | `anthropic/claude-sonnet-4-5` |
+| `agents.list[].agentDir` | Agent workspace path | `/root/clawd` |
+| `channels.whatsapp` | WhatsApp channel config | `{"enabled": true}` |
+| `tools.deny` | Blocked tool names | `["memory_search"]` |
+| `gateway.mode` | Gateway mode | `"local"` |
 
 ### 4.3 Model Configuration
 
 **Recommended Tiers:**
 
-| Use Case | Model | Context | Cost |
-|----------|-------|---------|------|
-| Main session | `claude-opus-4-6` | 200K | High |
-| Sub-agents | `claude-sonnet-4-5` | 200K | Medium |
-| Cron jobs | `claude-sonnet-4-0` | 200K | Low |
-| Fallback | `google/gemini-2.5-pro` | 1M+ | Low |
+| Use Case | Model | Notes |
+|----------|-------|-------|
+| Main session | `anthropic/claude-sonnet-4-5` | Upgrade to `claude-opus-4-6` on Max plan |
+| Sub-agents | `anthropic/claude-sonnet-4-5` | Background workers |
+| Cron jobs | `anthropic/claude-sonnet-4-5` | Set per-job via `--model` |
+| Fallback | `google/gemini-2.5-pro` | Free tier or Google One |
 
-**Important:** Set `contextTokens` to the **smallest** context window in your chain. If your fallback has 200K but primary has 1M, use `200000`.
+**Important:** Set `contextTokens` to the **smallest** context window in your chain. Most models support 200K, so `200000` is a safe default.
+
+### 4.4 Useful Config Commands
+
+```bash
+# Get any config value
+openclaw config get agents.defaults.model.primary
+
+# Set a config value
+openclaw config set agents.defaults.model.primary "anthropic/claude-sonnet-4-5"
+
+# Unset a config value
+openclaw config unset tools.deny
+
+# Or edit the full config file directly
+nano ~/.openclaw/openclaw.json
+```
 
 ---
 
@@ -685,7 +712,7 @@ Before you close this guide:
 - [ ] `SOUL.md` reflects your bot's purpose
 - [ ] At least one cron job configured
 - [ ] Backups confirmed in Google Drive
-- [ ] You know how to check logs: `journalctl -u openclaw-gateway -n 50`
+- [ ] You know how to check logs: `openclaw gateway logs`
 - [ ] You bookmarked the troubleshooting table
 - [ ] You know how to restore a snapshot: `scripts/restore-snapshot-config.sh`
 
@@ -702,13 +729,13 @@ Before you close this guide:
 **Quick Commands:**
 ```bash
 # Check gateway status
-systemctl status openclaw-gateway
+openclaw gateway status
 
 # Restart gateway
-systemctl restart openclaw-gateway
+openclaw gateway restart
 
 # View recent logs
-journalctl -u openclaw-gateway -n 100 -f
+openclaw gateway logs
 
 # Re-run verification
 python3 /root/clawd/scripts/verify-setup.py
@@ -725,13 +752,13 @@ curl http://127.0.0.1:8088/health
 # If everything is broken:
 cd /root/clawd
 git pull
-systemctl restart openclaw-gateway
+openclaw gateway restart
 
 # If config is corrupted:
 /root/clawd/scripts/restore-snapshot-config.sh
 
 # If OpenClaw won't start:
-journalctl -u openclaw-gateway -n 100
+openclaw gateway logs
 # Fix the error shown, then restart
 ```
 

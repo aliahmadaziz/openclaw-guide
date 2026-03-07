@@ -167,7 +167,7 @@ apt install -y nodejs
 
 *Why: OpenClaw requires Node.js runtime*
 
-✅ **Verify:** `node --version` shows `v22.22.0` or later (minimum v22.x required), `npm --version` shows `10.x` or later
+✅ **Verify:** `node --version` shows `v22.x` or later, `npm --version` shows `10.x` or later
 
 ---
 
@@ -181,7 +181,7 @@ npm install -g openclaw
 
 *Why: Global install makes `openclaw` command available system-wide*
 
-✅ **Verify:** `openclaw --version` shows version 2026.2.x or later
+✅ **Verify:** `openclaw --version` shows a version number
 
 ---
 
@@ -251,13 +251,14 @@ openclaw gateway logs
 **⚠️ IMPORTANT:** Always backup before upgrading. Never use `npm update -g openclaw` directly.
 
 ```bash
-# Check for updates
-openclaw update
+# Check current version
+openclaw --version
 
-# The command will show available updates and prompt for confirmation
+# Update to latest
+npm install -g openclaw
 ```
 
-*Why: `openclaw update` handles pre-upgrade backups, config migration, and rollback if upgrade fails. Raw npm updates can break your setup.*
+*Why: Check the [release notes](https://github.com/openclaw/openclaw/releases) before upgrading. After upgrade, restart the gateway and verify everything works.*
 
 ### 8.2 Upgrade Best Practices
 
