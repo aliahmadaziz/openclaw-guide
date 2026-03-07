@@ -813,17 +813,6 @@
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#44-test-heartbeat-manually" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        4.4 Test Heartbeat Manually
-      
-    </span>
-  </a>
-  
-</li>
-        
       </ul>
     </nav>
   
@@ -1210,17 +1199,6 @@
   
 </li>
         
-          <li class="md-nav__item">
-  <a href="#44-test-heartbeat-manually" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        4.4 Test Heartbeat Manually
-      
-    </span>
-  </a>
-  
-</li>
-        
       </ul>
     </nav>
   
@@ -1281,23 +1259,23 @@
 <p>Production OpenClaw crons use <strong>Asia/Karachi timezone</strong> (UTC+5) to avoid mental UTC math. Examples below show both UTC and timezone-aware syntax:</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>openclaw<span class="w"> </span>cron<span class="w"> </span>add<span class="w"> </span><span class="se">\</span>
 </span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span>--name<span class="w"> </span><span class="s2">&quot;morning-agenda&quot;</span><span class="w"> </span><span class="se">\</span>
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span>--cron<span class="w"> </span><span class="s2">&quot;0 9 * * * @ Asia/Karachi&quot;</span><span class="w"> </span><span class="se">\</span>
-</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span>--model<span class="w"> </span><span class="s2">&quot;claude-sonnet-4-0&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span>--cron<span class="w"> </span><span class="s2">&quot;0 9 * * *&quot;</span><span class="w"> </span>--tz<span class="w"> </span><span class="s2">&quot;Asia/Karachi&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span>--model<span class="w"> </span><span class="s2">&quot;anthropic/claude-sonnet-4-5&quot;</span><span class="w"> </span>--session<span class="w"> </span>isolated<span class="w"> </span><span class="se">\</span>
 </span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span>--announce<span class="w"> </span><span class="se">\</span>
 </span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">  </span>--best-effort-deliver<span class="w"> </span><span class="se">\</span>
 </span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">  </span>--message<span class="w"> </span><span class="s2">&quot;Read my calendar for today. Summarize: meetings (time, title, attendees if available), focus blocks, and any red/urgent events. Keep it under 5 lines. End with one practical tip based on my schedule density.&quot;</span>
 </span></code></pre></div>
-<p><strong>Syntax:</strong> <code>--cron "CRON_EXPRESSION @ TIMEZONE"</code></p>
-<p><strong>Why timezone suffix?</strong>
-- <code>0 9 * * *</code> = 9am UTC = 2pm PKT (confusing!)
-- <code>0 9 * * * @ Asia/Karachi</code> = 9am PKT exactly (clear!)</p>
+<p><strong>Syntax:</strong> <code>--cron "CRON_EXPRESSION" --tz "TIMEZONE"</code></p>
+<p><strong>Why timezone flag?</strong>
+- <code>--cron "0 9 * * *"</code> alone = 9am UTC = 2pm PKT (confusing!)
+- <code>--cron "0 9 * * *" --tz "Asia/Karachi"</code> = 9am PKT exactly (clear!)</p>
 <p><strong>WHY this cron:</strong> Daily calendar summary delivered to WhatsApp at 9am local time. Uses cheap Sonnet 4.0 model. <code>--best-effort-deliver</code> prevents job from failing if WhatsApp is temporarily down.</p>
 <p>✅ <strong>Verify:</strong> <code>openclaw cron list</code> shows the job. Wait until 9am UTC or test with near-future time.</p>
 <h3 id="13-add-evening-wrap-up-daily-1030pm">1.3 Add Evening Wrap-up (Daily 10:30pm)<a class="headerlink" href="#13-add-evening-wrap-up-daily-1030pm" title="Permanent link">&para;</a></h3>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>openclaw<span class="w"> </span>cron<span class="w"> </span>add<span class="w"> </span><span class="se">\</span>
 </span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span>--name<span class="w"> </span><span class="s2">&quot;evening-wrap&quot;</span><span class="w"> </span><span class="se">\</span>
-</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span>--cron<span class="w"> </span><span class="s2">&quot;30 22 * * * @ Asia/Karachi&quot;</span><span class="w"> </span><span class="se">\</span>
-</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span>--model<span class="w"> </span><span class="s2">&quot;claude-sonnet-4-0&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span>--cron<span class="w"> </span><span class="s2">&quot;30 22 * * *&quot;</span><span class="w"> </span>--tz<span class="w"> </span><span class="s2">&quot;Asia/Karachi&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span>--model<span class="w"> </span><span class="s2">&quot;anthropic/claude-sonnet-4-5&quot;</span><span class="w"> </span>--session<span class="w"> </span>isolated<span class="w"> </span><span class="se">\</span>
 </span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span>--announce<span class="w"> </span><span class="se">\</span>
 </span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">  </span>--best-effort-deliver<span class="w"> </span><span class="se">\</span>
 </span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">  </span>--message<span class="w"> </span><span class="s2">&quot;Read today&#39;s daily log (memory/YYYY-MM-DD.md). Summarize the day in 3 sentences: what got done, what&#39;s pending, one insight or pattern you noticed. Be honest but not harsh.&quot;</span>
@@ -1306,8 +1284,8 @@
 <h3 id="14-add-weekly-health-check-in-sunday-10am">1.4 Add Weekly Health Check-in (Sunday 10am)<a class="headerlink" href="#14-add-weekly-health-check-in-sunday-10am" title="Permanent link">&para;</a></h3>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>openclaw<span class="w"> </span>cron<span class="w"> </span>add<span class="w"> </span><span class="se">\</span>
 </span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span>--name<span class="w"> </span><span class="s2">&quot;health-checkin&quot;</span><span class="w"> </span><span class="se">\</span>
-</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span>--cron<span class="w"> </span><span class="s2">&quot;0 10 * * 0 @ Asia/Karachi&quot;</span><span class="w"> </span><span class="se">\</span>
-</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span>--model<span class="w"> </span><span class="s2">&quot;claude-sonnet-4-0&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span>--cron<span class="w"> </span><span class="s2">&quot;0 10 * * 0&quot;</span><span class="w"> </span>--tz<span class="w"> </span><span class="s2">&quot;Asia/Karachi&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span>--model<span class="w"> </span><span class="s2">&quot;anthropic/claude-sonnet-4-5&quot;</span><span class="w"> </span>--session<span class="w"> </span>isolated<span class="w"> </span><span class="se">\</span>
 </span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">  </span>--announce<span class="w"> </span><span class="se">\</span>
 </span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">  </span>--message<span class="w"> </span><span class="s2">&quot;Read health-os/STATUS.md. Ask me for this week&#39;s weight, energy level (1-10), and one health win. Keep it conversational and brief.&quot;</span>
 </span></code></pre></div>
@@ -1365,8 +1343,8 @@
 <p>Add a MANDATORY directive telling the agent to send via <code>message</code> tool <strong>as part of its task</strong>, not relying on announce:</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>openclaw<span class="w"> </span>cron<span class="w"> </span>add<span class="w"> </span><span class="se">\</span>
 </span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="w">  </span>--name<span class="w"> </span><span class="s2">&quot;morning-agenda&quot;</span><span class="w"> </span><span class="se">\</span>
-</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">  </span>--cron<span class="w"> </span><span class="s2">&quot;0 9 * * * @ Asia/Karachi&quot;</span><span class="w"> </span><span class="se">\</span>
-</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="w">  </span>--model<span class="w"> </span><span class="s2">&quot;claude-sonnet-4-5&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="w">  </span>--cron<span class="w"> </span><span class="s2">&quot;0 9 * * *&quot;</span><span class="w"> </span>--tz<span class="w"> </span><span class="s2">&quot;Asia/Karachi&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="w">  </span>--model<span class="w"> </span><span class="s2">&quot;anthropic/claude-sonnet-4-5&quot;</span><span class="w"> </span>--session<span class="w"> </span>isolated<span class="w"> </span><span class="se">\</span>
 </span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="w">  </span>--announce<span class="w"> </span><span class="se">\</span>
 </span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="w">  </span>--best-effort-deliver<span class="w"> </span><span class="se">\</span>
 </span><span id="__span-9-7"><a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="w">  </span>--message<span class="w"> </span><span class="s2">&quot;Read my calendar for today. Summarize meetings, focus blocks, urgent events. Keep it under 5 lines.</span>
@@ -1648,7 +1626,7 @@
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>openclaw<span class="w"> </span>cron<span class="w"> </span>add<span class="w"> </span><span class="se">\</span>
 </span><span id="__span-16-2"><a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a><span class="w">  </span>--name<span class="w"> </span><span class="s2">&quot;event-queue-processor&quot;</span><span class="w"> </span><span class="se">\</span>
 </span><span id="__span-16-3"><a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a><span class="w">  </span>--cron<span class="w"> </span><span class="s2">&quot;*/15 * * * *&quot;</span><span class="w"> </span><span class="se">\</span>
-</span><span id="__span-16-4"><a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="w">  </span>--model<span class="w"> </span><span class="s2">&quot;claude-sonnet-4-0&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-16-4"><a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="w">  </span>--model<span class="w"> </span><span class="s2">&quot;anthropic/claude-sonnet-4-5&quot;</span><span class="w"> </span>--session<span class="w"> </span>isolated<span class="w"> </span><span class="se">\</span>
 </span><span id="__span-16-5"><a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a><span class="w">  </span>--message<span class="w"> </span><span class="s2">&quot;Run: python3 /root/clawd/scripts/event-queue.py process --all. If there are dead letter events (check with &#39;dead&#39; command), alert me with details.&quot;</span>
 </span></code></pre></div>
 <p><strong>WHY:</strong> Processes queue every 15 minutes. AI can inspect dead letters and alert you.</p>
@@ -1721,26 +1699,26 @@
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="c1"># Edit OpenClaw config</span>
 </span><span id="__span-19-2"><a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>nano<span class="w"> </span>~/.openclaw/openclaw.json
 </span></code></pre></div>
-<p>Add/verify this section:
+<p>Add/verify this section under <code>agents.defaults</code>:
 <div class="language-json highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="p">{</span>
-</span><span id="__span-20-2"><a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="w">  </span><span class="nt">&quot;heartbeat&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-20-3"><a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="w">    </span><span class="nt">&quot;enabled&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
-</span><span id="__span-20-4"><a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="w">    </span><span class="nt">&quot;intervalMinutes&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">45</span><span class="p">,</span>
-</span><span id="__span-20-5"><a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a><span class="w">    </span><span class="nt">&quot;quietHoursStart&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;23:00&quot;</span><span class="p">,</span>
-</span><span id="__span-20-6"><a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a><span class="w">    </span><span class="nt">&quot;quietHoursEnd&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;08:00&quot;</span>
-</span><span id="__span-20-7"><a id="__codelineno-20-7" name="__codelineno-20-7" href="#__codelineno-20-7"></a><span class="w">  </span><span class="p">}</span>
-</span><span id="__span-20-8"><a id="__codelineno-20-8" name="__codelineno-20-8" href="#__codelineno-20-8"></a><span class="p">}</span>
+</span><span id="__span-20-2"><a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="w">  </span><span class="nt">&quot;agents&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-20-3"><a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="w">    </span><span class="nt">&quot;defaults&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-20-4"><a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="w">      </span><span class="nt">&quot;heartbeat&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-20-5"><a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a><span class="w">        </span><span class="nt">&quot;every&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;45m&quot;</span>
+</span><span id="__span-20-6"><a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a><span class="w">      </span><span class="p">}</span>
+</span><span id="__span-20-7"><a id="__codelineno-20-7" name="__codelineno-20-7" href="#__codelineno-20-7"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-20-8"><a id="__codelineno-20-8" name="__codelineno-20-8" href="#__codelineno-20-8"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-20-9"><a id="__codelineno-20-9" name="__codelineno-20-9" href="#__codelineno-20-9"></a><span class="p">}</span>
 </span></code></pre></div></p>
-<p><strong>WHY:</strong> Heartbeat every 45 minutes when idle. Quiet hours prevent nighttime spam.</p>
+<p>Or via CLI:
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>openclaw<span class="w"> </span>config<span class="w"> </span><span class="nb">set</span><span class="w"> </span>agents.defaults.heartbeat.every<span class="w"> </span><span class="s2">&quot;45m&quot;</span>
+</span></code></pre></div></p>
+<p><strong>WHY:</strong> Heartbeat every 45 minutes when idle. OpenClaw reads <code>HEARTBEAT.md</code> from your workspace on each heartbeat tick.</p>
 <p>Restart OpenClaw:
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>openclaw<span class="w"> </span>gateway<span class="w"> </span>restart
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-22-1"><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>openclaw<span class="w"> </span>gateway<span class="w"> </span>restart
 </span></code></pre></div></p>
-<p>✅ <strong>Verify:</strong> After 45 minutes of idle time, check your chat for a heartbeat check-in (or check <code>openclaw logs</code>).</p>
-<h3 id="44-test-heartbeat-manually">4.4 Test Heartbeat Manually<a class="headerlink" href="#44-test-heartbeat-manually" title="Permanent link">&para;</a></h3>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-22-1"><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a><span class="c1"># Trigger immediate heartbeat (if OpenClaw supports it)</span>
-</span><span id="__span-22-2"><a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a>openclaw<span class="w"> </span>heartbeat<span class="w"> </span>--now
-</span></code></pre></div>
-<p><strong>WHY:</strong> Tests heartbeat logic without waiting 45 minutes.</p>
+<p>✅ <strong>Verify:</strong> After 45 minutes of idle time, check your chat logs for heartbeat activity. OpenClaw will read <code>HEARTBEAT.md</code> and process the tasks listed there.</p>
+<p><strong>Note:</strong> Quiet hours are handled in <code>HEARTBEAT.md</code> itself (add a "Quiet Hours" section telling the AI to skip non-urgent checks at night), not in config.</p>
 <hr />
 <h2 id="part-4-complete-checklist">Part 4 Complete Checklist<a class="headerlink" href="#part-4-complete-checklist" title="Permanent link">&para;</a></h2>
 <p>✅ <strong>OpenClaw Cron Jobs:</strong>

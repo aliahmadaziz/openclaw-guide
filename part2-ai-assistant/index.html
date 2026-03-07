@@ -770,10 +770,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#61-adjust-memory-settings" class="md-nav__link">
+  <a href="#61-configure-heartbeat-idle-maintenance" class="md-nav__link">
     <span class="md-ellipsis">
       
-        6.1 Adjust Memory Settings
+        6.1 Configure Heartbeat (Idle Maintenance)
       
     </span>
   </a>
@@ -781,21 +781,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#62-set-message-limits" class="md-nav__link">
+  <a href="#62-enable-thinking-reasoning" class="md-nav__link">
     <span class="md-ellipsis">
       
-        6.2 Set Message Limits
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#63-enable-thinking-reasoning" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        6.3 Enable Thinking (Reasoning)
+        6.2 Enable Thinking (Reasoning)
       
     </span>
   </a>
@@ -1279,10 +1268,10 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
-  <a href="#61-adjust-memory-settings" class="md-nav__link">
+  <a href="#61-configure-heartbeat-idle-maintenance" class="md-nav__link">
     <span class="md-ellipsis">
       
-        6.1 Adjust Memory Settings
+        6.1 Configure Heartbeat (Idle Maintenance)
       
     </span>
   </a>
@@ -1290,21 +1279,10 @@
 </li>
         
           <li class="md-nav__item">
-  <a href="#62-set-message-limits" class="md-nav__link">
+  <a href="#62-enable-thinking-reasoning" class="md-nav__link">
     <span class="md-ellipsis">
       
-        6.2 Set Message Limits
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#63-enable-thinking-reasoning" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        6.3 Enable Thinking (Reasoning)
+        6.2 Enable Thinking (Reasoning)
       
     </span>
   </a>
@@ -1381,30 +1359,30 @@
 <ol>
 <li>Subscribe to Claude Max at <a href="https://claude.ai/settings/billing">claude.ai/settings/billing</a></li>
 <li>Install Claude Code CLI: <code>npm install -g @anthropic-ai/claude-code</code></li>
-<li>Run <code>claude</code> in your terminal — it will prompt you to authenticate</li>
-<li>During auth, it generates an access token — copy this token</li>
-<li>Set it in OpenClaw:</li>
+<li>Run <code>claude</code> in your terminal — it will prompt you to authenticate via browser</li>
+<li>After authenticating, Claude Code stores credentials that OpenClaw can use</li>
 </ol>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># Edit config file directly (OpenClaw 2026.2.x doesn&#39;t have config set commands)</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>nano<span class="w"> </span>~/.openclaw/openclaw.json
+<p>Now configure OpenClaw to use your Claude credentials. Edit the config file:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>nano<span class="w"> </span>~/.openclaw/openclaw.json
 </span></code></pre></div>
-<p>Add your API key under the <code>auth</code> section:
+<p>Add or update the <code>auth</code> section:
 <div class="language-json highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="p">{</span>
 </span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">  </span><span class="nt">&quot;auth&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
 </span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">    </span><span class="nt">&quot;profiles&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
 </span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">      </span><span class="nt">&quot;anthropic:default&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
 </span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">        </span><span class="nt">&quot;provider&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;anthropic&quot;</span><span class="p">,</span>
-</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">        </span><span class="nt">&quot;mode&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;token&quot;</span><span class="p">,</span>
-</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">        </span><span class="nt">&quot;token&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;YOUR_CLAUDE_CODE_TOKEN&quot;</span>
-</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">      </span><span class="p">}</span>
-</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">    </span><span class="p">}</span>
-</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">  </span><span class="p">}</span>
-</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="p">}</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">        </span><span class="nt">&quot;mode&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;claude-code&quot;</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">      </span><span class="p">}</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="p">}</span>
 </span></code></pre></div></p>
-<p><em>Why: The Max plan has built-in spend limits and cooldown periods. Raw API keys (from console.anthropic.com) have no guardrails and can run up significant bills fast. Max plan is safer for always-on assistants.</em></p>
+<p><em>Why: <code>mode: "claude-code"</code> tells OpenClaw to use the Claude Code CLI credentials, which are tied to your Max plan subscription. No API key needed — just your Max plan login.</em></p>
 <p><strong>Option B — Raw Anthropic API Key</strong></p>
 <p>If you prefer pay-as-you-go: get a key from <a href="https://console.anthropic.com">console.anthropic.com</a> and set spend limits in the console.</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>openclaw<span class="w"> </span>config<span class="w"> </span><span class="nb">set</span><span class="w"> </span>anthropicApiKey<span class="w"> </span>YOUR_ANTHROPIC_KEY
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>openclaw<span class="w"> </span>config<span class="w"> </span><span class="nb">set</span><span class="w"> </span>auth.profiles.anthropic:default.provider<span class="w"> </span>anthropic
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>openclaw<span class="w"> </span>config<span class="w"> </span><span class="nb">set</span><span class="w"> </span>auth.profiles.anthropic:default.mode<span class="w"> </span>token
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>openclaw<span class="w"> </span>config<span class="w"> </span><span class="nb">set</span><span class="w"> </span>auth.profiles.anthropic:default.token<span class="w"> </span>YOUR_ANTHROPIC_API_KEY
 </span></code></pre></div>
 <p><strong>Google Gemini (Fallback Model)</strong></p>
 <ol>
@@ -1413,78 +1391,102 @@
 <li>Click "Get API Key" → create a key</li>
 <li>Google AI Studio gives you <strong>$300 in free credits</strong> — more than enough for a fallback model</li>
 </ol>
-<p>Add Google API key to the same config file:
-<div class="language-json highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="p">{</span>
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span><span class="nt">&quot;auth&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="nt">&quot;profiles&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">      </span><span class="nt">&quot;anthropic:default&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">        </span><span class="nt">&quot;provider&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;anthropic&quot;</span><span class="p">,</span>
-</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">        </span><span class="nt">&quot;mode&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;token&quot;</span><span class="p">,</span>
-</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">        </span><span class="nt">&quot;token&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;YOUR_CLAUDE_CODE_TOKEN&quot;</span>
-</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">      </span><span class="p">},</span>
-</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">      </span><span class="nt">&quot;google:default&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">        </span><span class="nt">&quot;provider&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;google&quot;</span><span class="p">,</span>
-</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">        </span><span class="nt">&quot;mode&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;token&quot;</span><span class="p">,</span>
-</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="w">        </span><span class="nt">&quot;token&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;YOUR_AISTUDIO_KEY&quot;</span>
-</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="w">      </span><span class="p">}</span>
-</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="w">    </span><span class="p">}</span>
-</span><span id="__span-3-15"><a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="w">  </span><span class="p">}</span>
-</span><span id="__span-3-16"><a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="p">}</span>
-</span></code></pre></div></p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>openclaw<span class="w"> </span>config<span class="w"> </span><span class="nb">set</span><span class="w"> </span>auth.profiles.google:default.provider<span class="w"> </span>google
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>openclaw<span class="w"> </span>config<span class="w"> </span><span class="nb">set</span><span class="w"> </span>auth.profiles.google:default.mode<span class="w"> </span>token
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>openclaw<span class="w"> </span>config<span class="w"> </span><span class="nb">set</span><span class="w"> </span>auth.profiles.google:default.token<span class="w"> </span>YOUR_AISTUDIO_KEY
+</span></code></pre></div>
 <p><em>Why: AI Studio's free credits make Gemini essentially free as a fallback. You're not paying for a second model — Google is subsidizing your backup.</em></p>
-<p>✅ <strong>Verify:</strong> <code>openclaw config get anthropicApiKey</code> and <code>openclaw config get googleApiKey</code> show your keys (first few chars visible)</p>
+<p>✅ <strong>Verify:</strong> <code>openclaw config get auth.profiles</code> shows your configured providers</p>
 <h3 id="12-configure-models-and-context">1.2 Configure Models and Context<a class="headerlink" href="#12-configure-models-and-context" title="Permanent link">&para;</a></h3>
-<p>Edit <code>~/.openclaw/openclaw.json</code> and add the <code>agents</code> section:</p>
-<div class="language-json highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="p">{</span>
-</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="nt">&quot;agents&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">    </span><span class="nt">&quot;defaults&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">      </span><span class="nt">&quot;model&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">        </span><span class="nt">&quot;primary&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;anthropic/claude-opus-4-6&quot;</span><span class="p">,</span>
-</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">        </span><span class="nt">&quot;fallbacks&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;google/gemini-2.5-pro&quot;</span><span class="p">]</span>
-</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">      </span><span class="p">},</span>
-</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">      </span><span class="nt">&quot;contextTokens&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">200000</span><span class="p">,</span>
-</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">      </span><span class="nt">&quot;subagents&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">        </span><span class="nt">&quot;model&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="w">          </span><span class="nt">&quot;primary&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;anthropic/claude-sonnet-4-5&quot;</span>
-</span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="w">        </span><span class="p">}</span>
-</span><span id="__span-4-13"><a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a><span class="w">      </span><span class="p">}</span>
-</span><span id="__span-4-14"><a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a><span class="w">    </span><span class="p">},</span>
-</span><span id="__span-4-15"><a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a><span class="w">    </span><span class="nt">&quot;list&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-</span><span id="__span-4-16"><a id="__codelineno-4-16" name="__codelineno-4-16" href="#__codelineno-4-16"></a><span class="w">      </span><span class="p">{</span>
-</span><span id="__span-4-17"><a id="__codelineno-4-17" name="__codelineno-4-17" href="#__codelineno-4-17"></a><span class="w">        </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;main&quot;</span><span class="p">,</span>
-</span><span id="__span-4-18"><a id="__codelineno-4-18" name="__codelineno-4-18" href="#__codelineno-4-18"></a><span class="w">        </span><span class="nt">&quot;default&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
-</span><span id="__span-4-19"><a id="__codelineno-4-19" name="__codelineno-4-19" href="#__codelineno-4-19"></a><span class="w">        </span><span class="nt">&quot;agentDir&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/root/clawd&quot;</span>
-</span><span id="__span-4-20"><a id="__codelineno-4-20" name="__codelineno-4-20" href="#__codelineno-4-20"></a><span class="w">      </span><span class="p">}</span>
-</span><span id="__span-4-21"><a id="__codelineno-4-21" name="__codelineno-4-21" href="#__codelineno-4-21"></a><span class="w">    </span><span class="p">]</span>
-</span><span id="__span-4-22"><a id="__codelineno-4-22" name="__codelineno-4-22" href="#__codelineno-4-22"></a><span class="w">  </span><span class="p">}</span>
-</span><span id="__span-4-23"><a id="__codelineno-4-23" name="__codelineno-4-23" href="#__codelineno-4-23"></a><span class="p">}</span>
+<p>Configure models using the CLI:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># Set primary model (your main conversation partner)</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>openclaw<span class="w"> </span>config<span class="w"> </span><span class="nb">set</span><span class="w"> </span>agents.defaults.model.primary<span class="w"> </span><span class="s2">&quot;anthropic/claude-sonnet-4-5&quot;</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="c1"># Set fallback model(s) — kicks in if primary fails</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="c1"># Edit openclaw.json directly for array values:</span>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>nano<span class="w"> </span>~/.openclaw/openclaw.json
+</span></code></pre></div>
+<p>In <code>~/.openclaw/openclaw.json</code>, set the agents section:</p>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="p">{</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="w">  </span><span class="nt">&quot;agents&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="w">    </span><span class="nt">&quot;defaults&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">      </span><span class="nt">&quot;model&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">        </span><span class="nt">&quot;primary&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;anthropic/claude-sonnet-4-5&quot;</span><span class="p">,</span>
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="w">        </span><span class="nt">&quot;fallbacks&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&quot;google/gemini-2.5-pro&quot;</span><span class="p">]</span>
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">      </span><span class="p">},</span>
+</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="w">      </span><span class="nt">&quot;workspace&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/root/clawd&quot;</span><span class="p">,</span>
+</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="w">      </span><span class="nt">&quot;contextTokens&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">200000</span><span class="p">,</span>
+</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="w">      </span><span class="nt">&quot;subagents&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-5-11"><a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="w">        </span><span class="nt">&quot;model&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-5-12"><a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="w">          </span><span class="nt">&quot;primary&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;anthropic/claude-sonnet-4-5&quot;</span>
+</span><span id="__span-5-13"><a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="w">        </span><span class="p">}</span>
+</span><span id="__span-5-14"><a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="w">      </span><span class="p">}</span>
+</span><span id="__span-5-15"><a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a><span class="w">    </span><span class="p">},</span>
+</span><span id="__span-5-16"><a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a><span class="w">    </span><span class="nt">&quot;list&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-5-17"><a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a><span class="w">      </span><span class="p">{</span>
+</span><span id="__span-5-18"><a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a><span class="w">        </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;main&quot;</span><span class="p">,</span>
+</span><span id="__span-5-19"><a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a><span class="w">        </span><span class="nt">&quot;default&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+</span><span id="__span-5-20"><a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a><span class="w">        </span><span class="nt">&quot;agentDir&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/root/clawd&quot;</span>
+</span><span id="__span-5-21"><a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a><span class="w">      </span><span class="p">}</span>
+</span><span id="__span-5-22"><a id="__codelineno-5-22" name="__codelineno-5-22" href="#__codelineno-5-22"></a><span class="w">    </span><span class="p">]</span>
+</span><span id="__span-5-23"><a id="__codelineno-5-23" name="__codelineno-5-23" href="#__codelineno-5-23"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-5-24"><a id="__codelineno-5-24" name="__codelineno-5-24" href="#__codelineno-5-24"></a><span class="p">}</span>
 </span></code></pre></div>
 <p><strong>What each setting does:</strong>
-- <code>model.primary</code>: Main conversational model (Opus 4.6 — most capable)
-- <code>model.fallbacks</code>: Backup models if primary fails (Gemini 2.5 Pro)
-- <code>contextTokens</code>: Max context window (200K = ~150K words, never exceed smallest model in chain)
-- <code>subagents.model.primary</code>: Background worker model (Sonnet 4.5 — fast, cost-effective)
+- <code>model.primary</code>: Main conversational model — handles all direct messages
+- <code>model.fallbacks</code>: Backup models if primary fails (array, tried in order)
+- <code>workspace</code>: Path to your agent workspace (where personality files live)
+- <code>contextTokens</code>: Max context window (200K = ~150K words). Set this to the <strong>smallest</strong> context window across all models in your chain.
+- <code>subagents.model.primary</code>: Background worker model — used for sub-agent tasks
 - <code>agents.list[0].id</code>: Agent identifier ("main" is the default agent)
-- <code>agentDir</code>: Workspace path where personality files live</p>
-<p><strong>About cron model:</strong> Cron jobs specify their model per-job (typically <code>claude-sonnet-4-0</code> for cheap routine tasks). No global cron model setting.</p>
-<p>✅ <strong>Verify:</strong> <code>cat ~/.openclaw/openclaw.json | grep -A5 '"model"'</code> shows your model configuration</p>
-<p><strong>Model Summary:</strong>
-- <strong>Primary (Opus 4.6):</strong> Your main conversation partner, handles all direct messages
-- <strong>Fallback (Gemini 2.5 Pro):</strong> Backup if primary is down, keeps you online 24/7
-- <strong>Sub-agents (Sonnet 4.5):</strong> Background workers for research, file parsing, parallel tasks
-- <strong>Cron (Sonnet 4.0):</strong> Scheduled jobs like reminders, alerts, periodic checks</p>
+- <code>agentDir</code>: Workspace path where <code>AGENTS.md</code>, <code>SOUL.md</code>, etc. live</p>
+<p><strong>About cron model:</strong> Cron jobs specify their model per-job (typically <code>anthropic/claude-sonnet-4-5</code> for cost-effective routine tasks). No global cron model setting needed.</p>
+<p>✅ <strong>Verify:</strong> <code>openclaw config get agents.defaults.model.primary</code> shows your configured model</p>
+<p><strong>Model Tiers (Recommended):</strong></p>
+<table>
+<thead>
+<tr>
+<th>Use Case</th>
+<th>Model</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Primary</strong></td>
+<td><code>anthropic/claude-sonnet-4-5</code></td>
+<td>Great balance of capability and speed. Upgrade to <code>claude-opus-4-6</code> if on Max plan.</td>
+</tr>
+<tr>
+<td><strong>Fallback</strong></td>
+<td><code>google/gemini-2.5-pro</code></td>
+<td>Backup if primary is down, keeps you online 24/7</td>
+</tr>
+<tr>
+<td><strong>Sub-agents</strong></td>
+<td><code>anthropic/claude-sonnet-4-5</code></td>
+<td>Background workers for research, file parsing, parallel tasks</td>
+</tr>
+<tr>
+<td><strong>Cron jobs</strong></td>
+<td><code>anthropic/claude-sonnet-4-5</code></td>
+<td>Scheduled jobs like reminders, alerts, periodic checks (set per-job)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>💡 Tip:</strong> If you're on the Claude Max plan, use <code>anthropic/claude-opus-4-6</code> as primary for the most capable experience. Model names use the format <code>provider/model-name</code>.</p>
 <hr />
 <h2 id="2-workspace-structure">2. Workspace Structure<a class="headerlink" href="#2-workspace-structure" title="Permanent link">&para;</a></h2>
 <p>The workspace is where your AI lives. These files define personality, memory, and behavior.</p>
 <h3 id="21-create-workspace-directory">2.1 Create Workspace Directory<a class="headerlink" href="#21-create-workspace-directory" title="Permanent link">&para;</a></h3>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>~/clawd/memory<span class="w"> </span>~/clawd/scripts
-</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="nb">cd</span><span class="w"> </span>~/clawd
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>~/clawd/memory<span class="w"> </span>~/clawd/scripts
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="nb">cd</span><span class="w"> </span>~/clawd
 </span></code></pre></div>
 <p><em>Why: Central location for all AI personality, memory, and automation files</em></p>
 <h3 id="22-create-core-files">2.2 Create Core Files<a class="headerlink" href="#22-create-core-files" title="Permanent link">&para;</a></h3>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>touch<span class="w"> </span>SOUL.md<span class="w"> </span>USER.md<span class="w"> </span>IDENTITY.md<span class="w"> </span>AGENTS.md<span class="w"> </span>MEMORY.md<span class="w"> </span>HANDOFF.md<span class="w"> </span>HEARTBEAT.md<span class="w"> </span>TOOLS.md<span class="w"> </span>SECURITY.md<span class="w"> </span>RECOVERY.md<span class="w"> </span>WALL-POLICY.md
-</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>memory
-</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>touch<span class="w"> </span>memory/friction-log.md
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>touch<span class="w"> </span>SOUL.md<span class="w"> </span>USER.md<span class="w"> </span>IDENTITY.md<span class="w"> </span>AGENTS.md<span class="w"> </span>MEMORY.md<span class="w"> </span>HANDOFF.md<span class="w"> </span>HEARTBEAT.md<span class="w"> </span>TOOLS.md<span class="w"> </span>SECURITY.md<span class="w"> </span>RECOVERY.md<span class="w"> </span>WALL-POLICY.md
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>mkdir<span class="w"> </span>-p<span class="w"> </span>memory
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>touch<span class="w"> </span>memory/friction-log.md
 </span></code></pre></div>
 <p><em>Why: Each file serves a specific purpose in how your AI thinks and acts</em></p>
 <p>✅ <strong>Verify:</strong> <code>ls ~/clawd/*.md</code> shows all 11 files, <code>ls ~/clawd/memory/friction-log.md</code> exists</p>
@@ -1556,69 +1558,69 @@
 </tbody>
 </table>
 <h3 id="23-create-soulmd-template">2.3 Create SOUL.md Template<a class="headerlink" href="#23-create-soulmd-template" title="Permanent link">&para;</a></h3>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>~/clawd/SOUL.md<span class="w"> </span><span class="s">&lt;&lt; &#39;EOF&#39;</span>
-</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="s"># SOUL.md - Core Personality</span>
-</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>
-</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="s">## Tone</span>
-</span><span id="__span-7-5"><a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="s">Direct. Conversational. No corporate polish. Use sentence fragments when natural.</span>
-</span><span id="__span-7-6"><a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>
-</span><span id="__span-7-7"><a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="s">## Style</span>
-</span><span id="__span-7-8"><a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a><span class="s">- **Short replies** — Don&#39;t over-explain. Answer the question, then stop.</span>
-</span><span id="__span-7-9"><a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="s">- **Context-aware** — Read the room. Match energy. Formal when needed, casual otherwise.</span>
-</span><span id="__span-7-10"><a id="__codelineno-7-10" name="__codelineno-7-10" href="#__codelineno-7-10"></a><span class="s">- **Honest defaults** — &quot;I don&#39;t know&quot; &gt; guessing. Ask clarifying questions.</span>
-</span><span id="__span-7-11"><a id="__codelineno-7-11" name="__codelineno-7-11" href="#__codelineno-7-11"></a>
-</span><span id="__span-7-12"><a id="__codelineno-7-12" name="__codelineno-7-12" href="#__codelineno-7-12"></a><span class="s">## Hard Rules</span>
-</span><span id="__span-7-13"><a id="__codelineno-7-13" name="__codelineno-7-13" href="#__codelineno-7-13"></a><span class="s">1. **Memory over mental notes** — Write it down. Files &gt; brain.</span>
-</span><span id="__span-7-14"><a id="__codelineno-7-14" name="__codelineno-7-14" href="#__codelineno-7-14"></a><span class="s">2. **Ask before public actions** — Emails, tweets, posts need approval.</span>
-</span><span id="__span-7-15"><a id="__codelineno-7-15" name="__codelineno-7-15" href="#__codelineno-7-15"></a><span class="s">3. **Safe freely** — Read files, search web, work within workspace without asking.</span>
-</span><span id="__span-7-16"><a id="__codelineno-7-16" name="__codelineno-7-16" href="#__codelineno-7-16"></a>
-</span><span id="__span-7-17"><a id="__codelineno-7-17" name="__codelineno-7-17" href="#__codelineno-7-17"></a><span class="s">## Forbidden</span>
-</span><span id="__span-7-18"><a id="__codelineno-7-18" name="__codelineno-7-18" href="#__codelineno-7-18"></a><span class="s">- Corporate jargon (&quot;delighted to assist&quot;, &quot;circle back&quot;, &quot;synergy&quot;)</span>
-</span><span id="__span-7-19"><a id="__codelineno-7-19" name="__codelineno-7-19" href="#__codelineno-7-19"></a><span class="s">- Unsolicited advice or life coaching</span>
-</span><span id="__span-7-20"><a id="__codelineno-7-20" name="__codelineno-7-20" href="#__codelineno-7-20"></a><span class="s">- Making up facts or hallucinating data</span>
-</span><span id="__span-7-21"><a id="__codelineno-7-21" name="__codelineno-7-21" href="#__codelineno-7-21"></a><span class="s">EOF</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>~/clawd/SOUL.md<span class="w"> </span><span class="s">&lt;&lt; &#39;EOF&#39;</span>
+</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="s"># SOUL.md - Core Personality</span>
+</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>
+</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="s">## Tone</span>
+</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="s">Direct. Conversational. No corporate polish. Use sentence fragments when natural.</span>
+</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>
+</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="s">## Style</span>
+</span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a><span class="s">- **Short replies** — Don&#39;t over-explain. Answer the question, then stop.</span>
+</span><span id="__span-8-9"><a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="s">- **Context-aware** — Read the room. Match energy. Formal when needed, casual otherwise.</span>
+</span><span id="__span-8-10"><a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="s">- **Honest defaults** — &quot;I don&#39;t know&quot; &gt; guessing. Ask clarifying questions.</span>
+</span><span id="__span-8-11"><a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a>
+</span><span id="__span-8-12"><a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a><span class="s">## Hard Rules</span>
+</span><span id="__span-8-13"><a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a><span class="s">1. **Memory over mental notes** — Write it down. Files &gt; brain.</span>
+</span><span id="__span-8-14"><a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a><span class="s">2. **Ask before public actions** — Emails, tweets, posts need approval.</span>
+</span><span id="__span-8-15"><a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a><span class="s">3. **Safe freely** — Read files, search web, work within workspace without asking.</span>
+</span><span id="__span-8-16"><a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a>
+</span><span id="__span-8-17"><a id="__codelineno-8-17" name="__codelineno-8-17" href="#__codelineno-8-17"></a><span class="s">## Forbidden</span>
+</span><span id="__span-8-18"><a id="__codelineno-8-18" name="__codelineno-8-18" href="#__codelineno-8-18"></a><span class="s">- Corporate jargon (&quot;delighted to assist&quot;, &quot;circle back&quot;, &quot;synergy&quot;)</span>
+</span><span id="__span-8-19"><a id="__codelineno-8-19" name="__codelineno-8-19" href="#__codelineno-8-19"></a><span class="s">- Unsolicited advice or life coaching</span>
+</span><span id="__span-8-20"><a id="__codelineno-8-20" name="__codelineno-8-20" href="#__codelineno-8-20"></a><span class="s">- Making up facts or hallucinating data</span>
+</span><span id="__span-8-21"><a id="__codelineno-8-21" name="__codelineno-8-21" href="#__codelineno-8-21"></a><span class="s">EOF</span>
 </span></code></pre></div>
 <p><em>Why: Defines how the AI talks and thinks. Short, clear rules prevent generic corporate-bot responses.</em></p>
 <h3 id="24-create-usermd-template">2.4 Create USER.md Template<a class="headerlink" href="#24-create-usermd-template" title="Permanent link">&para;</a></h3>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>~/clawd/USER.md<span class="w"> </span><span class="s">&lt;&lt; &#39;EOF&#39;</span>
-</span><span id="__span-8-2"><a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a><span class="s"># USER.md - About You</span>
-</span><span id="__span-8-3"><a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a>
-</span><span id="__span-8-4"><a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="s">**Name:** Your Name  </span>
-</span><span id="__span-8-5"><a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="s">**Role:** Founder &amp; CEO  </span>
-</span><span id="__span-8-6"><a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a><span class="s">**Timezone:** UTC+5 (Your Timezone)  </span>
-</span><span id="__span-8-7"><a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="s">**Location:** Your City</span>
-</span><span id="__span-8-8"><a id="__codelineno-8-8" name="__codelineno-8-8" href="#__codelineno-8-8"></a>
-</span><span id="__span-8-9"><a id="__codelineno-8-9" name="__codelineno-8-9" href="#__codelineno-8-9"></a><span class="s">## Communication Preferences</span>
-</span><span id="__span-8-10"><a id="__codelineno-8-10" name="__codelineno-8-10" href="#__codelineno-8-10"></a><span class="s">- **Response time:** Immediate for urgent, batched for routine</span>
-</span><span id="__span-8-11"><a id="__codelineno-8-11" name="__codelineno-8-11" href="#__codelineno-8-11"></a><span class="s">- **Format:** WhatsApp is primary, keep it concise</span>
-</span><span id="__span-8-12"><a id="__codelineno-8-12" name="__codelineno-8-12" href="#__codelineno-8-12"></a><span class="s">- **Tone:** Direct, no fluff</span>
-</span><span id="__span-8-13"><a id="__codelineno-8-13" name="__codelineno-8-13" href="#__codelineno-8-13"></a>
-</span><span id="__span-8-14"><a id="__codelineno-8-14" name="__codelineno-8-14" href="#__codelineno-8-14"></a><span class="s">## Work Context</span>
-</span><span id="__span-8-15"><a id="__codelineno-8-15" name="__codelineno-8-15" href="#__codelineno-8-15"></a><span class="s">- Runs multiple companies (e-commerce, logistics, tech)</span>
-</span><span id="__span-8-16"><a id="__codelineno-8-16" name="__codelineno-8-16" href="#__codelineno-8-16"></a><span class="s">- High volume of meetings, emails, and decisions</span>
-</span><span id="__span-8-17"><a id="__codelineno-8-17" name="__codelineno-8-17" href="#__codelineno-8-17"></a><span class="s">- Needs AI to handle research, scheduling, and follow-ups</span>
-</span><span id="__span-8-18"><a id="__codelineno-8-18" name="__codelineno-8-18" href="#__codelineno-8-18"></a>
-</span><span id="__span-8-19"><a id="__codelineno-8-19" name="__codelineno-8-19" href="#__codelineno-8-19"></a><span class="s">## Personal Notes</span>
-</span><span id="__span-8-20"><a id="__codelineno-8-20" name="__codelineno-8-20" href="#__codelineno-8-20"></a><span class="s">- Prefers dark mode screenshots</span>
-</span><span id="__span-8-21"><a id="__codelineno-8-21" name="__codelineno-8-21" href="#__codelineno-8-21"></a><span class="s">- Uses 24-hour time format</span>
-</span><span id="__span-8-22"><a id="__codelineno-8-22" name="__codelineno-8-22" href="#__codelineno-8-22"></a><span class="s">- Frequent traveler, timezone shifts</span>
-</span><span id="__span-8-23"><a id="__codelineno-8-23" name="__codelineno-8-23" href="#__codelineno-8-23"></a><span class="s">EOF</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>~/clawd/USER.md<span class="w"> </span><span class="s">&lt;&lt; &#39;EOF&#39;</span>
+</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="s"># USER.md - About You</span>
+</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>
+</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="s">**Name:** Your Name  </span>
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="s">**Role:** Founder &amp; CEO  </span>
+</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="s">**Timezone:** UTC+5 (Your Timezone)  </span>
+</span><span id="__span-9-7"><a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="s">**Location:** Your City</span>
+</span><span id="__span-9-8"><a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>
+</span><span id="__span-9-9"><a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a><span class="s">## Communication Preferences</span>
+</span><span id="__span-9-10"><a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a><span class="s">- **Response time:** Immediate for urgent, batched for routine</span>
+</span><span id="__span-9-11"><a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a><span class="s">- **Format:** WhatsApp is primary, keep it concise</span>
+</span><span id="__span-9-12"><a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a><span class="s">- **Tone:** Direct, no fluff</span>
+</span><span id="__span-9-13"><a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a>
+</span><span id="__span-9-14"><a id="__codelineno-9-14" name="__codelineno-9-14" href="#__codelineno-9-14"></a><span class="s">## Work Context</span>
+</span><span id="__span-9-15"><a id="__codelineno-9-15" name="__codelineno-9-15" href="#__codelineno-9-15"></a><span class="s">- Runs multiple companies (e-commerce, logistics, tech)</span>
+</span><span id="__span-9-16"><a id="__codelineno-9-16" name="__codelineno-9-16" href="#__codelineno-9-16"></a><span class="s">- High volume of meetings, emails, and decisions</span>
+</span><span id="__span-9-17"><a id="__codelineno-9-17" name="__codelineno-9-17" href="#__codelineno-9-17"></a><span class="s">- Needs AI to handle research, scheduling, and follow-ups</span>
+</span><span id="__span-9-18"><a id="__codelineno-9-18" name="__codelineno-9-18" href="#__codelineno-9-18"></a>
+</span><span id="__span-9-19"><a id="__codelineno-9-19" name="__codelineno-9-19" href="#__codelineno-9-19"></a><span class="s">## Personal Notes</span>
+</span><span id="__span-9-20"><a id="__codelineno-9-20" name="__codelineno-9-20" href="#__codelineno-9-20"></a><span class="s">- Prefers dark mode screenshots</span>
+</span><span id="__span-9-21"><a id="__codelineno-9-21" name="__codelineno-9-21" href="#__codelineno-9-21"></a><span class="s">- Uses 24-hour time format</span>
+</span><span id="__span-9-22"><a id="__codelineno-9-22" name="__codelineno-9-22" href="#__codelineno-9-22"></a><span class="s">- Frequent traveler, timezone shifts</span>
+</span><span id="__span-9-23"><a id="__codelineno-9-23" name="__codelineno-9-23" href="#__codelineno-9-23"></a><span class="s">EOF</span>
 </span></code></pre></div>
 <p><em>Why: Tells the AI who you are, how you work, and what you expect. It uses this to personalize responses.</em></p>
 <h3 id="25-create-identitymd-template">2.5 Create IDENTITY.md Template<a class="headerlink" href="#25-create-identitymd-template" title="Permanent link">&para;</a></h3>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>~/clawd/IDENTITY.md<span class="w"> </span><span class="s">&lt;&lt; &#39;EOF&#39;</span>
-</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="s"># IDENTITY.md - Bot Identity</span>
-</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>
-</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="s">**Name:** MyBot  </span>
-</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="s">**Emoji:** 🤖  </span>
-</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="s">**Avatar:** (none set)</span>
-</span><span id="__span-9-7"><a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>
-</span><span id="__span-9-8"><a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a><span class="s">**Role:** Personal AI assistant  </span>
-</span><span id="__span-9-9"><a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a><span class="s">**Primary Function:** Memory, research, automation, scheduling</span>
-</span><span id="__span-9-10"><a id="__codelineno-9-10" name="__codelineno-9-10" href="#__codelineno-9-10"></a>
-</span><span id="__span-9-11"><a id="__codelineno-9-11" name="__codelineno-9-11" href="#__codelineno-9-11"></a><span class="s">**Personality Snapshot:**  </span>
-</span><span id="__span-9-12"><a id="__codelineno-9-12" name="__codelineno-9-12" href="#__codelineno-9-12"></a><span class="s">Efficient. Low-ego. Direct. Not here to impress, here to help.</span>
-</span><span id="__span-9-13"><a id="__codelineno-9-13" name="__codelineno-9-13" href="#__codelineno-9-13"></a><span class="s">EOF</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>~/clawd/IDENTITY.md<span class="w"> </span><span class="s">&lt;&lt; &#39;EOF&#39;</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="s"># IDENTITY.md - Bot Identity</span>
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="s">**Name:** MyBot  </span>
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="s">**Emoji:** 🤖  </span>
+</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="s">**Avatar:** (none set)</span>
+</span><span id="__span-10-7"><a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a>
+</span><span id="__span-10-8"><a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a><span class="s">**Role:** Personal AI assistant  </span>
+</span><span id="__span-10-9"><a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a><span class="s">**Primary Function:** Memory, research, automation, scheduling</span>
+</span><span id="__span-10-10"><a id="__codelineno-10-10" name="__codelineno-10-10" href="#__codelineno-10-10"></a>
+</span><span id="__span-10-11"><a id="__codelineno-10-11" name="__codelineno-10-11" href="#__codelineno-10-11"></a><span class="s">**Personality Snapshot:**  </span>
+</span><span id="__span-10-12"><a id="__codelineno-10-12" name="__codelineno-10-12" href="#__codelineno-10-12"></a><span class="s">Efficient. Low-ego. Direct. Not here to impress, here to help.</span>
+</span><span id="__span-10-13"><a id="__codelineno-10-13" name="__codelineno-10-13" href="#__codelineno-10-13"></a><span class="s">EOF</span>
 </span></code></pre></div>
 <p><em>Why: Gives the AI a clear identity. It knows what it is and what it's not.</em></p>
 <p>✅ <strong>Verify:</strong> <code>cat ~/clawd/SOUL.md</code> shows the template content</p>
@@ -1626,16 +1628,12 @@
 <h2 id="3-workspace-configuration">3. Workspace Configuration<a class="headerlink" href="#3-workspace-configuration" title="Permanent link">&para;</a></h2>
 <p>Now configure OpenClaw to use your workspace files.</p>
 <h3 id="31-set-workspace-path">3.1 Set Workspace Path<a class="headerlink" href="#31-set-workspace-path" title="Permanent link">&para;</a></h3>
-<p>The workspace path was already set in Section 1.2 when you configured the agents section:</p>
-<div class="language-json highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="p">{</span>
-</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="w">  </span><span class="nt">&quot;agents&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a><span class="w">    </span><span class="nt">&quot;defaults&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="w">      </span><span class="nt">&quot;workspace&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/root/clawd&quot;</span>
-</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="w">    </span><span class="p">}</span>
-</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="w">  </span><span class="p">}</span>
-</span><span id="__span-10-7"><a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="p">}</span>
+<p>The workspace path was already set in Section 1.2 when you configured the agents section. Verify it:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>openclaw<span class="w"> </span>config<span class="w"> </span>get<span class="w"> </span>agents.defaults.workspace
 </span></code></pre></div>
-<p>If you haven't added this yet, edit <code>~/.openclaw/openclaw.json</code> and add the <code>workspace</code> field under <code>agents.defaults</code>.</p>
+<p>If it doesn't show <code>/root/clawd</code>, set it:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>openclaw<span class="w"> </span>config<span class="w"> </span><span class="nb">set</span><span class="w"> </span>agents.defaults.workspace<span class="w"> </span>/root/clawd
+</span></code></pre></div>
 <p><em>Why: Tells OpenClaw where to find personality and memory files</em></p>
 <h3 id="32-how-files-are-loaded">3.2 How Files Are Loaded<a class="headerlink" href="#32-how-files-are-loaded" title="Permanent link">&para;</a></h3>
 <p>OpenClaw automatically loads these files when present in your workspace:</p>
@@ -1662,136 +1660,138 @@
 - Custom weighting for different file types</p>
 <h3 id="42-configure-memory-search-ban">4.2 Configure Memory Search Ban<a class="headerlink" href="#42-configure-memory-search-ban" title="Permanent link">&para;</a></h3>
 <p>Edit <code>~/.openclaw/openclaw.json</code> and add to the <code>tools</code> section:</p>
-<div class="language-json highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="p">{</span>
-</span><span id="__span-11-2"><a id="__codelineno-11-2" name="__codelineno-11-2" href="#__codelineno-11-2"></a><span class="w">  </span><span class="nt">&quot;tools&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-11-3"><a id="__codelineno-11-3" name="__codelineno-11-3" href="#__codelineno-11-3"></a><span class="w">    </span><span class="nt">&quot;deny&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-</span><span id="__span-11-4"><a id="__codelineno-11-4" name="__codelineno-11-4" href="#__codelineno-11-4"></a><span class="w">      </span><span class="s2">&quot;memory_search&quot;</span><span class="p">,</span>
-</span><span id="__span-11-5"><a id="__codelineno-11-5" name="__codelineno-11-5" href="#__codelineno-11-5"></a><span class="w">      </span><span class="s2">&quot;memory_get&quot;</span>
-</span><span id="__span-11-6"><a id="__codelineno-11-6" name="__codelineno-11-6" href="#__codelineno-11-6"></a><span class="w">    </span><span class="p">],</span>
-</span><span id="__span-11-7"><a id="__codelineno-11-7" name="__codelineno-11-7" href="#__codelineno-11-7"></a><span class="w">    </span><span class="nt">&quot;web&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-11-8"><a id="__codelineno-11-8" name="__codelineno-11-8" href="#__codelineno-11-8"></a><span class="w">      </span><span class="nt">&quot;search&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-11-9"><a id="__codelineno-11-9" name="__codelineno-11-9" href="#__codelineno-11-9"></a><span class="w">        </span><span class="nt">&quot;apiKey&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;YOUR_BRAVE_SEARCH_KEY&quot;</span>
-</span><span id="__span-11-10"><a id="__codelineno-11-10" name="__codelineno-11-10" href="#__codelineno-11-10"></a><span class="w">      </span><span class="p">}</span>
-</span><span id="__span-11-11"><a id="__codelineno-11-11" name="__codelineno-11-11" href="#__codelineno-11-11"></a><span class="w">    </span><span class="p">}</span>
-</span><span id="__span-11-12"><a id="__codelineno-11-12" name="__codelineno-11-12" href="#__codelineno-11-12"></a><span class="w">  </span><span class="p">}</span>
-</span><span id="__span-11-13"><a id="__codelineno-11-13" name="__codelineno-11-13" href="#__codelineno-11-13"></a><span class="p">}</span>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a><span class="p">{</span>
+</span><span id="__span-13-2"><a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a><span class="w">  </span><span class="nt">&quot;tools&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-13-3"><a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a><span class="w">    </span><span class="nt">&quot;deny&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+</span><span id="__span-13-4"><a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a><span class="w">      </span><span class="s2">&quot;memory_search&quot;</span><span class="p">,</span>
+</span><span id="__span-13-5"><a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a><span class="w">      </span><span class="s2">&quot;memory_get&quot;</span>
+</span><span id="__span-13-6"><a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a><span class="w">    </span><span class="p">],</span>
+</span><span id="__span-13-7"><a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a><span class="w">    </span><span class="nt">&quot;web&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-13-8"><a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a><span class="w">      </span><span class="nt">&quot;search&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-13-9"><a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a><span class="w">        </span><span class="nt">&quot;provider&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;brave&quot;</span><span class="p">,</span>
+</span><span id="__span-13-10"><a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a><span class="w">        </span><span class="nt">&quot;apiKey&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;YOUR_BRAVE_SEARCH_KEY&quot;</span>
+</span><span id="__span-13-11"><a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a><span class="w">      </span><span class="p">}</span>
+</span><span id="__span-13-12"><a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-13-13"><a id="__codelineno-13-13" name="__codelineno-13-13" href="#__codelineno-13-13"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-13-14"><a id="__codelineno-13-14" name="__codelineno-13-14" href="#__codelineno-13-14"></a><span class="p">}</span>
 </span></code></pre></div>
-<p><em>Why: Prevents AI from using inferior built-in search. Forces use of custom script.</em></p>
+<p>To get a Brave Search API key: go to <a href="https://api.search.brave.com">api.search.brave.com</a> → sign up → create a key (free tier: 2,000 queries/month).</p>
+<p><em>Why: Prevents AI from using inferior built-in search. Forces use of custom script. Brave Search gives your AI web search capability.</em></p>
 <h3 id="43-custom-memory-search-preview">4.3 Custom Memory Search (Preview)<a class="headerlink" href="#43-custom-memory-search-preview" title="Permanent link">&para;</a></h3>
 <p>Part 3 will cover setting up <code>scripts/memory-search.py</code> with hybrid search and reranking. For now, just ensure the built-in tools are banned.</p>
 <p><strong>The AI should call:</strong> <code>python3 scripts/memory-search.py "query" --deep</code><br />
 <strong>NOT:</strong> Use built-in <code>memory_search</code> tool</p>
-<p>✅ <strong>Verify:</strong> <code>cat ~/.openclaw/openclaw.json | grep -A3 '"deny"'</code> shows memory tools banned</p>
+<p>✅ <strong>Verify:</strong> <code>openclaw config get tools.deny</code> shows <code>["memory_search","memory_get"]</code></p>
 <hr />
 <h2 id="5-first-real-conversation">5. First Real Conversation<a class="headerlink" href="#5-first-real-conversation" title="Permanent link">&para;</a></h2>
 <p>Time to restart OpenClaw and talk to your newly configured AI assistant.</p>
 <h3 id="51-restart-gateway">5.1 Restart Gateway<a class="headerlink" href="#51-restart-gateway" title="Permanent link">&para;</a></h3>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>openclaw<span class="w"> </span>gateway<span class="w"> </span>restart
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>openclaw<span class="w"> </span>gateway<span class="w"> </span>restart
 </span></code></pre></div>
 <p><em>Why: Reload all configuration changes (models, workspace, persona)</em></p>
 <p>Wait 5-10 seconds for full restart.</p>
 <p>✅ <strong>Verify:</strong> <code>openclaw gateway status</code> shows "running"</p>
 <h3 id="52-send-test-message">5.2 Send Test Message<a class="headerlink" href="#52-send-test-message" title="Permanent link">&para;</a></h3>
 <p><strong>From WhatsApp, send:</strong></p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-13-1"><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>Who are you and what&#39;s my name?
+<div class="language-text highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>Who are you and what&#39;s my name?
 </span></code></pre></div>
 <p><strong>Expected Response:</strong>
 The bot should introduce itself using the identity from <code>IDENTITY.md</code> (MyBot 🤖) and mention your name from <code>USER.md</code> (Your Name).</p>
 <p>✅ <strong>Verify:</strong> Bot knows its own name and your name</p>
 <h3 id="53-test-personality">5.3 Test Personality<a class="headerlink" href="#53-test-personality" title="Permanent link">&para;</a></h3>
 <p><strong>Send:</strong></p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>Write me a long corporate email about synergy and circling back.
+<div class="language-text highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>Write me a long corporate email about synergy and circling back.
 </span></code></pre></div>
 <p><strong>Expected Response:</strong>
 The bot should refuse or push back based on <code>SOUL.md</code> forbidden rules (no corporate jargon).</p>
 <p>✅ <strong>Verify:</strong> Bot follows SOUL.md tone rules</p>
 <h3 id="54-test-timezone-awareness">5.4 Test Timezone Awareness<a class="headerlink" href="#54-test-timezone-awareness" title="Permanent link">&para;</a></h3>
 <p><strong>Send:</strong></p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>What timezone am I in?
+<div class="language-text highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>What timezone am I in?
 </span></code></pre></div>
 <p><strong>Expected Response:</strong>
 Bot should reference <code>USER.md</code> and say UTC+5 / Your Timezone.</p>
 <p>✅ <strong>Verify:</strong> Bot reads and uses USER.md data</p>
 <h3 id="55-check-logs">5.5 Check Logs<a class="headerlink" href="#55-check-logs" title="Permanent link">&para;</a></h3>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>openclaw<span class="w"> </span>gateway<span class="w"> </span>logs<span class="w"> </span>--tail<span class="w"> </span><span class="m">50</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>openclaw<span class="w"> </span>gateway<span class="w"> </span>logs<span class="w"> </span>--tail<span class="w"> </span><span class="m">50</span>
 </span></code></pre></div>
 <p><em>Why: Confirms workspace files are being loaded</em></p>
 <p>✅ <strong>Verify:</strong> Logs show no errors, messages processed successfully</p>
 <hr />
 <h2 id="6-fine-tuning-optional">6. Fine-Tuning (Optional)<a class="headerlink" href="#6-fine-tuning-optional" title="Permanent link">&para;</a></h2>
-<h3 id="61-adjust-memory-settings">6.1 Adjust Memory Settings<a class="headerlink" href="#61-adjust-memory-settings" title="Permanent link">&para;</a></h3>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-17-1"><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>openclaw<span class="w"> </span>config<span class="w"> </span><span class="nb">set</span><span class="w"> </span>memoryEnabled<span class="w"> </span><span class="nb">true</span>
-</span><span id="__span-17-2"><a id="__codelineno-17-2" name="__codelineno-17-2" href="#__codelineno-17-2"></a>openclaw<span class="w"> </span>config<span class="w"> </span><span class="nb">set</span><span class="w"> </span>memoryMaxTokens<span class="w"> </span><span class="m">50000</span>
+<h3 id="61-configure-heartbeat-idle-maintenance">6.1 Configure Heartbeat (Idle Maintenance)<a class="headerlink" href="#61-configure-heartbeat-idle-maintenance" title="Permanent link">&para;</a></h3>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a><span class="c1"># Edit openclaw.json and add under agents.defaults:</span>
+</span><span id="__span-19-2"><a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>nano<span class="w"> </span>~/.openclaw/openclaw.json
 </span></code></pre></div>
-<p><em>Why: Enables conversation memory (stores recent messages for context)</em></p>
-<h3 id="62-set-message-limits">6.2 Set Message Limits<a class="headerlink" href="#62-set-message-limits" title="Permanent link">&para;</a></h3>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-18-1"><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>openclaw<span class="w"> </span>config<span class="w"> </span><span class="nb">set</span><span class="w"> </span>maxReplyLength<span class="w"> </span><span class="m">2000</span>
+<div class="language-json highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="p">{</span>
+</span><span id="__span-20-2"><a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a><span class="w">  </span><span class="nt">&quot;agents&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-20-3"><a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a><span class="w">    </span><span class="nt">&quot;defaults&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-20-4"><a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="w">      </span><span class="nt">&quot;heartbeat&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-20-5"><a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a><span class="w">        </span><span class="nt">&quot;every&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;45m&quot;</span>
+</span><span id="__span-20-6"><a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a><span class="w">      </span><span class="p">}</span>
+</span><span id="__span-20-7"><a id="__codelineno-20-7" name="__codelineno-20-7" href="#__codelineno-20-7"></a><span class="w">    </span><span class="p">}</span>
+</span><span id="__span-20-8"><a id="__codelineno-20-8" name="__codelineno-20-8" href="#__codelineno-20-8"></a><span class="w">  </span><span class="p">}</span>
+</span><span id="__span-20-9"><a id="__codelineno-20-9" name="__codelineno-20-9" href="#__codelineno-20-9"></a><span class="p">}</span>
 </span></code></pre></div>
-<p><em>Why: Prevents excessively long responses (especially on WhatsApp)</em></p>
-<h3 id="63-enable-thinking-reasoning">6.3 Enable Thinking (Reasoning)<a class="headerlink" href="#63-enable-thinking-reasoning" title="Permanent link">&para;</a></h3>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-19-1"><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>openclaw<span class="w"> </span>config<span class="w"> </span><span class="nb">set</span><span class="w"> </span>reasoning<span class="w"> </span>low
-</span></code></pre></div>
-<p><em>Why: Shows brief reasoning traces for debugging AI decisions. Options: off, low, high, stream</em></p>
+<p><em>Why: Heartbeats let your AI do periodic maintenance tasks (check calendar, process events) during idle time. <code>"45m"</code> means every 45 minutes when no conversations are active.</em></p>
+<h3 id="62-enable-thinking-reasoning">6.2 Enable Thinking (Reasoning)<a class="headerlink" href="#62-enable-thinking-reasoning" title="Permanent link">&para;</a></h3>
+<p>Thinking/reasoning can be configured per-session. This is set in the system prompt or via the <code>/reasoning</code> command in chat, not via config.</p>
+<p><em>Why: Brief reasoning traces help debug AI decisions. Options: off, low, medium, high</em></p>
 <hr />
 <h2 id="part-2-complete">Part 2 Complete ✅<a class="headerlink" href="#part-2-complete" title="Permanent link">&para;</a></h2>
 <p>You should now have:</p>
 <ul>
 <li>[ ] Claude access configured (Max plan token or API key)</li>
-<li>[ ] Model chain set (Opus 4.6 primary, Gemini fallback, Sonnet sub-agents, Sonnet cron)</li>
+<li>[ ] Model chain set (primary + fallback + sub-agents configured)</li>
 <li>[ ] Context window set to 200K tokens</li>
 <li>[ ] Workspace created at <code>~/clawd</code></li>
 <li>[ ] Core files created (SOUL.md, USER.md, IDENTITY.md, etc.)</li>
 <li>[ ] Minimal templates populated (personality, user info, identity)</li>
 <li>[ ] Workspace path configured in OpenClaw</li>
-<li>[ ] Project context files set (AGENTS.md, TOOLS.md)</li>
-<li>[ ] System prompt configured</li>
+<li>[ ] Workspace files auto-loaded by OpenClaw (AGENTS.md, SOUL.md, TOOLS.md, USER.md)</li>
 <li>[ ] Gateway restarted with new config</li>
 <li>[ ] Bot responds with configured personality</li>
 <li>[ ] Bot knows your name and timezone from USER.md</li>
 <li>[ ] Bot follows SOUL.md tone and rules</li>
 </ul>
 <p><strong>Next:</strong> Part 3 — Infrastructure (Google OAuth, Cloudflare tunnel, webhooks, backups)</p>
-<p><strong>⚠️ Note:</strong> Some <code>openclaw config</code> paths may vary by version. Run <code>openclaw doctor</code> after configuration to validate. If a config path doesn't exist, check <code>openclaw config --help</code> or the docs at docs.openclaw.ai.</p>
+<p><strong>⚠️ Note:</strong> If a config path doesn't work, check <code>openclaw config --help</code> or the docs at <a href="https://docs.openclaw.ai">docs.openclaw.ai</a>. You can always edit <code>~/.openclaw/openclaw.json</code> directly.</p>
 <hr />
 <h2 id="quick-reference-commands">Quick Reference Commands<a class="headerlink" href="#quick-reference-commands" title="Permanent link">&para;</a></h2>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-20-1"><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a><span class="c1"># View all config</span>
-</span><span id="__span-20-2"><a id="__codelineno-20-2" name="__codelineno-20-2" href="#__codelineno-20-2"></a>openclaw<span class="w"> </span>config<span class="w"> </span>list
-</span><span id="__span-20-3"><a id="__codelineno-20-3" name="__codelineno-20-3" href="#__codelineno-20-3"></a>
-</span><span id="__span-20-4"><a id="__codelineno-20-4" name="__codelineno-20-4" href="#__codelineno-20-4"></a><span class="c1"># Check specific settings</span>
-</span><span id="__span-20-5"><a id="__codelineno-20-5" name="__codelineno-20-5" href="#__codelineno-20-5"></a>openclaw<span class="w"> </span>config<span class="w"> </span>get<span class="w"> </span>defaultModel
-</span><span id="__span-20-6"><a id="__codelineno-20-6" name="__codelineno-20-6" href="#__codelineno-20-6"></a>openclaw<span class="w"> </span>config<span class="w"> </span>get<span class="w"> </span>workspace
-</span><span id="__span-20-7"><a id="__codelineno-20-7" name="__codelineno-20-7" href="#__codelineno-20-7"></a>
-</span><span id="__span-20-8"><a id="__codelineno-20-8" name="__codelineno-20-8" href="#__codelineno-20-8"></a><span class="c1"># Edit personality files</span>
-</span><span id="__span-20-9"><a id="__codelineno-20-9" name="__codelineno-20-9" href="#__codelineno-20-9"></a>nano<span class="w"> </span>~/clawd/SOUL.md
-</span><span id="__span-20-10"><a id="__codelineno-20-10" name="__codelineno-20-10" href="#__codelineno-20-10"></a>nano<span class="w"> </span>~/clawd/USER.md
-</span><span id="__span-20-11"><a id="__codelineno-20-11" name="__codelineno-20-11" href="#__codelineno-20-11"></a>
-</span><span id="__span-20-12"><a id="__codelineno-20-12" name="__codelineno-20-12" href="#__codelineno-20-12"></a><span class="c1"># Restart after changes</span>
-</span><span id="__span-20-13"><a id="__codelineno-20-13" name="__codelineno-20-13" href="#__codelineno-20-13"></a>openclaw<span class="w"> </span>gateway<span class="w"> </span>restart
-</span><span id="__span-20-14"><a id="__codelineno-20-14" name="__codelineno-20-14" href="#__codelineno-20-14"></a>
-</span><span id="__span-20-15"><a id="__codelineno-20-15" name="__codelineno-20-15" href="#__codelineno-20-15"></a><span class="c1"># View logs</span>
-</span><span id="__span-20-16"><a id="__codelineno-20-16" name="__codelineno-20-16" href="#__codelineno-20-16"></a>openclaw<span class="w"> </span>gateway<span class="w"> </span>logs<span class="w"> </span>--tail<span class="w"> </span><span class="m">50</span>
-</span><span id="__span-20-17"><a id="__codelineno-20-17" name="__codelineno-20-17" href="#__codelineno-20-17"></a>
-</span><span id="__span-20-18"><a id="__codelineno-20-18" name="__codelineno-20-18" href="#__codelineno-20-18"></a><span class="c1"># Check workspace files loaded</span>
-</span><span id="__span-20-19"><a id="__codelineno-20-19" name="__codelineno-20-19" href="#__codelineno-20-19"></a>ls<span class="w"> </span>-lh<span class="w"> </span>~/clawd/*.md
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a><span class="c1"># Check specific settings</span>
+</span><span id="__span-21-2"><a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a>openclaw<span class="w"> </span>config<span class="w"> </span>get<span class="w"> </span>agents.defaults.model.primary
+</span><span id="__span-21-3"><a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a>openclaw<span class="w"> </span>config<span class="w"> </span>get<span class="w"> </span>agents.defaults.workspace
+</span><span id="__span-21-4"><a id="__codelineno-21-4" name="__codelineno-21-4" href="#__codelineno-21-4"></a>
+</span><span id="__span-21-5"><a id="__codelineno-21-5" name="__codelineno-21-5" href="#__codelineno-21-5"></a><span class="c1"># Edit personality files</span>
+</span><span id="__span-21-6"><a id="__codelineno-21-6" name="__codelineno-21-6" href="#__codelineno-21-6"></a>nano<span class="w"> </span>~/clawd/SOUL.md
+</span><span id="__span-21-7"><a id="__codelineno-21-7" name="__codelineno-21-7" href="#__codelineno-21-7"></a>nano<span class="w"> </span>~/clawd/USER.md
+</span><span id="__span-21-8"><a id="__codelineno-21-8" name="__codelineno-21-8" href="#__codelineno-21-8"></a>
+</span><span id="__span-21-9"><a id="__codelineno-21-9" name="__codelineno-21-9" href="#__codelineno-21-9"></a><span class="c1"># Restart after changes</span>
+</span><span id="__span-21-10"><a id="__codelineno-21-10" name="__codelineno-21-10" href="#__codelineno-21-10"></a>openclaw<span class="w"> </span>gateway<span class="w"> </span>restart
+</span><span id="__span-21-11"><a id="__codelineno-21-11" name="__codelineno-21-11" href="#__codelineno-21-11"></a>
+</span><span id="__span-21-12"><a id="__codelineno-21-12" name="__codelineno-21-12" href="#__codelineno-21-12"></a><span class="c1"># View logs</span>
+</span><span id="__span-21-13"><a id="__codelineno-21-13" name="__codelineno-21-13" href="#__codelineno-21-13"></a>openclaw<span class="w"> </span>gateway<span class="w"> </span>logs<span class="w"> </span>--tail<span class="w"> </span><span class="m">50</span>
+</span><span id="__span-21-14"><a id="__codelineno-21-14" name="__codelineno-21-14" href="#__codelineno-21-14"></a>
+</span><span id="__span-21-15"><a id="__codelineno-21-15" name="__codelineno-21-15" href="#__codelineno-21-15"></a><span class="c1"># Check workspace files loaded</span>
+</span><span id="__span-21-16"><a id="__codelineno-21-16" name="__codelineno-21-16" href="#__codelineno-21-16"></a>ls<span class="w"> </span>-lh<span class="w"> </span>~/clawd/*.md
 </span></code></pre></div>
 <hr />
 <h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h2>
 <p><strong>Bot doesn't know my name:</strong>
-- Check <code>openclaw config get workspace</code> points to <code>~/clawd</code>
+- Check <code>openclaw config get agents.defaults.workspace</code> points to <code>/root/clawd</code>
 - Verify <code>~/clawd/USER.md</code> exists and has your name
 - Restart gateway: <code>openclaw gateway restart</code></p>
 <p><strong>Bot ignores SOUL.md rules:</strong>
-- Ensure <code>systemPrompt</code> is set: <code>openclaw config get systemPrompt</code>
 - Check files exist: <code>ls ~/clawd/SOUL.md</code>
 - Try explicit instruction: "Read SOUL.md and tell me your tone rules"</p>
 <p><strong>API errors:</strong>
-- Verify keys: <code>openclaw config get anthropicApiKey</code> and <code>openclaw config get googleApiKey</code>
+- Verify keys: <code>openclaw config get auth.profiles</code>
 - If using Max plan: check usage at claude.ai/settings/usage
 - If using raw API: check quotas at console.anthropic.com
 - Google credits: check at aistudio.google.com → Settings
 - Test fallback: temporarily disable Anthropic key to trigger Gemini</p>
 <p><strong>Context too large errors:</strong>
-- Reduce <code>contextTokens</code>: <code>openclaw config set contextTokens 150000</code>
+- Reduce <code>contextTokens</code>: edit <code>~/.openclaw/openclaw.json</code> → <code>agents.defaults.contextTokens</code>
 - Remove large files from workspace
 - Trim daily logs in <code>~/clawd/memory/</code></p>
 <hr />

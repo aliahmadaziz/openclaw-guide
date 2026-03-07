@@ -1492,14 +1492,14 @@
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-11-1"><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>nodejs
 </span></code></pre></div>
 <p><em>Why: OpenClaw requires Node.js runtime</em></p>
-<p>✅ <strong>Verify:</strong> <code>node --version</code> shows <code>v22.22.0</code> or later (minimum v22.x required), <code>npm --version</code> shows <code>10.x</code> or later</p>
+<p>✅ <strong>Verify:</strong> <code>node --version</code> shows <code>v22.x</code> or later, <code>npm --version</code> shows <code>10.x</code> or later</p>
 <hr />
 <h2 id="5-install-openclaw">5. Install OpenClaw<a class="headerlink" href="#5-install-openclaw" title="Permanent link">&para;</a></h2>
 <h3 id="51-install-via-npm">5.1 Install via NPM<a class="headerlink" href="#51-install-via-npm" title="Permanent link">&para;</a></h3>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-12-1"><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>npm<span class="w"> </span>install<span class="w"> </span>-g<span class="w"> </span>openclaw
 </span></code></pre></div>
 <p><em>Why: Global install makes <code>openclaw</code> command available system-wide</em></p>
-<p>✅ <strong>Verify:</strong> <code>openclaw --version</code> shows version 2026.2.x or later</p>
+<p>✅ <strong>Verify:</strong> <code>openclaw --version</code> shows a version number</p>
 <hr />
 <h2 id="6-initial-setup">6. Initial Setup<a class="headerlink" href="#6-initial-setup" title="Permanent link">&para;</a></h2>
 <h3 id="61-run-setup-wizard">6.1 Run Setup Wizard<a class="headerlink" href="#61-run-setup-wizard" title="Permanent link">&para;</a></h3>
@@ -1541,12 +1541,13 @@
 <h2 id="8-future-upgrades">8. Future Upgrades<a class="headerlink" href="#8-future-upgrades" title="Permanent link">&para;</a></h2>
 <h3 id="81-how-to-upgrade-openclaw">8.1 How to Upgrade OpenClaw<a class="headerlink" href="#81-how-to-upgrade-openclaw" title="Permanent link">&para;</a></h3>
 <p><strong>⚠️ IMPORTANT:</strong> Always backup before upgrading. Never use <code>npm update -g openclaw</code> directly.</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="c1"># Check for updates</span>
-</span><span id="__span-16-2"><a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>openclaw<span class="w"> </span>update
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-16-1"><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a><span class="c1"># Check current version</span>
+</span><span id="__span-16-2"><a id="__codelineno-16-2" name="__codelineno-16-2" href="#__codelineno-16-2"></a>openclaw<span class="w"> </span>--version
 </span><span id="__span-16-3"><a id="__codelineno-16-3" name="__codelineno-16-3" href="#__codelineno-16-3"></a>
-</span><span id="__span-16-4"><a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="c1"># The command will show available updates and prompt for confirmation</span>
+</span><span id="__span-16-4"><a id="__codelineno-16-4" name="__codelineno-16-4" href="#__codelineno-16-4"></a><span class="c1"># Update to latest</span>
+</span><span id="__span-16-5"><a id="__codelineno-16-5" name="__codelineno-16-5" href="#__codelineno-16-5"></a>npm<span class="w"> </span>install<span class="w"> </span>-g<span class="w"> </span>openclaw
 </span></code></pre></div>
-<p><em>Why: <code>openclaw update</code> handles pre-upgrade backups, config migration, and rollback if upgrade fails. Raw npm updates can break your setup.</em></p>
+<p><em>Why: Check the <a href="https://github.com/openclaw/openclaw/releases">release notes</a> before upgrading. After upgrade, restart the gateway and verify everything works.</em></p>
 <h3 id="82-upgrade-best-practices">8.2 Upgrade Best Practices<a class="headerlink" href="#82-upgrade-best-practices" title="Permanent link">&para;</a></h3>
 <p><strong>Before upgrading:</strong>
 1. Save config snapshot (see Part 5, Section 3)

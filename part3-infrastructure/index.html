@@ -1789,7 +1789,7 @@
 <p>Press <code>Ctrl+C</code> in the tunnel terminal to stop.</p>
 <p>✅ <strong>Verify:</strong> <code>curl</code> doesn't show DNS errors or connection refused</p>
 <h3 id="27-create-systemd-service">2.7 Create Systemd Service<a class="headerlink" href="#27-create-systemd-service" title="Permanent link">&para;</a></h3>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>/etc/systemd/system/cloudflared.service<span class="w"> </span><span class="s">&lt;&lt; &#39;EOF&#39;</span>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-14-1"><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>/etc/systemd/system/cloudflared-tunnel.service<span class="w"> </span><span class="s">&lt;&lt; &#39;EOF&#39;</span>
 </span><span id="__span-14-2"><a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a><span class="s">[Unit]</span>
 </span><span id="__span-14-3"><a id="__codelineno-14-3" name="__codelineno-14-3" href="#__codelineno-14-3"></a><span class="s">Description=Cloudflare Tunnel</span>
 </span><span id="__span-14-4"><a id="__codelineno-14-4" name="__codelineno-14-4" href="#__codelineno-14-4"></a><span class="s">After=network.target</span>
@@ -1805,14 +1805,14 @@
 </span><span id="__span-14-14"><a id="__codelineno-14-14" name="__codelineno-14-14" href="#__codelineno-14-14"></a><span class="s">WantedBy=multi-user.target</span>
 </span><span id="__span-14-15"><a id="__codelineno-14-15" name="__codelineno-14-15" href="#__codelineno-14-15"></a><span class="s">EOF</span>
 </span></code></pre></div>
-<p><em>Why: Runs tunnel automatically on boot, restarts on failure</em></p>
+<p><em>Why: Runs tunnel automatically on boot, restarts on failure. Named <code>cloudflared-tunnel</code> to distinguish from other cloudflared services.</em></p>
 <p>Enable and start the service:</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-15-1"><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>systemctl<span class="w"> </span>daemon-reload
-</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>cloudflared
-</span><span id="__span-15-3"><a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>systemctl<span class="w"> </span>start<span class="w"> </span>cloudflared
+</span><span id="__span-15-2"><a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>cloudflared-tunnel
+</span><span id="__span-15-3"><a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>systemctl<span class="w"> </span>start<span class="w"> </span>cloudflared-tunnel
 </span></code></pre></div>
 <p><em>Why: Starts tunnel now and on every boot</em></p>
-<p>✅ <strong>Verify:</strong> <code>systemctl status cloudflared</code> shows "active (running)"</p>
+<p>✅ <strong>Verify:</strong> <code>systemctl status cloudflared-tunnel</code> shows "active (running)"</p>
 <hr />
 <h2 id="3-webhook-server">3. Webhook Server<a class="headerlink" href="#3-webhook-server" title="Permanent link">&para;</a></h2>
 <p>The webhook server listens on localhost:8088 and receives push notifications from external services (Google Calendar, email alerts, etc.). You'll create endpoints with random URL paths as security tokens.</p>
@@ -1948,6 +1948,7 @@
 <p>Press <code>Ctrl+C</code> in the server terminal to stop.</p>
 <p>✅ <strong>Verify:</strong> Curl commands succeed, server logs show requests</p>
 <h3 id="35-create-systemd-service">3.5 Create Systemd Service<a class="headerlink" href="#35-create-systemd-service" title="Permanent link">&para;</a></h3>
+<p><strong>⚠️ Note:</strong> The service is named <code>moltbot-webhook</code> in this guide. You can rename it to whatever you like (e.g., <code>my-webhook.service</code>), just be consistent.</p>
 <div class="language-bash highlight"><pre><span></span><code><span id="__span-21-1"><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>cat<span class="w"> </span>&gt;<span class="w"> </span>/etc/systemd/system/moltbot-webhook.service<span class="w"> </span><span class="s">&lt;&lt; &#39;EOF&#39;</span>
 </span><span id="__span-21-2"><a id="__codelineno-21-2" name="__codelineno-21-2" href="#__codelineno-21-2"></a><span class="s">[Unit]</span>
 </span><span id="__span-21-3"><a id="__codelineno-21-3" name="__codelineno-21-3" href="#__codelineno-21-3"></a><span class="s">Description=Moltbot Webhook Server</span>
@@ -2077,7 +2078,7 @@
 </span><span id="__span-29-13"><a id="__codelineno-29-13" name="__codelineno-29-13" href="#__codelineno-29-13"></a><span class="s">cp -r /root/clawd &quot;$BACKUP_DIR/workspace&quot;</span>
 </span><span id="__span-29-14"><a id="__codelineno-29-14" name="__codelineno-29-14" href="#__codelineno-29-14"></a>
 </span><span id="__span-29-15"><a id="__codelineno-29-15" name="__codelineno-29-15" href="#__codelineno-29-15"></a><span class="s"># Backup OpenClaw config</span>
-</span><span id="__span-29-16"><a id="__codelineno-29-16" name="__codelineno-29-16" href="#__codelineno-29-16"></a><span class="s">cp ~/.config/openclaw/openclaw.json &quot;$BACKUP_DIR/openclaw-config.json&quot; || true</span>
+</span><span id="__span-29-16"><a id="__codelineno-29-16" name="__codelineno-29-16" href="#__codelineno-29-16"></a><span class="s">cp ~/.openclaw/openclaw.json &quot;$BACKUP_DIR/openclaw-config.json&quot; || true</span>
 </span><span id="__span-29-17"><a id="__codelineno-29-17" name="__codelineno-29-17" href="#__codelineno-29-17"></a>
 </span><span id="__span-29-18"><a id="__codelineno-29-18" name="__codelineno-29-18" href="#__codelineno-29-18"></a><span class="s"># Backup credentials</span>
 </span><span id="__span-29-19"><a id="__codelineno-29-19" name="__codelineno-29-19" href="#__codelineno-29-19"></a><span class="s">cp -r ~/.clawdbot &quot;$BACKUP_DIR/clawdbot&quot; || true</span>
@@ -2215,10 +2216,10 @@
 </span><span id="__span-37-3"><a id="__codelineno-37-3" name="__codelineno-37-3" href="#__codelineno-37-3"></a>python3<span class="w"> </span>~/clawd/scripts/test-calendar.py<span class="w">            </span><span class="c1"># Test API access</span>
 </span><span id="__span-37-4"><a id="__codelineno-37-4" name="__codelineno-37-4" href="#__codelineno-37-4"></a>
 </span><span id="__span-37-5"><a id="__codelineno-37-5" name="__codelineno-37-5" href="#__codelineno-37-5"></a><span class="c1"># Cloudflare Tunnel</span>
-</span><span id="__span-37-6"><a id="__codelineno-37-6" name="__codelineno-37-6" href="#__codelineno-37-6"></a>systemctl<span class="w"> </span>status<span class="w"> </span>cloudflared<span class="w">                        </span><span class="c1"># Check tunnel status</span>
-</span><span id="__span-37-7"><a id="__codelineno-37-7" name="__codelineno-37-7" href="#__codelineno-37-7"></a>systemctl<span class="w"> </span>restart<span class="w"> </span>cloudflared<span class="w">                       </span><span class="c1"># Restart tunnel</span>
+</span><span id="__span-37-6"><a id="__codelineno-37-6" name="__codelineno-37-6" href="#__codelineno-37-6"></a>systemctl<span class="w"> </span>status<span class="w"> </span>cloudflared-tunnel<span class="w">                  </span><span class="c1"># Check tunnel status</span>
+</span><span id="__span-37-7"><a id="__codelineno-37-7" name="__codelineno-37-7" href="#__codelineno-37-7"></a>systemctl<span class="w"> </span>restart<span class="w"> </span>cloudflared-tunnel<span class="w">                </span><span class="c1"># Restart tunnel</span>
 </span><span id="__span-37-8"><a id="__codelineno-37-8" name="__codelineno-37-8" href="#__codelineno-37-8"></a>cloudflared<span class="w"> </span>tunnel<span class="w"> </span>list<span class="w">                             </span><span class="c1"># List tunnels</span>
-</span><span id="__span-37-9"><a id="__codelineno-37-9" name="__codelineno-37-9" href="#__codelineno-37-9"></a>journalctl<span class="w"> </span>-u<span class="w"> </span>cloudflared<span class="w"> </span>-f<span class="w">                        </span><span class="c1"># View tunnel logs</span>
+</span><span id="__span-37-9"><a id="__codelineno-37-9" name="__codelineno-37-9" href="#__codelineno-37-9"></a>journalctl<span class="w"> </span>-u<span class="w"> </span>cloudflared-tunnel<span class="w"> </span>-f<span class="w">                  </span><span class="c1"># View tunnel logs</span>
 </span><span id="__span-37-10"><a id="__codelineno-37-10" name="__codelineno-37-10" href="#__codelineno-37-10"></a>
 </span><span id="__span-37-11"><a id="__codelineno-37-11" name="__codelineno-37-11" href="#__codelineno-37-11"></a><span class="c1"># Webhook Server</span>
 </span><span id="__span-37-12"><a id="__codelineno-37-12" name="__codelineno-37-12" href="#__codelineno-37-12"></a>systemctl<span class="w"> </span>status<span class="w"> </span>moltbot-webhook<span class="w">                    </span><span class="c1"># Check webhook status</span>
@@ -2235,8 +2236,8 @@
 </span><span id="__span-37-23"><a id="__codelineno-37-23" name="__codelineno-37-23" href="#__codelineno-37-23"></a>crontab<span class="w"> </span>-l<span class="w">                                          </span><span class="c1"># View scheduled backups</span>
 </span><span id="__span-37-24"><a id="__codelineno-37-24" name="__codelineno-37-24" href="#__codelineno-37-24"></a>
 </span><span id="__span-37-25"><a id="__codelineno-37-25" name="__codelineno-37-25" href="#__codelineno-37-25"></a><span class="c1"># System Health</span>
-</span><span id="__span-37-26"><a id="__codelineno-37-26" name="__codelineno-37-26" href="#__codelineno-37-26"></a>systemctl<span class="w"> </span>status<span class="w"> </span>cloudflared<span class="w"> </span>moltbot-webhook<span class="w">        </span><span class="c1"># Check both services</span>
-</span><span id="__span-37-27"><a id="__codelineno-37-27" name="__codelineno-37-27" href="#__codelineno-37-27"></a>journalctl<span class="w"> </span>--since<span class="w"> </span><span class="s2">&quot;1 hour ago&quot;</span><span class="w"> </span>-u<span class="w"> </span>webhook<span class="w">          </span><span class="c1"># Recent webhook logs</span>
+</span><span id="__span-37-26"><a id="__codelineno-37-26" name="__codelineno-37-26" href="#__codelineno-37-26"></a>systemctl<span class="w"> </span>status<span class="w"> </span>cloudflared-tunnel<span class="w"> </span>moltbot-webhook<span class="w">  </span><span class="c1"># Check both services</span>
+</span><span id="__span-37-27"><a id="__codelineno-37-27" name="__codelineno-37-27" href="#__codelineno-37-27"></a>journalctl<span class="w"> </span>--since<span class="w"> </span><span class="s2">&quot;1 hour ago&quot;</span><span class="w"> </span>-u<span class="w"> </span>moltbot-webhook<span class="w">  </span><span class="c1"># Recent webhook logs</span>
 </span><span id="__span-37-28"><a id="__codelineno-37-28" name="__codelineno-37-28" href="#__codelineno-37-28"></a>ls<span class="w"> </span>-lh<span class="w"> </span>~/.clawdbot/google/<span class="w">                          </span><span class="c1"># Check tokens exist</span>
 </span></code></pre></div>
 <hr />
@@ -2251,7 +2252,7 @@
 - Check that all required scopes are enabled
 - Try using a different Google account</p>
 <p><strong>Cloudflare tunnel connection refused:</strong>
-- Check tunnel is running: <code>systemctl status cloudflared</code>
+- Check tunnel is running: <code>systemctl status cloudflared-tunnel</code>
 - Verify config.yml has correct tunnel UUID
 - Ensure DNS CNAME record exists (check Cloudflare dashboard)
 - Test local service first: <code>curl http://localhost:8088/health</code></p>
@@ -2265,7 +2266,7 @@
 - Verify Cloudflare tunnel is running
 - Check webhook server is listening on localhost:8088
 - Test health endpoint: <code>curl https://webhook.yourdomain.com/health</code>
-- Check both services: <code>systemctl status cloudflared moltbot-webhook</code></p>
+- Check both services: <code>systemctl status cloudflared-tunnel moltbot-webhook</code></p>
 <p><strong>Rclone "Failed to create file system" error:</strong>
 - Re-run <code>rclone config</code> to reconfigure remote
 - Test authentication: <code>rclone lsd gdrive:</code>
