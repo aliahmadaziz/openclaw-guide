@@ -336,7 +336,7 @@ Press `Ctrl+C` in the tunnel terminal to stop.
 ### 2.7 Create Systemd Service
 
 ```bash
-cat > /etc/systemd/system/cloudflared.service << 'EOF'
+cat > /etc/systemd/system/cloudflared-tunnel.service << 'EOF'
 [Unit]
 Description=Cloudflare Tunnel
 After=network.target
@@ -353,19 +353,19 @@ WantedBy=multi-user.target
 EOF
 ```
 
-*Why: Runs tunnel automatically on boot, restarts on failure*
+*Why: Runs tunnel automatically on boot, restarts on failure. Named `cloudflared-tunnel` to distinguish from other cloudflared services.*
 
 Enable and start the service:
 
 ```bash
 systemctl daemon-reload
-systemctl enable cloudflared
-systemctl start cloudflared
+systemctl enable cloudflared-tunnel
+systemctl start cloudflared-tunnel
 ```
 
 *Why: Starts tunnel now and on every boot*
 
-✅ **Verify:** `systemctl status cloudflared` shows "active (running)"
+✅ **Verify:** `systemctl status cloudflared-tunnel` shows "active (running)"
 
 ---
 
@@ -528,6 +528,8 @@ Press `Ctrl+C` in the server terminal to stop.
 ✅ **Verify:** Curl commands succeed, server logs show requests
 
 ### 3.5 Create Systemd Service
+
+**⚠️ Note:** The service is named `moltbot-webhook` in this guide. You can rename it to whatever you like (e.g., `my-webhook.service`), just be consistent.
 
 ```bash
 cat > /etc/systemd/system/moltbot-webhook.service << 'EOF'
@@ -702,7 +704,7 @@ mkdir -p "$BACKUP_DIR"
 cp -r /root/clawd "$BACKUP_DIR/workspace"
 
 # Backup OpenClaw config
-cp ~/.config/openclaw/openclaw.json "$BACKUP_DIR/openclaw-config.json" || true
+cp ~/.openclaw/openclaw.json "$BACKUP_DIR/openclaw-config.json" || true
 
 # Backup credentials
 cp -r ~/.clawdbot "$BACKUP_DIR/clawdbot" || true
@@ -885,10 +887,10 @@ python3 ~/clawd/scripts/google-auth.py              # Reauthorize
 python3 ~/clawd/scripts/test-calendar.py            # Test API access
 
 # Cloudflare Tunnel
-systemctl status cloudflared                        # Check tunnel status
-systemctl restart cloudflared                       # Restart tunnel
+systemctl status cloudflared-tunnel                  # Check tunnel status
+systemctl restart cloudflared-tunnel                # Restart tunnel
 cloudflared tunnel list                             # List tunnels
-journalctl -u cloudflared -f                        # View tunnel logs
+journalctl -u cloudflared-tunnel -f                  # View tunnel logs
 
 # Webhook Server
 systemctl status moltbot-webhook                    # Check webhook status
@@ -905,8 +907,8 @@ tail -f /var/log/backup-nightly.log                 # Monitor nightly backups
 crontab -l                                          # View scheduled backups
 
 # System Health
-systemctl status cloudflared moltbot-webhook        # Check both services
-journalctl --since "1 hour ago" -u webhook          # Recent webhook logs
+systemctl status cloudflared-tunnel moltbot-webhook  # Check both services
+journalctl --since "1 hour ago" -u moltbot-webhook  # Recent webhook logs
 ls -lh ~/.clawdbot/google/                          # Check tokens exist
 ```
 
@@ -926,7 +928,7 @@ ls -lh ~/.clawdbot/google/                          # Check tokens exist
 - Try using a different Google account
 
 **Cloudflare tunnel connection refused:**
-- Check tunnel is running: `systemctl status cloudflared`
+- Check tunnel is running: `systemctl status cloudflared-tunnel`
 - Verify config.yml has correct tunnel UUID
 - Ensure DNS CNAME record exists (check Cloudflare dashboard)
 - Test local service first: `curl http://localhost:8088/health`
@@ -942,7 +944,7 @@ ls -lh ~/.clawdbot/google/                          # Check tokens exist
 - Verify Cloudflare tunnel is running
 - Check webhook server is listening on localhost:8088
 - Test health endpoint: `curl https://webhook.yourdomain.com/health`
-- Check both services: `systemctl status cloudflared moltbot-webhook`
+- Check both services: `systemctl status cloudflared-tunnel moltbot-webhook`
 
 **Rclone "Failed to create file system" error:**
 - Re-run `rclone config` to reconfigure remote

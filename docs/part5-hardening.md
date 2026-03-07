@@ -139,8 +139,8 @@ Add this section:
 ## Rotation Procedures
 
 ### OpenClaw Gateway Token
-1. Generate new token: `openclaw gateway token --new`
-2. Update `~/.openclaw/config.json` → `gatewayToken` field
+1. Generate new token: `openssl rand -hex 32  # Then update gateway.auth.token in ~/.openclaw/openclaw.json`
+2. Update `~/.openclaw/openclaw.json` → `gatewayToken` field
 3. Restart gateway: `openclaw gateway restart`
 4. Test: Send WhatsApp message, verify response
 
@@ -148,7 +148,7 @@ Add this section:
 1. Generate new secret: `openssl rand -hex 16`
 2. Update `~/.clawdbot/webhook.env` → endpoint paths
 3. Update Cloudflare tunnel config (if paths changed)
-4. Restart webhook: `systemctl restart openclaw-webhook`
+4. Restart webhook: `systemctl restart moltbot-webhook`
 5. Re-register Google Calendar webhook with new URL
 6. Test: Trigger calendar event, verify delivery
 
@@ -171,19 +171,26 @@ Add this section:
 ### 2.2 Rotate OpenClaw Gateway Token (Example)
 
 ```bash
-# Generate new token (outputs token to terminal)
-openclaw gateway token --new
-
-# Copy the token, then edit config
-nano ~/.openclaw/config.json
+# Edit config to update the token
+nano ~/.openclaw/openclaw.json
 ```
 
-Find the `gatewayToken` field and replace with new token:
+Find the `gateway.auth.token` field and replace with a new randomly generated token:
 
+```bash
+# Generate a new token
+openssl rand -hex 32
+```
+
+Update in config:
 ```json
 {
-  "gatewayToken": "NEW_TOKEN_HERE",
-  "whatsapp": { ... }
+  "gateway": {
+    "auth": {
+      "mode": "token",
+      "token": "NEW_TOKEN_HERE"
+    }
+  }
 }
 ```
 
@@ -217,8 +224,8 @@ AGENTMAIL_WEBHOOK_PATH="/agentmail/NEW_SECRET_HERE"
 Restart webhook server:
 
 ```bash
-systemctl restart openclaw-webhook
-systemctl status openclaw-webhook
+systemctl restart moltbot-webhook
+systemctl status moltbot-webhook
 ```
 
 **Then update external services:**
@@ -322,14 +329,14 @@ save_snapshot() {
     echo "📸 Saving snapshot: $LABEL"
     
     # OpenClaw config
-    if [ -f "$HOME/.openclaw/config.json" ]; then
-        cp "$HOME/.openclaw/config.json" "$SNAP_PATH/openclaw.json"
+    if [ -f "$HOME/.openclaw/openclaw.json" ]; then
+        cp "$HOME/.openclaw/openclaw.json" "$SNAP_PATH/openclaw.json"
         echo "  ✓ openclaw.json"
     fi
     
     # Systemd services
     mkdir -p "$SNAP_PATH/systemd"
-    for service in openclaw-webhook.service; do
+    for service in moltbot-webhook.service; do
         if [ -f "/etc/systemd/system/$service" ]; then
             cp "/etc/systemd/system/$service" "$SNAP_PATH/systemd/"
             echo "  ✓ $service"
@@ -379,7 +386,7 @@ restore_snapshot() {
     
     # Restore OpenClaw config
     if [ -f "$SNAP_PATH/openclaw.json" ]; then
-        cp "$SNAP_PATH/openclaw.json" "$HOME/.openclaw/config.json"
+        cp "$SNAP_PATH/openclaw.json" "$HOME/.openclaw/openclaw.json"
         echo "  ✓ openclaw.json restored"
     fi
     
@@ -403,7 +410,7 @@ restore_snapshot() {
     fi
     
     echo "✅ Snapshot restored. Restart services as needed."
-    echo "   Suggested: openclaw gateway restart && systemctl restart openclaw-webhook"
+    echo "   Suggested: openclaw gateway restart && systemctl restart moltbot-webhook"
 }
 
 list_snapshots() {
@@ -468,7 +475,7 @@ chmod +x /root/clawd/scripts/restore-snapshot-config.sh
 ```bash
 # Test everything first
 openclaw gateway status
-systemctl status openclaw-webhook
+systemctl status moltbot-webhook
 ufw status
 crontab -l
 
@@ -493,7 +500,7 @@ crontab -l
 ```bash
 /root/clawd/scripts/restore-snapshot-config.sh restore
 openclaw gateway restart
-systemctl restart openclaw-webhook
+systemctl restart moltbot-webhook
 ```
 
 **Time to recovery:** 3 seconds  
@@ -545,7 +552,7 @@ npm install -g openclaw@$BACKUP_VERSION
 
 # Restore config (if it was also affected)
 if [ -f "$LATEST_BACKUP/config.json" ]; then
-    cp "$LATEST_BACKUP/config.json" "$HOME/.openclaw/config.json"
+    cp "$LATEST_BACKUP/config.json" "$HOME/.openclaw/openclaw.json"
     echo "  ✓ Config restored from backup"
 fi
 
@@ -620,7 +627,7 @@ echo "✅ Backup extracted to /root/clawd"
 # Next steps
 echo ""
 echo "Manual steps required:"
-echo "1. Restore OpenClaw config: cp clawd/.openclaw/config.json ~/.openclaw/"
+echo "1. Restore OpenClaw config: cp clawd/.openclaw/openclaw.json ~/.openclaw/"
 echo "2. Restore systemd services: cp clawd/systemd/* /etc/systemd/system/"
 echo "3. Restore crontab: crontab clawd/crontab.txt"
 echo "4. Install Node.js 22: curl -fsSL https://deb.nodesource.com/setup_22.x | bash && apt install nodejs"
@@ -646,16 +653,16 @@ chmod +x /root/clawd/scripts/full-restore.sh
 
 ```bash
 # 1. Verify OpenClaw health
-openclaw doctor
+openclaw status
 
 # 2. Test gateway connectivity
-openclaw gateway probe
+openclaw gateway status
 
 # 3. Send test message
 # (From your phone: send "test" to bot WhatsApp number)
 
 # 4. Check critical services
-systemctl status openclaw-webhook crowdsec
+systemctl status moltbot-webhook crowdsec
 
 # 5. Verify backups still running
 crontab -l | grep backup
@@ -877,7 +884,7 @@ openclaw gateway status
 openclaw status | grep scope
 
 # 2. Infrastructure
-systemctl status openclaw-webhook crowdsec crowdsec-firewall-bouncer
+systemctl status moltbot-webhook crowdsec crowdsec-firewall-bouncer
 
 # 3. Backups
 crontab -l | grep -E 'backup|verify'
@@ -933,12 +940,12 @@ openclaw setup                             # Re-pair if scope missing
 
 # Secret Rotation
 rotation-check.py                          # Check rotation schedule
-openclaw gateway token --new               # Generate new gateway token
+openssl rand -hex 32  # Then update gateway.auth.token in ~/.openclaw/openclaw.json               # Generate new gateway token
 
 # Post-Recovery
-openclaw doctor                            # Health check
-openclaw gateway probe                     # Connectivity test
-systemctl status crowdsec openclaw-webhook  # Service status
+openclaw status                            # Health check
+openclaw gateway status                     # Connectivity test
+systemctl status crowdsec moltbot-webhook  # Service status
 ```
 
 ---
